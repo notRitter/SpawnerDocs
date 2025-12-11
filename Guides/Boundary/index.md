@@ -1,6 +1,6 @@
 ---
-title: Boundary
-nav_order: 1
+title: Boundary System Guides
+nav_order: 3
 has_children: true
 ---
 
