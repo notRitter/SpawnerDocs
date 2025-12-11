@@ -4,6 +4,10 @@ description: Official documentation for the Ritter Ultimate Event Spawner.
 # Use GitHub Pages–compatible remote theme
 remote_theme: just-the-docs/just-the-docs
 
+just_the_docs:
+  css:
+    - assets/css/custom.css
+
 # Required for Just the Docs
 plugins:
   - jekyll-remote-theme
