@@ -1,5 +1,5 @@
 ---
-title: Installation
+title: ScriptCalls
 parent: Guides
 nav_order: 2
 ---
