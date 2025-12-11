@@ -6,5 +6,5 @@ url: "https://notritter.github.com"
 baseurl: "/SpawnerDocs" 
 
 search_enabled: true
-# logo: "/assets/logo.png"    (optional, you can remove if no logo)
+# logo: "/assets/logo.png"    (optional)
 # favicon_ico: "/assets/favicon.ico"  (optional)
