@@ -34,7 +34,7 @@ Ritter_BoundarySystem
 Ritter_EventSpawner
 
 
-![Plugin Manager](../assets/images/installation/plugin-manager.png)
+![Plugin Manager](../Assets/BaseSpawner/Installation/Spawner_Plugin_Manager.png)
 
 ---
 
@@ -42,14 +42,12 @@ Ritter_EventSpawner
 
 After enabling the plugin, adjust its parameters to match your project’s needs.
 
-Key configuration areas include:
+Key configuration areas:
 
-- Spawn Map settings
 - Spawn Event Starting EventId Number
-- Boundary integration settings
-- Debug / logging preferences
+- Spawn Map Settings
 
-![Plugin Parameters](../assets/images/installation/plugin-parameters.png)
+![Plugin Parameters](../Assets/BaseSpawner/Installation/Spawner_Plugin_Parameters.png)
 
 ---
 
@@ -66,7 +64,7 @@ To set this up:
 
 This map acts like a library of spawnable event types.
 
-![Template Map](../assets/images/installation/template-map.png)
+![Template Map](../Assets/BaseSpawner/Installation/Spawner_Spawn_Map.png)
 
 ---
 
@@ -77,17 +75,14 @@ Run a playtest and confirm that the spawner is functioning properly.
 Try the following:
 
 - Execute **Plugin Commands** to spawn/unspawn events  
-- Test **Script Calls** from the console  
-- Verify that template events correctly appear on gameplay maps  
-- Confirm boundary behavior (if using the Boundary System)
-
-![Playtest Example](../assets/images/installation/playtest.png)
+- Test **Script Calls** from the console using Guide linked below.
+- Verify that template events correctly appear on the game map
 
 ---
 
 ## Next Steps
 
-Once installation works, continue with the more advanced guides:
+Once finished with installation, continue with the more guides:
 
 - 👉 [Script Calls](script-calls.md)  
 - 👉 [Plugin Commands](plugin-commands.md)  
