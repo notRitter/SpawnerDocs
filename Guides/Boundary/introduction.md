@@ -64,8 +64,8 @@ This enables large, event-heavy maps with smooth, consistent performance.
 
 Below are the primary boundary types used to control event spawning.
 
-### **Fill On — Spawn Boundary**
-![FillOnBoundary](../Assets/BoundarySpawner/Introduction/FillOnBoundary.png)
+### **Fill On - Spawn Boundary**
+![FillOnBoundary](/Assets/BoundarySpawner/Introduction/FillOnBoundary.png)
 * **Type:** `FillOn`
 * **Width:** 17
 * **Height:** 7
@@ -80,8 +80,8 @@ Behavior:
 
 ---
 
-### **Fill In — Spawn Boundary**
-![FillOnBoundary](../Assets/BoundarySpawner/Introduction/FillInBoundary.png)
+### **Fill In - Spawn Boundary**
+![FillInBoundary](/Assets/BoundarySpawner/Introduction/FillInBoundary.png)
 * **Type:** `FillIn`
 * **Width:** 17
 * **Height:** 7
@@ -96,17 +96,19 @@ Behavior:
 
 ---
 
-### **Spawn On — Spawn Boundary**
-
-
-
-
+### **Spawn On - Spawn Boundary**
+![SpawnOnBoundary](/Assets/BoundarySpawner/Introduction/SpawnOnBoundary.png)
 * **Type:** `SpawnOn`
 * **Width:** 17
 * **Height:** 7
-* **Thickness:** 1
+* **Thickness:** 2
 
-Behavior matches **Fill In**, focusing on interior tiles and restoring/spawning events accordingly.
+Behavior:
+
+* Attempts to spawn one event on a random tile that is **on the boundary edge**.
+* Restores all saved events owned by this boundary found on those tiles on the boundary edge.
+* Spawns events that match your BoundaryEventSetup rules (legacy mode).
+* **Thickness** extends the boundary outward.
 
 ---
 
@@ -134,7 +136,7 @@ Your maps maintain controlled event populations automatically.
 
 The Boundary System integrates tightly with the Event Spawner:
 
-With a simple setup—such as a **spawn boundary** just outside the player’s screen and an **unspawn boundary** a bit further—you gain fully automated event streaming:
+With a simple setup; such as a **spawn boundary** just outside the player’s screen and an **unspawn boundary** a bit further you gain fully automated event streaming:
 
 * Automatic spawning & unspawning based on player movement
 * Persistent events that restore saved data
@@ -142,7 +144,7 @@ With a simple setup—such as a **spawn boundary** just outside the player’s s
 * Scalable systems for open worlds
 * Preloaded events via XY or RegionId
 
-Because every permanent event has a performance cost—even erased events—boundaries prevent unnecessary overhead.
+Because every permanent event has a performance cost, even erased events, boundaries prevent unnecessary overhead.
 
 You may design maps with hundreds or thousands of potential events, while only **40–100** ever exist at one time.
 
