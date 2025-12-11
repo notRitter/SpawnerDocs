@@ -1,0 +1,10 @@
+title: Ritter Ultimate Event Spawner Documentation
+description: Official documentation for the Ritter Ultimate Event Spawner for RPG Maker MV/MZ.
+theme: just-the-docs
+
+url: "https://notritter.github.com"
+baseurl: "/SpawnerDocs" 
+
+search_enabled: true
+# logo: "/assets/logo.png"    (optional, you can remove if no logo)
+# favicon_ico: "/assets/favicon.ico"  (optional)
