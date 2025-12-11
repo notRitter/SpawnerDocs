@@ -1,7 +1,7 @@
 ---
 title: Script Calls
-parent: Guides
-nav_order: 2
+parent: Documentation
+nav_order: 3
 ---
 
 # Script Calls
