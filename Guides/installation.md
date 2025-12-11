@@ -17,7 +17,7 @@ Download the plugin file and place it inside your project’s:
 
 /js/plugins/
 
-![Download the Plugin](../Assets/BaseSpawner/Installation/spawner_install_folder.png)
+![Download the Plugin](../Assets/BaseSpawner/Installation/Spawner_Install_Folder.png)
 
 ---
 
