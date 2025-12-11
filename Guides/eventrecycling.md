@@ -1,7 +1,7 @@
 ---
 title: Event Recycling
-parent: Documentation
-nav_order: 4
+parent: Guides
+nav_order: 1
 ---
 
 ![Event_Recycling](../Assets/BaseSpawner/Event_Recycling.png)
