@@ -1,6 +1,6 @@
 ---
 title: Event Recycling
-parent: Guides
+parent: Documentation
 nav_order: 4
 ---
 
