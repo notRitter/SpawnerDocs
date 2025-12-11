@@ -1,7 +1,7 @@
 ---
 title: Plugin Commands
-parent: Guides
-nav_order: 3
+parent: Documentation
+nav_order: 2
 ---
 
 # Plugin Commands
