@@ -1,6 +1,6 @@
 ---
 title: Introduction
-parent: Boundary
+parent: Boundary System Guides
 nav_order: 1
 ---
 
