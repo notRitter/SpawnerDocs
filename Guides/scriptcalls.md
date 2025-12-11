@@ -1,3 +1,9 @@
+---
+title: Installation
+parent: Guides
+nav_order: 2
+---
+
 # Ritter Ultimate Event Spawner Script Calls
 
 ## Spawn Event
