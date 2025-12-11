@@ -1,5 +1,5 @@
 ---
-title: ScriptCalls
+title: Script Calls
 parent: Guides
 nav_order: 2
 ---
@@ -110,8 +110,13 @@ Ritter.unspawnEvent(eventId, removeSave)
 ### Examples
 
 ```javascript
-Ritter.unspawnEvent(1000, true)
+// Unspawn event 1000
 Ritter.unspawnEvent(1000)
+```
+
+```javascript
+// Unspawn event 1000 and remove save data
+Ritter.unspawnEvent(1000, true)
 ```
 
 ## Unspawn Event by Coordinates
@@ -126,8 +131,13 @@ Ritter.unspawnEvent(x, y, removeSave)
 ### Examples
 
 ```javascript
-Ritter.unspawnEvent(15, 16, true)
+// Unspawn event at coordinates 4,8
 Ritter.unspawnEvent(4, 8)
+```
+
+```javascript
+// Unspawn event at coordinates 15,16 and remove save data
+Ritter.unspawnEvent(15, 16, true)
 ```
 
 ## Unspawn All Events
@@ -141,7 +151,12 @@ Ritter.unspawnAll(removeSave)
 ### Examples
 
 ```javascript
+// Unspawn all events
 Ritter.unspawnAll()
+```
+
+```javascript
+// Unspawn all spawned events and remove save data
 Ritter.unspawnAll(true)
 ```
 
