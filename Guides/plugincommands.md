@@ -1,5 +1,5 @@
 ---
-title: Installation
+title: Plugin Commands
 parent: Guides
 nav_order: 3
 ---
@@ -8,7 +8,7 @@ nav_order: 3
 
 ## Spawn Event
 
-![Plugin Command Image Goes Here]
+![SpawnEvent_PluginCommand](../Assets/BaseSpawner/PluginCommands/spawnEvent.png)
 
 * **mapId**: The ID or name of the map containing the event.
 * **eventId**: The ID or name of the event to spawn.
@@ -23,7 +23,7 @@ nav_order: 3
 
 ## Spawn Event Region
 
-![Plugin Command Image Goes Here]
+![SpawnEventRegion_PluginCommand](../Assets/BaseSpawner/PluginCommands/spawnEventRegion.png)
 
 * **mapId**: The ID of the map containing the event.
 * **eventId**: The ID of the event to spawn.
@@ -38,7 +38,7 @@ nav_order: 3
 
 ## Spawn Event Terrain Tag
 
-![Plugin Command Image Goes Here]
+![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/spawnEventTerrainTag.png)
 
 * **mapId**: The ID of the map containing the event.
 * **eventId**: The ID of the event to spawn.
@@ -53,7 +53,7 @@ nav_order: 3
 
 ## Transform Event
 
-![Plugin Command Image Goes Here]
+![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/transformEvent.png)
 
 * **eventId**: ID of the event on the map to transform.
 * **mapId**: Spawn map ID containing the template event.
@@ -61,24 +61,20 @@ nav_order: 3
 
 ## Unspawn Event
 
-![Plugin Command Image Goes Here]
-
-```javascript
-Ritter.unspawnEvent(eventId, removeSave)
-```
+![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/unspawnEvent.png)
 
 * **eventId**: ID of the event to unspawn.
 * **removeSave**: `true` to remove from saved events, `false` or empty to retain.
 
 ## Unspawn Event XY
 
-![Plugin Command Image Goes Here]
+![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/unspawnEventXy.png)
 
 * **x, y**: Coordinates to check for the event.
 * **removeSave**: `true` to remove from saved events, `false` or empty to retain.
 
 ## Unspawn All
 
-![Plugin Command Image Goes Here]
+![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/unspawnAll.png)
 
 * **removeSave**: `true` to delete all saved events, leave empty to retain.
