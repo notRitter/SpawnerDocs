@@ -5,7 +5,7 @@ nav_order: 1
 ---
 
 # Boundary System Introduction
-![Download the Plugin](../Assets/BoundarySpawner/Introduction/Boundary_Visuals_Lossy.gif)
+![Download the Plugin](https://images.squarespace-cdn.com/content/638d8e0d08f7d34f01db55f5/aa21069d-389b-454f-8884-5398efee3571/Boundary+Visuals+Lossy.gif?content-type=image%2Fgif)
 *Boundaries visualized using the Ritter_BoundaryVisualizer.js Developer Extension Plugin*
 
 * **2 Thickness "FillOn" Boundary** shown in **Green**
@@ -65,7 +65,7 @@ This enables large, event-heavy maps with smooth, consistent performance.
 Below are the primary boundary types used to control event spawning.
 
 ### **Fill On — Spawn Boundary**
-
+![FillOnBoundary](../Assets/BoundarySpawner/Introduction/FillOnBoundary.png)
 * **Type:** `FillOn`
 * **Width:** 17
 * **Height:** 7
@@ -81,7 +81,7 @@ Behavior:
 ---
 
 ### **Fill In — Spawn Boundary**
-
+![FillOnBoundary](../Assets/BoundarySpawner/Introduction/FillInBoundary.png)
 * **Type:** `FillIn`
 * **Width:** 17
 * **Height:** 7
@@ -98,9 +98,10 @@ Behavior:
 
 ### **Spawn On — Spawn Boundary**
 
-*(Note: Typically used similarly to FillIn)*
 
-* **Type:** `FillIn`
+
+
+* **Type:** `SpawnOn`
 * **Width:** 17
 * **Height:** 7
 * **Thickness:** 1
