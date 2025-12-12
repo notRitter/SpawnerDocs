@@ -13,7 +13,7 @@ For MZ users, these appear in the Plugin Command interface.
 
 # Create Boundary
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/CreateBoundary_Plugin_Command.png)
 
 Creates a Boundary used for spawning or unspawning events.
 
@@ -37,7 +37,7 @@ Creates a Boundary used for spawning or unspawning events.
 
 # Add Auto Handler
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/AddAutoHandler_Plugin_Command.png)
 
 Enables automatic spawning/unspawning for a boundary.
 
@@ -65,7 +65,7 @@ Enables automatic spawning/unspawning for a boundary.
 
 # Boundary Event Setup
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/BoundaryEventSetup_Plugin_Command.png)
 
 **Optional / Legacy method.**
 This plugin command is placed on **page 1** of SpawnMap events and behaves like metadata.
@@ -87,7 +87,7 @@ This prevents mass ID buildup and performance degradation. All other state persi
 
 # Init Boundary Events
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/Init_Boundary_Plugin_Command.png)
 
 ### Parameters
 
@@ -111,7 +111,7 @@ Use when entering a map or when manually preloading saved boundary events.
 
 # Activate Boundary
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/ActivateBoundary_Plugin_Command.png)
 
 Turns a boundary **on**.
 
@@ -129,7 +129,7 @@ A boundary will spawn or unspawn events only when active **and** all other condi
 
 # Deactivate Boundary
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/Deactivate_Boundary_Plugin_Command.png)
 
 Turns a boundary **off**.
 
@@ -144,7 +144,7 @@ Once deactivated, the boundary stops all spawn/unspawn activity until activated 
 
 # Enable Event
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/EnableEvent_Plugin_Command.png)
 
 ### Parameters
 
@@ -157,7 +157,7 @@ Allows this event to be spawned by auto boundaries.
 
 # Disable Event
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/DisableEvent_Plugin_Command.png)
 
 ### Parameters
 
@@ -171,7 +171,7 @@ Prevents the event from being spawned by boundaries.
 
 # Edit Spawner Boundary
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/EditBoundary_Plugin_Command.png)
 
 Modifies an existing boundary’s properties.
 
@@ -181,7 +181,7 @@ Modifies an existing boundary’s properties.
 * **param** — Property to edit.
 * **value** — Value to apply.
 
-Leave unused parameters as `undefined`.
+Leave unchanged parameters empty.
 
 ### Parameter Keys
 
@@ -215,7 +215,7 @@ When the boundary reaches that tile:
 
 # Preload Saved Boundary Event
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/PreloadEvent_Plugin_Command.png)
 
 ### Parameters
 
@@ -235,7 +235,7 @@ Allows deferred spawning until the player is nearby.
 
 # Preload Saved Boundary Event (Region)
 
-![Plugin Command UI](REPLACE_ME)
+![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/PreloadEventRegion_Plugin_Command.png)
 
 ### Parameters
 
@@ -249,5 +249,3 @@ Allows deferred spawning until the player is nearby.
 Preloads an event into a **random region tile** inside the boundary, spawning later when conditions are met.
 
 ---
-
-End of Plugin Command Documentation.
