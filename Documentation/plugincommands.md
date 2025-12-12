@@ -1,6 +1,6 @@
 ---
 title: Plugin Commands
-parent: Documentation
+parent: Spawner Documentation
 nav_order: 2
 ---
 
