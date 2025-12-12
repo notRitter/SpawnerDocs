@@ -1,6 +1,6 @@
 ---
-title: Guides
-nav_order: 5
+title: Spawner Guides
+nav_order: 3
 has_children: true
 ---
 
