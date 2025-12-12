@@ -145,7 +145,7 @@ BEID identifies an event regardless of whether it is:
 * Not yet spawned for the first time
 
 ### Accessing BEID Entries
-![BEIDEntry_Console](/Assets/BoundarySpawner/BEIDEntry.png)
+![BEIDEntry_Console](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/BEIDEntry.png)
 
 ```
 Ritter.getBEIDEntry("BoundaryName", mapId, BEID)
