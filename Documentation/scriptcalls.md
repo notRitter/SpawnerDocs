@@ -1,6 +1,6 @@
 ---
 title: Script Calls
-parent: Documentation
+parent: Spawner Documentation
 nav_order: 3
 ---
 
