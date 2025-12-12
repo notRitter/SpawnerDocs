@@ -44,12 +44,12 @@ Because the system recycles rather than repeatedly constructing and destroying e
 
 * No unused event clutter accumulates in memory.
 * Frame rate remains stable even after hours of gameplay.
-* Large-scale or continuous spawning becomes feasible.
+* Opens the door to large-scale and continuous spawning.
 * The engine avoids slowdown caused by hundreds of inactive events.
 
-This is how the spawner has been stress‑tested with **tens of millions** of spawns and unspawns without any performance loss.
+This spawner breezes through extreme stress‑tests with **tens of millions** of spawns and unspawns without any performance loss.
 
-### Why This Matters for Developers
+### Why This Matters
 
 Event recycling makes the spawner ideal for:
 
@@ -63,4 +63,4 @@ Event recycling makes the spawner ideal for:
 * Endless runner object generation
 * Any game requiring constant spawning and cleanup
 
-Instead of events piling up over time, you get a stable system that performs the same at **20 hours** as it did at **2 minutes**.
+Instead of unspawned erased events piling up over time, you get a stable system that performs the same at **20 hours** as it did at **2 minutes**.
