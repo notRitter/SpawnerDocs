@@ -21,11 +21,11 @@ Welcome! This is the official documentation for the **Ritter Ultimate Event Spaw
 The **Ritter Ultimate Event Spawner** simplifies and supercharges dynamic content for RPG Maker:
 
 * Spawn events by [coordinates](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event), [region](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event-by-region), or [terrain tag](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event-by-terrain-tag)
-* [Transform existing events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event-by-terrain-tag) into live instances of template events
-* Save events for persistent gameplay or use temporary spawns
-* Recycle event objects to prevent memory bloat and preserve performance
+* [Transform existing events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#transform-event) into live instances of template events
+* [Save events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#examples) for persistent gameplay or use temporary spawns
+* [Recycle event objects](https://notritter.github.io/SpawnerDocs/Guides/eventrecycling.html) to prevent memory bloat and preserve performance
 * [Boundary-based spawning system](https://notritter.github.io/SpawnerDocs/Guides/Boundary/introduction.html) for streaming large maps
-* [Full script-call (MV&MZ)](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html) and [plugin-command control(MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html)
+* [Full script-call (MV&MZ)](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html) and [plugin-command (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html) control
 
 ---
 
