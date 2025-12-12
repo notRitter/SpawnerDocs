@@ -1,5 +1,5 @@
 ---
-title: Documentation
+title: Spawner Documentation
 nav_order: 2
 has_children: true
 ---
