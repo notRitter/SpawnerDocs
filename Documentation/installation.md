@@ -1,6 +1,6 @@
 ---
-title: Installation
-parent: Documentation
+title: Spawner Installation
+parent: Spawner Documentation
 nav_order: 1
 ---
 
@@ -45,7 +45,9 @@ After enabling the plugin, adjust its parameters to match your project’s needs
 Key configuration areas:
 
 - Spawn Event Starting EventId Number
+- - Spawn eventIds begin at this number
 - Spawn Map Settings
+- - Spawn Map Ids to preload
 
 ![Plugin Parameters](../Assets/BaseSpawner/Installation/Spawner_Plugin_Parameters.png)
 
@@ -62,7 +64,7 @@ To set this up:
 3. These events should **never** appear directly in your game  
 4. The spawner duplicates them dynamically when needed  
 
-This map acts like a library of spawnable event types.
+This map acts like a library of spawnable events.
 
 ![Template Map](../Assets/BaseSpawner/Installation/Spawner_Spawn_Map.png)
 
