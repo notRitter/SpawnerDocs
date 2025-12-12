@@ -1,6 +1,6 @@
 ---
 title: Event Recycling
-parent: Guides
+parent: Spawner Guides
 nav_order: 1
 ---
 
