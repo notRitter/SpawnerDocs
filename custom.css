@@ -1,35 +1,19 @@
-/* --- Desktop: Force correct sidebar width and remove extra left gutter --- */
+/* Force the entire Just-the-Docs layout to align left instead of centered */
 @media (min-width: 50rem) {
-  /* reset likely container padding/margins that produce the left gutter */
-  body, .site, .site-inner, .wrap, .container, .page {
-    padding-left: 0 !important;
+  .page,
+  .site,
+  .site-inner,
+  .main,
+  .main-header,
+  .main-content,
+  .footer {
+    max-width: none !important;
     margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
-  /* sidebar sizing and position */
-  .side-bar, .sidebar, .sidebar-inner {
-    width: 264px !important;    /* pick your width */
+  /* Sidebar pinned to far left */
+  .side-bar {
     left: 0 !important;
-    transform: none !important;
-    box-sizing: border-box !important;
   }
-
-  /* keep main content correctly offset from the sidebar */
-  .main, .site-main, .content {
-    margin-left: 264px !important; /* match sidebar width */
-    padding-left: 2rem;            /* optional breathing room */
-  }
-
-  /* align header/logo with content area (prevents the header from spanning full page leaving a left gap) */
-  .site-header, .header, .masthead {
-    margin-left: 264px !important;
-    padding-left: 0 !important;
-  }
-}
-
-/* Mobile remains intact by not affecting small screens */
-@media (max-width: 50rem) {
-  .side-bar, .sidebar, .sidebar-inner { width: 100% !important; left:auto !important; transform:none !important; }
-  .main, .site-main, .content { margin-left: 0 !important; }
-  .site-header, .header, .masthead { margin-left: 0 !important; }
 }
