@@ -5,16 +5,13 @@ nav_order: 1
 
 # Ritter Ultimate Event Spawner Documentation
 
-Welcome — this is the official documentation for the **Ritter Ultimate Event Spawner** (RPG Maker MV & MZ).
-
-This landing page gives a clean, mobile‑friendly overview of the whole docs site and acts as an alternative to the sidebar. Use it to quickly find what you need whether you’re on desktop or phone.
+Welcome! This is the official documentation for the **Ritter Ultimate Event Spawner** (RPG Maker MV & MZ).
 
 ---
 
 ## Quick Links
 
-* **Buy the plugin:** [Ritter Ultimate Event Spawner on Itch.io](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv)
-* **Repository / Docs:** (link your GitHub Pages root here)
+* **Itch.io Store Page:** [Ritter Ultimate Event Spawner on Itch.io](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv)
 
 ---
 
@@ -31,7 +28,7 @@ The **Ritter Ultimate Event Spawner** simplifies and supercharges dynamic conten
 
 ---
 
-## Documentation Structure (Table of Contents)
+## Documentation Structure
 
 Below is a concise map of the docs so you can land on the exact topic you need.
 
@@ -88,7 +85,7 @@ Below is a concise map of the docs so you can land on the exact topic you need.
 
 ## Notes for MV vs MZ users
 
-* **MV:** Script calls are the primary integration point. Plugin commands exist but MV’s plugin command UI is limited.
+* **MV:** Script calls are the sole integration point.
 * **MZ:** Full plugin-command support via the editor UI; examples in the Plugin Commands pages show MZ UI screenshots and arguments.
 
 ---
