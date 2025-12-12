@@ -154,13 +154,14 @@ Ritter.getBEIDEntry("BoundaryName", mapId, BEID)
 Returns the BEID entry itself.
 
 ```
-Ritter.getBEIDEntry("BoundaryName", mapId, BEID).event()
+let BEIDEntry = Ritter.getBEIDEntry("BoundaryName", mapId, BEID);
+let event = BEIDEntry.event();
 ```
 
 Returns:
 
 * The active Game_Event (if spawned)
-* The unspawned saved event data
+* The inactive saved Game_Event from the database
 * The preload object (if not yet spawned)
 
 ![BEIDEntry_event](https://images.squarespace-cdn.com/content/638d8e0d08f7d34f01db55f5/2daa0eae-e6a1-44c8-b3ec-aac3dbef5278/BEIDEntry_event.gif?content-type=image%2Fgif)
