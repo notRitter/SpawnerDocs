@@ -6,13 +6,16 @@ nav_order: 1
 # Ritter Ultimate Event Spawner Documentation
 <img src="https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/RitterUltimateEventSpawnerLogo.png" alt="Ritter Ultimate Event Spawner Logo" style="width: 25%; height: auto;"/>
 
-Welcome! This is the official documentation for the **Ritter Ultimate Event Spawner** (RPG Maker MV & MZ).
+Welcome!
+
+This is the official documentation for the **Ritter Ultimate Event Spawner** (RPG Maker MV & MZ).
 
 ---
 
 ## Quick Links
 
-* **Itch.io Store Page:** [Ritter Ultimate Event Spawner on Itch.io](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv)
+* **Store Page:** [Ritter Ultimate Event Spawner on Itch.io](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv)
+* **Store Page:** [Ritter Boundary System on Itch.io](https://notritter.itch.io/ritter-boundary-system-rpg-maker-mz)
 
 ---
 
@@ -21,10 +24,10 @@ Welcome! This is the official documentation for the **Ritter Ultimate Event Spaw
 The **Ritter Ultimate Event Spawner** simplifies and supercharges dynamic content for RPG Maker:
 
 * Spawn events by [coordinates](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event), [region](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event-by-region), or [terrain tag](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event-by-terrain-tag)
-* [Transform existing events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#transform-event) into live instances of template events
-* [Save events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#examples) for persistent gameplay or use temporary spawns
+* [Transform existing events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#transform-event) into live instances of [template events](https://notritter.github.io/SpawnerDocs/Documentation/installation.html#4-create-a-template-map-for-source-events)
+* [Save events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#examples) for persistence throughout gameplay or use temporary spawns
 * [Recycle event objects](https://notritter.github.io/SpawnerDocs/Guides/eventrecycling.html) to prevent memory bloat and preserve performance
-* [Boundary-based spawning system](https://notritter.github.io/SpawnerDocs/Guides/Boundary/introduction.html) for streaming large maps
+* [Boundary-based spawning system](https://notritter.github.io/SpawnerDocs/Guides/Boundary/introduction.html) for [streaming events on large maps]()
 * [Full script-call (MV&MZ)](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html) and [plugin-command (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html) control
 
 ---
@@ -92,6 +95,6 @@ Below is a concise map of the docs so you can land on the exact topic you need.
 
 ## Contribute / Report issues
 
-If you find a problem or want to suggest improvements, please make a post on the forums on store page for the plugin on Itch.io.
+If you find a problem or want to suggest improvements, please make a post on the [forums](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv/community) which can be found on the [store page on Itch.io.](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv)
 
 ---
