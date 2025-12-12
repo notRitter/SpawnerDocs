@@ -123,7 +123,7 @@ This workflow is the most flexible and efficient way to populate your maps.
 ---
 
 ## 5. BEID: Persistent Event Identity
-![FillOnBoundary](/Assets/BoundarySpawner/BEIDEntry_event.gif)
+![FillOnBoundary](https://images.squarespace-cdn.com/content/638d8e0d08f7d34f01db55f5/2daa0eae-e6a1-44c8-b3ec-aac3dbef5278/BEIDEntry_event.gif?content-type=image%2Fgif)
 
 Every Saved Boundary Event has a permanent **BEID**, defined by:
 
