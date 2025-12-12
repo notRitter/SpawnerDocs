@@ -37,9 +37,9 @@ Below is a concise map of the docs so you can land on the exact topic you need.
 
 **Documentation**
 
-* [Installation & Setup](https://notritter.github.io/SpawnerDocs/Documentation/installation.html)
-* [Script Calls](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html)
-* [Plugin Commands (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html)
+* [Installation & Setup](https://notritter.github.io/SpawnerDocs/Documentation/installation.html#installation)
+* [Script Calls](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#script-calls)
+* [Plugin Commands (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#plugin-commands)
 * [Event Recycling (how recycling works)](https://notritter.github.io/SpawnerDocs/Guides/eventrecycling.html)
 * Spawn Maps & Templates
 * Saved Events System
@@ -58,9 +58,9 @@ Below is a concise map of the docs so you can land on the exact topic you need.
 
 **Documentation**
 
-* [Boundary System Introduction](https://notritter.github.io/SpawnerDocs/Guides/Boundary/introduction.html)
-* [Boundary Script Calls](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html)
-* [Boundary Plugin Commands (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/plugincommands.html)
+* [Boundary System Introduction](https://notritter.github.io/SpawnerDocs/Guides/Boundary/introduction.html#boundary-system-introduction)
+* [Boundary Script Calls](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html#boundary-system--script-call-documentation)
+* [Boundary Plugin Commands (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/plugincommands.html#boundary-system-plugin-commands-documentation)
 * Boundary Types & Behaviors
 * Auto Handlers & Update Methods
 * Saved Boundary Events & Preloading
@@ -69,7 +69,7 @@ Below is a concise map of the docs so you can land on the exact topic you need.
 
 * Event Streaming Quick Start Guide!
 * Correctly designing Spawn & Unspawn Zones
-* [Boundary System Best Practices](https://notritter.github.io/SpawnerDocs/Guides/Boundary/bestpractices.html)
+* [Boundary System Best Practices](https://notritter.github.io/SpawnerDocs/Guides/Boundary/bestpractices.html#boundary-system-best-practices-guide)
 * Expanding Worlds with Boundaries
 * Boundary Debugging & Visualizer Usage
 
