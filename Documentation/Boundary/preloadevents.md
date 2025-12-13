@@ -1,5 +1,5 @@
 ---
-title: Preload Saved Boundary Events
+title: Preload Boundary Events
 parent: Boundary Documentation
 nav_order: 4
 ---
