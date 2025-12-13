@@ -1,7 +1,7 @@
 ---
-title: Preload Events
+title: Preload Saved Boundary Events
 parent: Boundary Documentation
-nav_order: 3
+nav_order: 4
 ---
 
 # Preloaded Boundary Events
