@@ -19,19 +19,19 @@ Creates a Boundary used for spawning or unspawning events.
 
 ### Parameters
 
-* **width** — Number of tiles wide the boundary is.
-* **height** — Number of tiles high the boundary is.
-* **thickness** — Number of tiles thick the boundary wall is.
-* **name** — Unique boundary name used later when spawning or unspawning.
-* **eventId** — Determines boundary anchor:
+* **width** - Number of tiles wide the boundary is.
+* **height** - Number of tiles high the boundary is.
+* **thickness** - Number of tiles thick the boundary wall is.
+* **name** - Unique boundary name used later when spawning or unspawning.
+* **eventId** - Determines boundary anchor:
 
   * `0` = Boundary follows the **player**
   * `>0` = Boundary follows **event with that eventId**
-  * `-1` = Boundary is centered on **x,y coordinates** — requires `centerx` and `centery`
-* **expandBy** — Extra tiles extending in the player’s movement direction to encourage forward-facing spawns.
-* **maxEvents** — Max number of events this boundary may actively manage.
-* **centerx** — Only used when `eventId = -1`. Center X position.
-* **centery** — Only used when `eventId = -1`. Center Y position.
+  * `-1` = Boundary is centered on **x,y coordinates** - requires `centerx` and `centery`
+* **expandBy** - Extra tiles extending in the player’s movement direction to encourage forward-facing spawns.
+* **maxEvents** - Max number of events this boundary may actively manage.
+* **centerx** - Only used when `eventId = -1`. Center X position.
+* **centery** - Only used when `eventId = -1`. Center Y position.
 
 ---
 
@@ -43,23 +43,23 @@ Enables automatic spawning/unspawning for a boundary.
 
 ### Parameters
 
-* **name** — Boundary name.
-* **spawnMap** — ID of the SpawnMap to pull events from.
-* **type** — Mode of operation:
+* **name** - Boundary name.
+* **spawnMap** - ID of the SpawnMap to pull events from.
+* **type** - Mode of operation:
 
-  * `SpawnOn` — Spawn events on boundary edge
-  * `SpawnIn` — Spawn events inside boundary
-  * `FillOn` — Fill every valid tile on boundary edge
-  * `FillIn` — Fill every valid tile inside boundary
-  * `UnspawnOn` — Unspawn events on boundary edge
-  * `UnspawnIn` — Unspawn events inside boundary
-* **updateMode** — How the boundary updates:
+  * `SpawnOn` - Spawn events on boundary edge
+  * `SpawnIn` - Spawn events inside boundary
+  * `FillOn` - Fill every valid tile on boundary edge
+  * `FillIn` - Fill every valid tile inside boundary
+  * `UnspawnOn` - Unspawn events on boundary edge
+  * `UnspawnIn` - Unspawn events inside boundary
+* **updateMode** - How the boundary updates:
 
-  * **Wait Time** — Update every *n* frames
-  * **Player Move** — Update each time player moves to a new tile
-* **wait** — Number of frames between spawn/unspawn checks.
-* **enabled** — Whether the boundary auto‑handler begins active.
-* **boundary** — *(Unspawn only)* Array of boundary names it may remove events from. Each unspawned event must match one of the listed boundaries via its `parentBoundary`.
+  * **Wait Time** - Update every *n* frames
+  * **Player Move** - Update each time player moves to a new tile
+* **wait** - Number of frames between spawn/unspawn checks.
+* **enabled** - Whether the boundary auto‑handler begins active.
+* **boundary** - *(Unspawn only)* Array of boundary names it may remove events from. Each unspawned event must match one of the listed boundaries via its `parentBoundary`.
 
 ---
 
@@ -72,11 +72,11 @@ This plugin command is placed on **page 1** of SpawnMap events and behaves like 
 
 ### Parameters
 
-* **Boundary List** — Array of boundary names this event may spawn on.
-* **Map List** — Game map IDs this event is allowed to spawn on.
-* **RegionId List** — Region IDs the event may spawn on.
-* **Enabled By Default?** — Whether the event is initially allowed to spawn.
-* **Saved Event?** — Whether this event should be restored if re‑encountered.
+* **Boundary List** - Array of boundary names this event may spawn on.
+* **Map List** - Game map IDs this event is allowed to spawn on.
+* **RegionId List** - Region IDs the event may spawn on.
+* **Enabled By Default?** - Whether the event is initially allowed to spawn.
+* **Saved Event?** - Whether this event should be restored if re‑encountered.
 
 ### Important Note About Saved Boundary Events
 
@@ -91,7 +91,7 @@ This prevents mass ID buildup and performance degradation. All other state persi
 
 ### Parameters
 
-* **boundaryName** — Name of the boundary to initialize.
+* **boundaryName** - Name of the boundary to initialize.
 
 Use this when you want to restore all saved boundary events when loading a map.
 
@@ -117,7 +117,7 @@ Turns a boundary **on**.
 
 ### Parameters
 
-* **boundaryName** — Boundary to activate.
+* **boundaryName** - Boundary to activate.
 
 A boundary will spawn or unspawn events only when active **and** all other conditions are met:
 
@@ -135,8 +135,8 @@ Turns a boundary **off**.
 
 ### Parameters
 
-* **boundaryName** — Boundary to deactivate.
-* **unspawnAll** — `true/false`. Whether to unspawn all events belonging to this boundary immediately.
+* **boundaryName** - Boundary to deactivate.
+* **unspawnAll** - `true/false`. Whether to unspawn all events belonging to this boundary immediately.
 
 Once deactivated, the boundary stops all spawn/unspawn activity until activated again.
 
@@ -148,8 +148,8 @@ Once deactivated, the boundary stops all spawn/unspawn activity until activated 
 
 ### Parameters
 
-* **spawnMap** — SpawnMap ID.
-* **eventId** — Event ID to enable.
+* **spawnMap** - SpawnMap ID.
+* **eventId** - Event ID to enable.
 
 Allows this event to be spawned by auto boundaries.
 
@@ -161,11 +161,11 @@ Allows this event to be spawned by auto boundaries.
 
 ### Parameters
 
-* **spawnMap** — SpawnMap ID.
-* **eventId** — Event ID to disable.
+* **spawnMap** - SpawnMap ID.
+* **eventId** - Event ID to disable.
 
 Prevents the event from being spawned by boundaries.
-**Saved versions will still restore** — this only blocks *new* spawns.
+**Saved versions will still restore** - this only blocks *new* spawns.
 
 ---
 
@@ -177,9 +177,9 @@ Modifies an existing boundary’s properties.
 
 ### Parameters
 
-* **boundaryName** — Boundary to modify.
-* **param** — Property to edit.
-* **value** — Value to apply.
+* **boundaryName** - Boundary to modify.
+* **param** - Property to edit.
+* **value** - Value to apply.
 
 Leave unchanged parameters empty.
 
@@ -200,7 +200,7 @@ Changing boundary size may leave some events outside an unspawn boundary. Shrink
 
 ---
 
-# v2.1 — NEW FEATURE
+# v2.1 - NEW FEATURE
 
 **Preload Saved Boundary Events**
 
@@ -219,15 +219,15 @@ When the boundary reaches that tile:
 
 ### Parameters
 
-* **boundaryName** — Boundary that will spawn the event.
-* **spawnMap** — SpawnMap ID.
-* **eventId** — Template event ID.
-* **x**, **y** — Coordinates to preload.
-* **BEID -> Game Variable** — Variable to store the BEID.
+* **boundaryName** - Boundary that will spawn the event.
+* **spawnMap** - SpawnMap ID.
+* **eventId** - Template event ID.
+* **x**, **y** - Coordinates to preload.
+* **BEID -> Game Variable** - Variable to store the BEID.
 * **Setter Type**:
 
-  * `SetValueAsInteger` — Store BEID as number
-  * `PushValueAsArray` — Push BEID into an array
+  * `SetValueAsInteger` - Store BEID as number
+  * `PushValueAsArray` - Push BEID into an array
 
 Allows deferred spawning until the player is nearby.
 
@@ -239,12 +239,12 @@ Allows deferred spawning until the player is nearby.
 
 ### Parameters
 
-* **boundaryName** — Target boundary.
-* **spawnMap** — SpawnMap ID.
-* **eventId** — Template event ID.
-* **regions** — Array of region IDs; one is chosen randomly.
-* **BEID -> Game Variable** — Variable for BEID.
-* **Setter Type** — Same as above.
+* **boundaryName** - Target boundary.
+* **spawnMap** - SpawnMap ID.
+* **eventId** - Template event ID.
+* **regions** - Array of region IDs; one is chosen randomly.
+* **BEID -> Game Variable** - Variable for BEID.
+* **Setter Type** - Same as above.
 
 Preloads an event into a **random region tile** inside the boundary, spawning later when conditions are met.
 
