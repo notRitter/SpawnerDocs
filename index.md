@@ -27,8 +27,8 @@ The **Ritter Ultimate Event Spawner** simplifies and supercharges dynamic conten
 * [Transform existing events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#transform-event) into live instances of [template events](https://notritter.github.io/SpawnerDocs/Documentation/installation.html#4-create-a-template-map-for-source-events)
 * [Save events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#examples) for persistence throughout gameplay or use temporary spawns
 * [Recycle event objects](https://notritter.github.io/SpawnerDocs/Guides/eventrecycling.html) to prevent memory bloat and preserve performance
-* [Boundary-based spawning system](https://notritter.github.io/SpawnerDocs/Guides/Boundary/introduction.html) for [streaming events on large maps]()
-* [Full script-call (MV&MZ)](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html) and [plugin-command (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html) control
+* Full [script-call (MV&MZ)](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html) and [plugin-command (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html) control
+* [Boundary-based spawning system](https://notritter.github.io/SpawnerDocs/Guides/Boundary/introduction.html) for streaming events on large maps
 
 ---
 
@@ -43,19 +43,20 @@ Below is a concise map of the docs so you can land on the exact topic you need.
 * [Installation & Setup](https://notritter.github.io/SpawnerDocs/Documentation/installation.html#installation)
 * [Script Calls](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#script-calls)
 * [Plugin Commands (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#plugin-commands)
-* [Event Recycling (how recycling works)](https://notritter.github.io/SpawnerDocs/Guides/eventrecycling.html)
 * [Spawn Maps & Templates](https://notritter.github.io/SpawnerDocs/Documentation/spawnmapsandtemplates.html)
 * [Saved Events](https://notritter.github.io/SpawnerDocs/Documentation/savedevents.html)
 
 **Guides**
 
+* [Event Recycling (how recycling works)](https://notritter.github.io/SpawnerDocs/Guides/eventrecycling.html)
 * Beginner Quick Start
 * Performance Optimization
-* Random Encounter Setup
 
 ---
 
 ### Boundary Spawner
+Requires Ritter Boundary System
+
 
 **Documentation**
 
