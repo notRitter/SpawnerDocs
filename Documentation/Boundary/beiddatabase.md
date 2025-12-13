@@ -187,6 +187,8 @@ This allows **safe, unified access** regardless of state.
 
 In some cases, `event()` may return a **preload object** instead of a live event.
 
+![PreloadObjExample](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PreloadObjectExample.png)
+
 You can detect this by checking:
 
 ```js
