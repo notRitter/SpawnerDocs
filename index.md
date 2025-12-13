@@ -44,16 +44,14 @@ Below is a concise map of the docs so you can land on the exact topic you need.
 * [Script Calls](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#script-calls)
 * [Plugin Commands (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#plugin-commands)
 * [Event Recycling (how recycling works)](https://notritter.github.io/SpawnerDocs/Guides/eventrecycling.html)
-* Spawn Maps & Templates
+* [Spawn Maps & Templates](https://notritter.github.io/SpawnerDocs/Documentation/spawnmapsandtemplates.html)
 * Saved Events System
-* Event Transformations
 
 **Guides**
 
 * Beginner Quick Start
 * Performance Optimization
 * Random Encounter Setup
-* Dynamic Objects & World Population
 
 ---
 
@@ -66,7 +64,9 @@ Below is a concise map of the docs so you can land on the exact topic you need.
 * [Boundary Plugin Commands (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/plugincommands.html#boundary-system-plugin-commands-documentation)
 * Boundary Types & Behaviors
 * Auto Handlers & Update Methods
-* Saved Boundary Events & Preloading
+* [Saved Boundary Events](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/savedboundaryevents.html)
+* [Preloading Saved Boundary Events](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/preloadevents.html)
+* [BEID Database](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/beiddatabase.html)
 
 **Guides**
 
