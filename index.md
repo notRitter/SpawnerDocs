@@ -45,7 +45,7 @@ Below is a concise map of the docs so you can land on the exact topic you need.
 * [Plugin Commands (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#plugin-commands)
 * [Event Recycling (how recycling works)](https://notritter.github.io/SpawnerDocs/Guides/eventrecycling.html)
 * [Spawn Maps & Templates](https://notritter.github.io/SpawnerDocs/Documentation/spawnmapsandtemplates.html)
-* Saved Events System
+* [Saved Events](https://notritter.github.io/SpawnerDocs/Documentation/savedevents.html)
 
 **Guides**
 
