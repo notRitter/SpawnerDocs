@@ -193,22 +193,17 @@ Ritter.Boundary.addAutoHandler(name, spawnMap, maps, type, wait, enabled, bounda
 ```
 
 
+
 ---
 
 # 3. Boundary Initialization
 
 ## `Ritter.Boundary.initBoundaryEvents(boundaryName)`
+ * `boundaryName` - "Spawn Boundary Name"
 
-Preloads all saved events inside or on a boundary at map load.
+Spawns all saved events within a boundary.
 
-Only needed when using:
-
-* `SpawnOn`
-* `FillOn`
-
-For `SpawnIn` or `FillIn`, initialization is not required.
-
-Recommended usage: place in an Autorun event that erases itself.
+Helpful to run after boundary creation and preloading of saved boundary events.
 
 ---
 
@@ -220,7 +215,7 @@ Turns a boundary **on**, allowing it to spawn or unspawn events.
 
 ## `Ritter.Boundary.deactivate(boundaryName, unspawnAll)`
 
-Turns a boundary **off**.
+Turns a boundary **off** and optionally unspawns all of it's events.
 
 ### Parameters
 
@@ -230,6 +225,7 @@ Turns a boundary **off**.
 ---
 
 # 5. Enabling & Disabling Events
+(When using [BoundaryEventSetup Plugin Command](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/plugincommands.html#boundary-event-setup) method)
 
 ## `Ritter.Boundary.enableEvent(spawnMap, eventId)`
 
@@ -277,7 +273,7 @@ Ritter.Boundary.editSpawnerBoundary("spawn", "height", 17);
 
 ## `Ritter.spawnEventOnBoundary(mapId, eventId, regions, boundaryName)`
 
-Spawns an event on a region **along the boundary edge**.
+Spawns an event on a random valid tile **along the boundary edge**.
 
 ## `Ritter.spawnFillOnBoundary(mapId, eventId, regions, boundaryName)`
 
