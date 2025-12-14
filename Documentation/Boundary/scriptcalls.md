@@ -45,7 +45,7 @@ Creates a Boundary used for spawning or unspawning events.
 
 ---
 
-### Example One: Spawn Boundary Outside Of The Screen Anchored To Player
+### Example One: Spawn Boundary Outside Of The Screen Anchored To The Player
 
 ```js
 const width = Graphics.width / $gameMap.tileWidth() + 4; // 2nd ring of tiles outside of the screen
@@ -59,11 +59,11 @@ const maxEvents = 200; // Boundary is limited to 200 actively spawned events
 Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId, expandBy, maxEvents);
 ```
 
-Creates a spawn boundary named "Static Spawn" tracking **The Player** which is 2 tiles distance outside of the screen, with 2-tile thickness. (Starts at the 1st ring of tiles outside of the screen and covers 2 total rings thickness)
+Creates a spawn boundary named "Static Spawn" tracking **The Player** which is 2 tiles distance outside of the screen, with 2-tile thickness. (Starts at the 2nd ring of tiles outside of the screen and covers 2 total rings thickness)
 
 ---
 
-### Example Two: Unspawn Boundary Outside Of The Screen Anchored To Player
+### Example Two: Unspawn Boundary Outside Of The Screen Anchored To The Player
 
 ```js
 const width = Graphics.width / $gameMap.tileWidth() + 8; // 4th ring of tiles outside of the screen
@@ -96,17 +96,23 @@ For this type of boundary setup you'll always want your unspawn boundary outside
 
 ---
 
-```js
-const width = 15; // 15 tiles width
-const height = 15; // 15 tiles height
-const thickness = 1; // 1 thickness is lowest value.
-const name = "unspawn"; // name works as your boundary ID
-const eventId = 0; // achors boundary to player
+### Example Three: 3x3 Spawn Boundary Anchored To The Player
 
-Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId);
+```js
+const width = 3; // 3 tiles width
+const height = 3; // 3 tiles height
+const thickness = 1; // 1 thickness is lowest value.
+const name = "3x3 Spawn"; // name works as your boundary ID
+const eventId = 0; // achors boundary to player
+const expandBy = 0; // No expanding the boundary
+const maxEvents = 12; // Some extra room for recycling
+
+Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId, expandBy, maxEvents);
 ```
 
-Creates a unspawn boundary named "unspawn" tracking **the Player** which is 15 width x 15 height with normal thickness.
+Creates a spawn boundary named "3x3 Spawn" tracking **the Player** which is 3 width x 3 height with normal thickness.
+
+---
 
 ```js
 const width = 11;
