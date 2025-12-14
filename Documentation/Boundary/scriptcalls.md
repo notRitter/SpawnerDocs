@@ -22,34 +22,79 @@ Creates a Boundary used for spawning or unspawning events.
 ### Parameters
 
 * **width** - Width of the boundary in tiles.
+  * Use `odd numbers`. Boundary needs a center tile, which requires odd numbers.
 * **height** - Height of the boundary in tiles.
+  * Use `odd numbers`. Boundary needs a center tile, which requires odd numbers.
 * **thickness** - Boundary wall thickness in tiles.
+  * `1` → Default value.
+  * `2` → grows the boundary outward by 1 extra ring of tiles.
+  * Larger values increase thickness further.
 * **name** - String name used to reference this boundary.
 * **eventId** - Determines the boundary anchor:
-
   * `0` → Boundary follows the **player**
   * Any number >0 → Boundary follows **event with that eventId**
   * `-1` → Boundary anchored to **x,y coordinates** (requires `centerx`, `centery`)
 * **expandBy** - Expands boundary thickness on the player’s movement axis to encourage forward-facing spawns.
+  * This was created for a project which required the constant spawning of ABS enemies around the player.
+    * It increases the probability of spawns ahead of the player, while still allowing spawns to the sides and back.
+    * **Be mindful not to overlap connected Spawn & Unspawn boundaries when expanding.**
+    * For most use cases keep this set to `0`
 * **maxEvents** - Maximum number of active events the boundary may spawn at once.
 * **centerx** - (Only when `eventId === -1`) X-coordinate center.
 * **centery** - (Only when `eventId === -1`) Y-coordinate center.
 
-### Examples
+---
+
+### Example One: Spawn Boundary Outside Of The Screen Anchored To Player
 
 ```js
-const width = 11;
-const height = 11;
-const thickness = 1;
-const name = "spawn";
-const eventId = 0;
-const expandBy = 0;
-const maxEvents = 30;
+const width = Graphics.width / $gameMap.tileWidth() + 4; // 2nd ring of tiles outside of the screen
+const height = Graphics.height / $gameMap.tileHeight() + 4; // 2nd ring of tiles outside of the screen
+const thickness = 2; // Setting 2 provides 1 extra outer ring of tiles.
+const name = "Static Spawn"; // name works as your boundary ID
+const eventId = 0; // 0: player, >0: eventId, -1: x,y anchor
+const expandBy = 0; // Boundary doesn't expand
+const maxEvents = 200; // Boundary is limited to 200 actively spawned events
 
 Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId, expandBy, maxEvents);
 ```
 
-Creates an 11×11 player-centered boundary named **spawn**, which doesn't expand, max 30 spawned events.
+Creates a spawn boundary named "Static Spawn" tracking **The Player** which is 2 tiles distance outside of the screen, with 2-tile thickness. (Starts at the 1st ring of tiles outside of the screen and covers 2 total rings thickness)
+
+---
+
+### Example Two: Unspawn Boundary Outside Of The Screen Anchored To Player
+
+```js
+const width = Graphics.width / $gameMap.tileWidth() + 8; // 4th ring of tiles outside of the screen
+const height = Graphics.height / $gameMap.tileHeight() + 8; // 4th ring of tiles outside of the screen
+const thickness = 2; // Setting 2 provides 1 extra outer ring of tiles.
+const name = "unspawn"; // name works as your boundary ID
+const eventId = 0; // 0 achors boundary to player
+
+Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId);
+```
+
+Creates a unspawn boundary named "unspawn" tracking **the Player** 4 tiles distance outside of the screen, with 2-tile thickness.
+
+**Note:** Notice the consideration paid to the `width + thickness` & `height + thickness` from Example One. This unspawn boundary will be used for the "Static Spawn" Boundary. So this boundary is positioned right outside of Example One.
+
+Earlier we assigned these values to the `Static Spawn` Boundary.
+
+```js
+const width = Graphics.width / $gameMap.tileWidth() + 4;
+const height = Graphics.height / $gameMap.tileHeight() + 4;
+const thickness = 2;
+```
+Proper minimum unspawn boundary distance for Event Streaming.
+ * `Spawn Boundary Width + Spawn Boundary Thickness + 2`
+ * `Spawn Boundary Height + Spawn Boundary Thickness + 2`
+   * `+ 2` means unspawn boundary will be touching the spawn boundary.
+   * Increase value for more distance.
+
+For this type of boundary setup you'll always want your unspawn boundary outside of your spawn boundary.
+
+---
 
 ```js
 const width = 15; // 15 tiles width
@@ -62,18 +107,6 @@ Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId);
 ```
 
 Creates a unspawn boundary named "unspawn" tracking **the Player** which is 15 width x 15 height with normal thickness.
-
-```js
-const width = Graphics.width / $gameMap.tileWidth() + 6; // 3rd ring of tiles outside of the screen
-const height = Graphics.height / $gameMap.tileHeight() + 6; // 3rd ring of tiles outside of the screen
-const thickness = 2; // Setting 2 provides 1 extra outer ring of tiles.
-const name = "unspawn"; // name works as your boundary ID
-const eventId = 0; // 0 achors boundary to player
-
-Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId);
-```
-
-Creates a unspawn boundary named "unspawn" tracking **the Player** 3 tiles distance outside of the screen, with 2-tile thickness.
 
 ```js
 const width = 11;
@@ -121,11 +154,12 @@ Enables a boundary to automatically spawn/unspawn events without manual script c
 
 ### Examples:
 
+**Add Auto Handler To "Static Spawn" Boundary**
 ```js
 const name = "Static Spawn"; // Name of the Boundary we are adding the auto handler to
 const spawnMap = 29; // Spawn Map ID
 const maps = [2,4,6,8]; // List of Map IDs this auto boundary will operate on
-const type = "FillOn"; // Will use FillOn boundary type, ideal for event streaming
+const type = "FillOn"; // types: "SpawnOn", "SpawnIn", "FillOn", "FillIn", "UnspawnOn", "UnspawnIn"
 const wait = 10; // We won't be using wait time in this example, but we'll set a value anyway.
 const enabled = true; // This will ensure the auto boundary is enabled upon creation.
 const boundaries = false; // This is used for unspawn boundaries, set to false when working with spawn boundaries.
@@ -137,27 +171,7 @@ Ritter.Boundary.addAutoHandler(name, spawnMap, maps, type, wait, enabled, bounda
 
 ---
 
-# 3. Boundary Event Setup (Spawn Map Event Metadata)
-
-This plugin command is placed on **Page 1** of any event used by auto boundaries. It executes no code - it is metadata only.
-
-### Properties
-
-* **Boundary List** - Array of boundary names this event is allowed to spawn on.
-* **Map List** - Valid game map IDs for spawning the event.
-* **RegionId List** - Allowed region IDs.
-* **Enabled By Default?** - Whether this event is initially spawnable.
-* **Saved Event?** - Whether this event becomes a Saved Boundary Event.
-
-Saved Boundary Events behave differently than normal saved events because:
-
-* They do **not** retain eventId when unspawned (to prevent buildup)
-* They are **recycled** when not in use
-* All state is still preserved on spawn/unspawn
-
----
-
-# 4. Boundary Initialization
+# 3. Boundary Initialization
 
 ## `Ritter.Boundary.initBoundaryEvents(boundaryName)`
 
@@ -174,7 +188,7 @@ Recommended usage: place in an Autorun event that erases itself.
 
 ---
 
-# 5. Activating & Deactivating Boundaries
+# 4. Activating & Deactivating Boundaries
 
 ## `Ritter.Boundary.activate(boundaryName)`
 
@@ -191,7 +205,7 @@ Turns a boundary **off**.
 
 ---
 
-# 6. Enabling & Disabling Events
+# 5. Enabling & Disabling Events
 
 ## `Ritter.Boundary.enableEvent(spawnMap, eventId)`
 
@@ -203,7 +217,7 @@ Prevents an event from being spawned (existing saved versions still restore norm
 
 ---
 
-# 7. Editing Boundary Properties
+# 6. Editing Boundary Properties
 
 ## `Ritter.Boundary.editSpawnerBoundary(boundaryName, param, value)`
 
@@ -235,7 +249,7 @@ Ritter.Boundary.editSpawnerBoundary("spawn", "height", 17);
 
 ---
 
-# 8. Manual Boundary Spawning
+# 7. Manual Boundary Spawning
 
 ## `Ritter.spawnEventOnBoundary(mapId, eventId, regions, boundaryName)`
 
@@ -268,7 +282,7 @@ Ritter.spawnEventInBoundary(4, 8, [15, 16], "spawn");
 
 ---
 
-# 9. Manual Boundary Unspawning
+# 8. Manual Boundary Unspawning
 
 ## `Ritter.unspawnEventOnBoundary(boundaryName)`
 
