@@ -38,6 +38,8 @@ Creates a Boundary used for spawning or unspawning events.
   * This was created for a project which required the constant spawning of ABS enemies around the player.
     * It increases the probability of spawns ahead of the player, while still allowing spawns to the sides and back.
     * **Be mindful not to overlap connected Spawn & Unspawn boundaries when expanding.**
+      * For Unspawn Boundaries use:
+        * `Spawn Boundary Width + Spawn Boundary Height + Spawn Boundary Thickness + Spawn Boundary ExpandBy + 2`
     * For most use cases keep this set to `0`
 * **maxEvents** - Maximum number of active events the boundary may spawn at once.
 * **centerx** - (Only when `eventId === -1`) X-coordinate center.
@@ -114,6 +116,22 @@ Creates a spawn boundary named "3x3 Spawn" tracking **the Player** which is 3 wi
 
 ---
 
+### Example Four: 5x5 Unspawn Boundary Anchored To The Player
+
+```js
+const width = 5; // 5 tiles width
+const height = 5; // 5 tiles height
+const thickness = 1; // 1 thickness is lowest value.
+const name = "5x5 Unspawn"; // name works as your boundary ID
+const eventId = 0; // achors boundary to player
+
+Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId);
+```
+
+Creates a unspawn boundary named "5x5 Unspawn" tracking **the Player** which is 5 width x 5 height with normal thickness.
+
+---
+
 ```js
 const width = 11;
 const height = 11;
@@ -144,7 +162,7 @@ Enables a boundary to automatically spawn/unspawn events without manual script c
 * **spawnMap** - Spawn map ID to pull template events from.
 * **maps** - List of map IDs this auto boundary may operate on.
 * **type** - Auto mode type: 
-  * `"SpawnOn"` - [Spawn on](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#spawn-on---spawn-boundary) boundary edge
+  * `"SpawnOn"` - [Spawn on boundary edge](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#spawn-on---spawn-boundary)
   * `"SpawnIn"` - [Spawn inside boundary](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#spawn-in---spawn-boundary)
   * `"FillOn"` - [Fill entire boundary edge with events](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#fill-on---spawn-boundary)
   * `"FillIn"` - [Fill entire boundary interior](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#fill-in---spawn-boundary)
