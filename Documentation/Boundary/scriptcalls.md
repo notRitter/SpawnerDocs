@@ -4,7 +4,7 @@ parent: Boundary Documentation
 nav_order: 1
 ---
 
-# Boundary System — Script Call Documentation
+# Boundary System - Script Call Documentation
 
 **Ritter Ultimate Event Spawner & Boundary System**
 **Script Call API (Boundary Spawner System)**
@@ -21,19 +21,19 @@ Creates a Boundary used for spawning or unspawning events.
 
 ### Parameters
 
-* **width** — Width of the boundary in tiles.
-* **height** — Height of the boundary in tiles.
-* **thickness** — Boundary wall thickness in tiles.
-* **name** — String name used to reference this boundary.
-* **eventId** — Determines the boundary anchor:
+* **width** - Width of the boundary in tiles.
+* **height** - Height of the boundary in tiles.
+* **thickness** - Boundary wall thickness in tiles.
+* **name** - String name used to reference this boundary.
+* **eventId** - Determines the boundary anchor:
 
   * `0` → Boundary follows the **player**
   * Any number >0 → Boundary follows **event with that eventId**
   * `-1` → Boundary anchored to **x,y coordinates** (requires `centerx`, `centery`)
-* **expandBy** — Expands boundary thickness on the player’s movement axis to encourage forward-facing spawns.
-* **maxEvents** — Maximum number of active events the boundary may spawn at once.
-* **centerx** — (Only when `eventId === -1`) X-coordinate center.
-* **centery** — (Only when `eventId === -1`) Y-coordinate center.
+* **expandBy** - Expands boundary thickness on the player’s movement axis to encourage forward-facing spawns.
+* **maxEvents** - Maximum number of active events the boundary may spawn at once.
+* **centerx** - (Only when `eventId === -1`) X-coordinate center.
+* **centery** - (Only when `eventId === -1`) Y-coordinate center.
 
 ### Examples
 
@@ -65,40 +65,59 @@ Creates a boundary centered at **(50,50)**.
 
 # 2. Automatic Boundary Processing
 
-## `Ritter.Boundary.addAutoHandler(name, spawnMap, maps, type, wait, enabled, boundaries)`
+## `Ritter.Boundary.addAutoHandler(name, spawnMap, maps, type, wait, enabled, boundaries, updateMode)`
 
 Enables a boundary to automatically spawn/unspawn events without manual script calls.
 
 ### Parameters
 
-* **name** — Boundary name.
-* **spawnMap** — Spawn map ID to pull template events from.
-* **maps** — List of map IDs this auto boundary may operate on.
-* **type** — Auto mode type:
+* **name** - Boundary name.
+* **spawnMap** - Spawn map ID to pull template events from.
+* **maps** - List of map IDs this auto boundary may operate on.
+* **type** - Auto mode type: 
+  * `"SpawnOn"` - [Spawn on](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#spawn-on---spawn-boundary) boundary edge
+  * `"SpawnIn"` - [Spawn inside boundary](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#spawn-in---spawn-boundary)
+  * `"FillOn"` - [Fill entire boundary edge with events](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#fill-on---spawn-boundary)
+  * `"FillIn"` - [Fill entire boundary interior](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#fill-in---spawn-boundary)
+  * `"UnspawnOn"` - [Unspawn events on the boundary edge](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#unspawn-on---unspawn-boundary)
+  * `"UnspawnIn"` - [Unspawn events inside the boundary](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/boundarytypes.html#unspawn-in---unspawn-boundary)
+* **wait** - Frames between auto spawn/unspawn cycles.
+* **enabled** - Whether the auto handler starts enabled.
+* **boundaries** - *(Unspawn only)* Array of boundary names this unspawn boundary is allowed to unspawn events from.
+  * For **spawn boundaries** set this value to `false` in script calls
+* **updateMode** - Whether the auto boundary triggers on wait time or player movement
+  * `"WaitTime"` - Auto Boundary will use wait time (frames)
+  * `"Movement"` - Auto Boundary will trigger when the player lands on a new tile
 
-  * `"SpawnOn"` — Spawn on boundary edge
-  * `"SpawnIn"` — Spawn inside boundary
-  * `"FillOn"` — Fill entire boundary edge with events
-  * `"FillIn"` — Fill entire boundary interior
-  * `"UnspawnOn"` — Unspawn events on the boundary edge
-  * `"UnspawnIn"` — Unspawn events inside the boundary
-* **wait** — Frames between auto spawn/unspawn cycles.
-* **enabled** — Whether the auto handler starts enabled.
-* **boundaries** — *(Unspawn only)* Array of boundary names this unspawn boundary is allowed to remove events from.
+### Examples:
+
+```js
+const name = "Static Spawn"; // Name of the Boundary we are adding the auto handler to
+const spawnMap = 29; // Spawn Map ID
+const maps = [2,4,6,8]; // List of Map IDs this auto boundary will operate on
+const type = "FillOn"; // Will use FillOn boundary type, ideal for event streaming
+const wait = 10; // We won't be using wait time in this example, but we'll set a value anyway.
+const enabled = true; // This will ensure the auto boundary is enabled upon creation.
+const boundaries = false; // This is used for unspawn boundaries, set to false when working with spawn boundaries.
+const updateMode = "Movement"; // This will cause the boundary system to spawn events every time the player moves to a new tile.
+
+Ritter.Boundary.addAutoHandler(name, spawnMap, maps, type, wait, enabled, boundaries, updateMode);
+```
+
 
 ---
 
 # 3. Boundary Event Setup (Spawn Map Event Metadata)
 
-This plugin command is placed on **Page 1** of any event used by auto boundaries. It executes no code — it is metadata only.
+This plugin command is placed on **Page 1** of any event used by auto boundaries. It executes no code - it is metadata only.
 
 ### Properties
 
-* **Boundary List** — Array of boundary names this event is allowed to spawn on.
-* **Map List** — Valid game map IDs for spawning the event.
-* **RegionId List** — Allowed region IDs.
-* **Enabled By Default?** — Whether this event is initially spawnable.
-* **Saved Event?** — Whether this event becomes a Saved Boundary Event.
+* **Boundary List** - Array of boundary names this event is allowed to spawn on.
+* **Map List** - Valid game map IDs for spawning the event.
+* **RegionId List** - Allowed region IDs.
+* **Enabled By Default?** - Whether this event is initially spawnable.
+* **Saved Event?** - Whether this event becomes a Saved Boundary Event.
 
 Saved Boundary Events behave differently than normal saved events because:
 
@@ -137,8 +156,8 @@ Turns a boundary **off**.
 
 ### Parameters
 
-* **boundaryName** — Name of the boundary.
-* **unspawnAll** — `true`/`false` — Whether to immediately unspawn all events belonging to that boundary.
+* **boundaryName** - Name of the boundary.
+* **unspawnAll** - `true`/`false` - Whether to immediately unspawn all events belonging to that boundary.
 
 ---
 
@@ -162,9 +181,9 @@ Modifies boundary settings at runtime.
 
 ### Parameters
 
-* **boundaryName** — Name of the boundary.
-* **param** — String key of the property to edit.
-* **value** — New value.
+* **boundaryName** - Name of the boundary.
+* **param** - String key of the property to edit.
+* **value** - New value.
 
 ### Param keys
 
@@ -206,10 +225,10 @@ Spawns events on **every valid tile inside** the boundary.
 
 ### Shared Parameters
 
-* **mapId** — Spawn map ID
-* **eventId** — Template event ID
-* **regions** — Array of region IDs
-* **boundaryName** — Target boundary
+* **mapId** - Spawn map ID
+* **eventId** - Template event ID
+* **regions** - Array of region IDs
+* **boundaryName** - Target boundary
 
 ### Example
 
