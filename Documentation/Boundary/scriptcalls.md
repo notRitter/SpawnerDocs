@@ -38,24 +38,54 @@ Creates a Boundary used for spawning or unspawning events.
 ### Examples
 
 ```js
-Ritter.Boundary.createSpawnerBoundary(11, 11, 1, "spawn", 0, 2, 30);
+const width = 11;
+const height = 11;
+const thickness = 1;
+const name = "spawn";
+const eventId = 0;
+const expandBy = 0;
+const maxEvents = 30;
+
+Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId, expandBy, maxEvents);
 ```
 
-Creates an 11×11 player-centered boundary named **spawn**, expands by 2 tiles, max 30 spawned events.
+Creates an 11×11 player-centered boundary named **spawn**, which doesn't expand, max 30 spawned events.
 
 ```js
-Ritter.Boundary.createSpawnerBoundary(15, 15, 1, "unspawn", 0, 0, 0);
+const width = 15; // 15 tiles width
+const height = 15; // 15 tiles height
+const thickness = 1; // 1 thickness is lowest value.
+const name = "unspawn"; // name works as your boundary ID
+const eventId = 0; // achors boundary to player
+
+Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId);
 ```
 
-Creates a 15×15 player boundary used for unspawning only.
+Creates a unspawn boundary named "unspawn" tracking **the Player** which is 15 width x 15 height with normal thickness.
 
 ```js
-Ritter.Boundary.createSpawnerBoundary(5, 5, 2, "eventBoundary", 50, 0, 5);
+const width = Graphics.width / $gameMap.tileWidth() + 6; // 3rd ring of tiles outside of the screen
+const height = Graphics.height / $gameMap.tileHeight() + 6; // 3rd ring of tiles outside of the screen
+const thickness = 2; // Setting 2 provides 1 extra outer ring of tiles.
+const name = "unspawn"; // name works as your boundary ID
+const eventId = 0; // 0 achors boundary to player
+
+Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId);
 ```
 
-Creates a boundary tracking **event 50**, with 2-tile thickness and max 5 spawned events.
+Creates a unspawn boundary named "unspawn" tracking **the Player** 3 tiles distance outside of the screen, with 2-tile thickness.
 
 ```js
+const width = 11;
+const height = 11;
+const thickness = 1;
+const name = "spawn";
+const eventId = 0;
+const expandBy = 2;
+const maxEvents = 30;
+const centerx;
+const centery;
+
 Ritter.Boundary.createSpawnerBoundary(5, 5, 1, "xyBoundary", -1, 0, 20, 50, 50);
 ```
 
