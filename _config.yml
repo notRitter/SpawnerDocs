@@ -19,5 +19,5 @@ baseurl: "/SpawnerDocs"
 search_enabled: true
 
 # Optional logo
-logo: "/Assets/Ultimate_Event_Spawner_DocsLogo.png"
+logo: "/Assets/SpawnerDocumentationLogo.png"
 favicon_ico: "/assets/favicon.ico"
