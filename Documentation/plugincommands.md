@@ -7,6 +7,7 @@ nav_order: 2
 # Plugin Commands
 
 ## Spawn Event
+Spawns or recycles an event on the game map on to x,y coordinates by creating a copy of a template event located on a spawn map.
 
 ![SpawnEvent_PluginCommand](../Assets/BaseSpawner/PluginCommands/spawnEvent.png)
 
@@ -21,7 +22,9 @@ nav_order: 2
   * **Set Value As Integer**: Stores EventId as an integer.
   * **Push Value As Array**: Pushes EventId into the variable as an array.
 
+---
 ## Spawn Event Region
+Spawns or recycles an event on the game map on to a random tile marked with the provided regionId(s) by creating a copy of a template event located on a spawn map.
 
 ![SpawnEventRegion_PluginCommand](../Assets/BaseSpawner/PluginCommands/spawnEventRegion.png)
 
@@ -36,7 +39,10 @@ nav_order: 2
   * **Set Value As Integer**
   * **Push Value As Array**
 
+---
+
 ## Spawn Event Terrain Tag
+Spawns or recycles an event on the game map on to a random tile marked with the provided terrain tag(s) by creating a copy of a template event located on a spawn map.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/spawnEventTerrainTag.png)
 
@@ -51,7 +57,10 @@ nav_order: 2
   * **Set Value As Integer**
   * **Push Value As Array**
 
+---
+
 ## Transform Event
+Transforms an event on the game map into a copy of a template event located on a spawn map.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/transformEvent.png)
 
@@ -59,21 +68,30 @@ nav_order: 2
 * **mapId**: Spawn map ID containing the template event.
 * **spawnId**: ID of the template event on the spawn map.
 
+---
+
 ## Unspawn Event
+Unspawns an event on the game map using it’s `eventId` and sets the unspawned `Game_Event` object to be **recycled** for future spawns.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/unspawnEvent.png)
 
 * **eventId**: ID of the event to unspawn.
 * **removeSave**: `true` to remove from saved events, `false` or empty to retain.
 
+---
+
 ## Unspawn Event XY
+Unspawns an event on the game map using `x`,`y` coordinates and prepares the unspawned `Game_Event` object to be recycled for future spawns.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/unspawnEventXy.png)
 
 * **x, y**: Coordinates to check for the event.
 * **removeSave**: `true` to remove from saved events, `false` or empty to retain.
 
+---
+
 ## Unspawn All
+Unspawns all events on the game map and prepares the unspawned `Game_Event` objects to be **recycled for future spawns.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/unspawnAll.png)
 
