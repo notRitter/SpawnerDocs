@@ -7,6 +7,18 @@ nav_order: 2
 # Plugin Commands
 MZ Only
 {: .label .label-blue }
+
+#### TABLE OF CONTENTS
+ * [Spawn Event](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#spawn-event)
+ * [Spawn Event Region](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#spawn-event-region)
+ * [Spawn Event Terrain Tags](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#spawn-event-terrain-tag)
+ * [Transform Event](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#transform-event)
+ * [Unspawn Event](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#unspawn-event)
+ * [Unspawn Event Xy](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#unspawn-event-xy)
+ * [Unspawn All](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#unspawn-all)
+
+---
+
 ## Spawn Event
 Spawns or recycles an event on the game map on to x,y coordinates by creating a copy of a template event located on a spawn map.
 
@@ -92,7 +104,7 @@ Unspawns an event on the game map using `x`,`y` coordinates and prepares the uns
 ---
 
 ## Unspawn All
-Unspawns all events on the game map and prepares the unspawned `Game_Event` objects to be **recycled for future spawns.
+Unspawns all events on the game map and prepares the unspawned `Game_Event` objects to be **recycled** for future spawns.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/unspawnAll.png)
 
