@@ -7,7 +7,6 @@ nav_order: 2
 # Plugin Commands
 MZ Only
 {: .label .label-blue }
-
 ## Spawn Event
 Spawns or recycles an event on the game map on to x,y coordinates by creating a copy of a template event located on a spawn map.
 
