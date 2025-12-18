@@ -6,7 +6,22 @@ nav_order: 3
 
 # Script Calls
 
+#### TABLE OF CONTENTS
+ * [Spawn Event](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event)
+ * [Spawn Event Region](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event-by-region)
+ * [Spawn Event Terrain Tags](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event-by-region)
+ * [Transform Event](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#transform-event)
+ * [Unspawn Event](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#unspawn-event)
+ * [Unspawn Event Xy](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#unspawn-event-by-coordinates)
+ * [Unspawn All](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#unspawn-all-events)
+
+
 ## Spawn Event
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
+
 Spawns or recycles an event on the game map on to x,y coordinates by creating a copy of a template event located on a spawn map.
  * [Plugin Command Available For MZ](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#spawn-event)
 
@@ -41,9 +56,16 @@ let eventId = spawnEvent._eventId;
 $gameVariables.setValue(1, eventId);
 ```
 
+</details>
+
 ---
 
 ## Spawn Event by Region
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
+
 Spawns or recycles an event on the game map on to a random tile marked with the provided regionId(s) by creating a copy of a template event located on a spawn map.
  * [Plugin Command Available For MZ](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#spawn-event-region)
 ```javascript
@@ -67,9 +89,16 @@ let eventId = spawnEvent._eventId;
 $gameVariables.setValue(1, eventId);
 ```
 
+</details>
+
 ---
 
 ## Spawn Event by Terrain Tag
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
+
 Spawns or recycles an event on the game map on to a random tile marked with the provided terrain tag(s) by creating a copy of a template event located on a spawn map.
  * [Plugin Command Available For MZ](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#spawn-event-terrain-tag)
 ```javascript
@@ -93,9 +122,16 @@ let eventId = spawnEvent._eventId;
 $gameVariables.setValue(23, eventId);
 ```
 
+</details>
+
 ---
 
 ## Transform Event
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
+
 Transforms an event on the game map on into a copy of a template event located on a spawn map.
  * [Plugin Command Available For MZ](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#transform-event)
 
@@ -113,9 +149,16 @@ Ritter.transformEvent(eventId, mapId, spawnId)
 Ritter.transformEvent(1010, 4, 8)
 ```
 
+</details>
+
 ---
 
 ## Unspawn Event
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
+
 Unspawns an event on the game map using it's `eventId` and sets the unspawned `Game_Event` object to be **recycled** for future spawns.
  * [Plugin Command Available For MZ](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#unspawn-event)
 
@@ -137,9 +180,16 @@ Ritter.unspawnEvent(1000)
 Ritter.unspawnEvent(1000, true)
 ```
 
+</details>
+
 ---
 
 ## Unspawn Event by Coordinates
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
+
 Unspawns an event on the game map using `x`,`y` coordinates and sets the unspawned `Game_Event` object to be **recycled** for future spawns.
  * [Plugin Command Available For MZ](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#unspawn-event-xy)
 
@@ -162,9 +212,16 @@ Ritter.unspawnEvent(4, 8)
 Ritter.unspawnEvent(15, 16, true)
 ```
 
+</details>
+
 ---
 
 ## Unspawn All Events
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
+
 Unspawns all event on the game map sets the unspawned `Game_Event` objects to be **recycled** for future spawns.
  * [Plugin Command Available For MZ](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#unspawn-event)
 
@@ -186,9 +243,16 @@ Ritter.unspawnAll()
 Ritter.unspawnAll(true)
 ```
 
+</details>
+
 ---
 
 ## Last Spawned Event
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
+
 Obsolete method to get the last spawned events `eventId`
 
 ```javascript
@@ -196,3 +260,5 @@ $gameMap._lastSpawnEventId
 ```
 
 * Returns the ID of the most recently spawned event. **(Obsolete, use stored Game_Event object method instead)**
+
+</details>
