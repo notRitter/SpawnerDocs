@@ -11,9 +11,24 @@ nav_order: 1
 
 This section provides clean, modern, fully-formatted documentation for all **Boundary System Spawner Script Calls**, including creation, automation, spawning, unspawning, editing, and setup parameters.
 
+#### TABLE OF CONTENTS
+ * [Create Boundary](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html#1-creating-boundaries)
+ * [Auto Boundary Handler](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html#2-automatic-boundary-processing)
+ * [Boundary Initialization](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html#3-boundary-initialization)
+ * [Activate & Deactivate Boundaries](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html#3-boundary-initialization)
+ * [Enable & Disable Events (legacy)](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html#5-enabling--disabling-events)
+ * [Edit Boundary](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html#6-editing-boundary-properties)
+ * [Manual Boundary Spawning](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html#7-manual-boundary-spawning)
+ * [Manual Boundary Unspawning](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html#8-manual-boundary-unspawning)
+
+
 ---
 
 # 1. Creating Boundaries
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
 
 ## `Ritter.Boundary.createSpawnerBoundary(width, height, thickness, name, eventId, expandBy, maxEvents, centerx, centery)`
 
@@ -148,9 +163,15 @@ Ritter.Boundary.createSpawnerBoundary(5, 5, 1, "xyBoundary", -1, 0, 20, 50, 50);
 
 Creates a boundary centered at **(50,50)**.
 
+</details>
+
 ---
 
 # 2. Automatic Boundary Processing
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
 
 ## `Ritter.Boundary.addAutoHandler(name, spawnMap, maps, type, wait, enabled, boundaries, updateMode)`
 
@@ -192,11 +213,15 @@ const updateMode = "Movement"; // This will cause the boundary system to spawn e
 Ritter.Boundary.addAutoHandler(name, spawnMap, maps, type, wait, enabled, boundaries, updateMode);
 ```
 
-
+</details>
 
 ---
 
 # 3. Boundary Initialization
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
 
 ## `Ritter.Boundary.initBoundaryEvents(boundaryName)`
  * `boundaryName` - "Spawn Boundary Name"
@@ -205,9 +230,15 @@ Spawns all saved events within a boundary.
 
 Helpful to run after boundary creation and preloading of saved boundary events.
 
+</details>
+
 ---
 
 # 4. Activating & Deactivating Boundaries
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
 
 ## `Ritter.Boundary.activate(boundaryName)`
 
@@ -222,9 +253,16 @@ Turns a boundary **off** and optionally unspawns all of it's events.
 * **boundaryName** - Name of the boundary.
 * **unspawnAll** - `true`/`false` - Whether to immediately unspawn all events belonging to that boundary.
 
+</details>
+
 ---
 
 # 5. Enabling & Disabling Events
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
+
 (When using [BoundaryEventSetup Plugin Command](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/plugincommands.html#boundary-event-setup) method)
 
 ## `Ritter.Boundary.enableEvent(spawnMap, eventId)`
@@ -235,9 +273,15 @@ Allows an event to be spawned by auto boundaries.
 
 Prevents an event from being spawned (existing saved versions still restore normally).
 
+</details>
+
 ---
 
 # 6. Editing Boundary Properties
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
 
 ## `Ritter.Boundary.editSpawnerBoundary(boundaryName, param, value)`
 
@@ -267,9 +311,15 @@ Ritter.Boundary.editSpawnerBoundary("spawn", "width", 25);
 Ritter.Boundary.editSpawnerBoundary("spawn", "height", 17);
 ```
 
+</details>
+
 ---
 
 # 7. Manual Boundary Spawning
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
 
 ## `Ritter.spawnEventOnBoundary(mapId, eventId, regions, boundaryName)`
 
@@ -300,9 +350,15 @@ Spawns events on **every valid tile inside** the boundary.
 Ritter.spawnEventInBoundary(4, 8, [15, 16], "spawn");
 ```
 
+</details>
+
 ---
 
 # 8. Manual Boundary Unspawning
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
 
 ## `Ritter.unspawnEventOnBoundary(boundaryName)`
 
@@ -317,3 +373,5 @@ Unspawns events **inside** the boundary.
 ```js
 Ritter.unspawnEventInBoundary("unspawn");
 ```
+
+</details>
