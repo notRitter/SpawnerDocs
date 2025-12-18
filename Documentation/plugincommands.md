@@ -21,7 +21,7 @@ MZ Only
 
 ## Spawn Event
 
-<details open>
+<details open markdown="block">
  
 <summary>Show/Hide Section</summary>
 
