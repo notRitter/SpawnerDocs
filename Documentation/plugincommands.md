@@ -20,8 +20,11 @@ MZ Only
 ---
 
 ## Spawn Event
+
 <details open>
+ 
 <summary>Show/Hide Section</summary>
+
 Spawns or recycles an event on the game map on to x,y coordinates by creating a copy of a template event located on a spawn map.
 
 
@@ -42,8 +45,11 @@ Spawns or recycles an event on the game map on to x,y coordinates by creating a 
 
 ---
 ## Spawn Event Region
+
 <details open>
+
 <summary>Show/Hide Section</summary>
+
 Spawns or recycles an event on the game map on to a random tile marked with the provided regionId(s) by creating a copy of a template event located on a spawn map.
 
 ![SpawnEventRegion_PluginCommand](../Assets/BaseSpawner/PluginCommands/spawnEventRegion.png)
@@ -64,8 +70,11 @@ Spawns or recycles an event on the game map on to a random tile marked with the 
 ---
 
 ## Spawn Event Terrain Tag
+
 <details open>
+
 <summary>Show/Hide Section</summary>
+
 Spawns or recycles an event on the game map on to a random tile marked with the provided terrain tag(s) by creating a copy of a template event located on a spawn map.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/spawnEventTerrainTag.png)
@@ -86,8 +95,11 @@ Spawns or recycles an event on the game map on to a random tile marked with the 
 ---
 
 ## Transform Event
+
 <details open>
+
 <summary>Show/Hide Section</summary>
+
 Transforms an event on the game map into a copy of a template event located on a spawn map.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/transformEvent.png)
@@ -101,8 +113,11 @@ Transforms an event on the game map into a copy of a template event located on a
 ---
 
 ## Unspawn Event
+
 <details open>
+
 <summary>Show/Hide Section</summary>
+
 Unspawns an event on the game map using it’s `eventId` and sets the unspawned `Game_Event` object to be **recycled** for future spawns.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/unspawnEvent.png)
@@ -115,8 +130,11 @@ Unspawns an event on the game map using it’s `eventId` and sets the unspawned 
 ---
 
 ## Unspawn Event XY
+
 <details open>
+
 <summary>Show/Hide Section</summary>
+
 Unspawns an event on the game map using `x`,`y` coordinates and prepares the unspawned `Game_Event` object to be recycled for future spawns.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/unspawnEventXy.png)
@@ -129,8 +147,11 @@ Unspawns an event on the game map using `x`,`y` coordinates and prepares the uns
 ---
 
 ## Unspawn All
+
 <details open>
+
 <summary>Show/Hide Section</summary>
+
 Unspawns all events on the game map and prepares the unspawned `Game_Event` objects to be **recycled** for future spawns.
 
 ![Plugin Command Image Goes Here](../Assets/BaseSpawner/PluginCommands/unspawnAll.png)
