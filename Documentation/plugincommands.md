@@ -46,7 +46,7 @@ Spawns or recycles an event on the game map on to x,y coordinates by creating a 
 ---
 ## Spawn Event Region
 
-<details open>
+<details open markdown="block">
 
 <summary>Show/Hide Section</summary>
 
@@ -71,7 +71,7 @@ Spawns or recycles an event on the game map on to a random tile marked with the 
 
 ## Spawn Event Terrain Tag
 
-<details open>
+<details open markdown="block">
 
 <summary>Show/Hide Section</summary>
 
@@ -96,7 +96,7 @@ Spawns or recycles an event on the game map on to a random tile marked with the 
 
 ## Transform Event
 
-<details open>
+<details open markdown="block">
 
 <summary>Show/Hide Section</summary>
 
@@ -114,7 +114,7 @@ Transforms an event on the game map into a copy of a template event located on a
 
 ## Unspawn Event
 
-<details open>
+<details open markdown="block">
 
 <summary>Show/Hide Section</summary>
 
@@ -131,7 +131,7 @@ Unspawns an event on the game map using it’s `eventId` and sets the unspawned 
 
 ## Unspawn Event XY
 
-<details open>
+<details open markdown="block">
 
 <summary>Show/Hide Section</summary>
 
@@ -148,7 +148,7 @@ Unspawns an event on the game map using `x`,`y` coordinates and prepares the uns
 
 ## Unspawn All
 
-<details open>
+<details open markdown="block">
 
 <summary>Show/Hide Section</summary>
 
