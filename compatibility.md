@@ -261,10 +261,10 @@ With proper cleanup:
 
 ## Summary (10-Second Checklist)
 
-✔ Initialize plugin data on `Game_Event.initialize`
-✔ Clean **everything** on `Game_Event.erase`
-✔ Remove sprites from parents
-✔ Clear references and caches
-✔ Avoid per-frame global scans
+* ✔ Initialize plugin data on `Game_Event.initialize`
+* ✔ Clean **everything** on `Game_Event.erase`
+* ✔ Remove sprites from parents
+* ✔ Clear references and caches
+* ✔ Avoid per-frame global scans
 
 That’s it.
