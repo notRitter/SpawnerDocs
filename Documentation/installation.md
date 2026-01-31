@@ -66,7 +66,7 @@ To set this up:
 
 This map acts like a library of spawnable events.
 
-![Template Map](../Assets/BaseSpawner/Installation/Spawner_Spawn_Map.png)
+![Template Map](../Assets/BaseSpawner/Spawn_Map_Designer_SpawnMap_Screenshot.png)
 
 ---
 
