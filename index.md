@@ -4,7 +4,7 @@ nav_order: 1
 ---
 
 # Ritter Ultimate Event Spawner Documentation
-<img src="https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/RitterUltimateEventSpawnerLogo.png" alt="Ritter Ultimate Event Spawner Logo" style="width: 25%; height: auto;"/>
+<img src="https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/RitterUltimateEventSpawnerLogo.png" alt="Ritter Ultimate Event Spawner Logo" style="width: 50%; height: auto;"/>
 
 Welcome!
 
