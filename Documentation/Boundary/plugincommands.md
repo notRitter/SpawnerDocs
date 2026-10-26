@@ -5,247 +5,154 @@ nav_order: 2
 ---
 
 # Boundary System Plugin Commands Documentation
+MZ Only
+{: .label .label-blue }
 
-This page documents **the Plugin Commands** for the Ritter Ultimate Event Spawner’s **Boundary System**.
-For MZ users, these appear in the Plugin Command interface.
+These commands appear under **Ritter_EventSpawner** in MZ's Plugin Command interface and require BoundarySystem above EventSpawner. MV uses the [script calls](scriptcalls.html), plus the template metadata form below.
 
----
+Screenshots illustrate the workflow; the exact argument names below match the current source. IDs and coordinates must be valid for your project. Commands run synchronously: successful output IDs are available to the next event command.
 
-# Create Boundary
+#### TABLE OF CONTENTS
 
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/CreateBoundary_Plugin_Command.png)
-
-Creates a Boundary used for spawning or unspawning events.
-
-### Parameters
-
-* **width** - Number of tiles wide the boundary is.
-* **height** - Number of tiles high the boundary is.
-* **thickness** - Number of tiles thick the boundary wall is.
-* **name** - Unique boundary name used later when spawning or unspawning.
-* **eventId** - Determines boundary anchor:
-
-  * `0` = Boundary follows the **player**
-  * `>0` = Boundary follows **event with that eventId**
-  * `-1` = Boundary is centered on **x,y coordinates** - requires `centerx` and `centery`
-* **expandBy** - Extra tiles extending in the player’s movement direction to encourage forward-facing spawns.
-* **maxEvents** - Max number of events this boundary may actively manage.
-* **centerx** - Only used when `eventId = -1`. Center X position.
-* **centery** - Only used when `eventId = -1`. Center Y position.
+* [Create Boundary](#create-boundary)
+* [Add Auto Handler](#add-auto-handler)
+* [Boundary Event Setup](#boundary-event-setup)
+* [Init Boundary Events](#init-boundary-events)
+* [Activate Boundary](#activate-boundary)
+* [Deactivate Boundary](#deactivate-boundary)
+* [Enable Event](#enable-event--disable-event)
+* [Disable Event](#enable-event--disable-event)
+* [Edit Spawner Boundary](#edit-spawner-boundary)
+* [Preload Saved Boundary Event](#preload-saved-boundary-event)
+* [Preload Saved Boundary Event (Region)](#preload-saved-boundary-event-region)
 
 ---
 
-# Add Auto Handler
+## Create Boundary
 
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/AddAutoHandler_Plugin_Command.png)
+![Create Boundary](../../Assets/BoundarySpawner/PluginCommands/CreateBoundary_Plugin_Command.png)
 
-Enables automatic spawning/unspawning for a boundary.
+Command ID: `CreateBoundary`.
 
-### Parameters
+| Argument key | Purpose |
+| --- | --- |
+| `Name` | Unique owning-boundary name. Keep it stable once persistent entities exist. |
+| `Width`, `Height`, `Thickness` | Tile dimensions and outward edge thickness. |
+| `EventId` | `0`: player; positive runtime ID: event; `-1`: static center. |
+| `ExpandBy` | Extra player-direction expansion when applicable. |
+| `MaxEvents` | Positive live capacity for a spawn boundary; `0` is not unlimited. |
+| `CenterX`, `CenterY` | Used for static centers. |
 
-* **name** - Boundary name.
-* **spawnMap** - ID of the SpawnMap to pull events from.
-* **type** - Mode of operation:
+Configure an auto handler next to establish the boundary's map/type settings. A disabled handler can be used for manual control. The command editor defaults to player anchor `EventId = 0`, `ExpandBy = 1`, and `MaxEvents = 30`; the script defaults are `-1`, `0`, and `0` respectively. Set geometry, anchor, expansion, and capacity deliberately.
 
-  * `SpawnOn` - Spawn events on boundary edge
-  * `SpawnIn` - Spawn events inside boundary
-  * `FillOn` - Fill every valid tile on boundary edge
-  * `FillIn` - Fill every valid tile inside boundary
-  * `UnspawnOn` - Unspawn events on boundary edge
-  * `UnspawnIn` - Unspawn events inside boundary
-* **updateMode** - How the boundary updates:
+## Add Auto Handler
 
-  * **Wait Time** - Update every *n* frames
-  * **Player Move** - Update each time player moves to a new tile
-* **wait** - Number of frames between spawn/unspawn checks.
-* **enabled** - Whether the boundary auto‑handler begins active.
-* **boundary** - *(Unspawn only)* Array of boundary names it may remove events from. Each unspawned event must match one of the listed boundaries via its `parentBoundary`.
+![Add Auto Handler](../../Assets/BoundarySpawner/PluginCommands/AddAutoHandler_Plugin_Command.png)
 
----
+Command ID: `AddAutoHandler`.
 
-# Boundary Event Setup
+| Argument key | Purpose |
+| --- | --- |
+| `Name` | Existing boundary name. |
+| `SpawnMap` | Numeric source template map ID for spawn handlers. Unspawn-only handlers need no source templates; `0` is sufficient. |
+| `Maps` | Gameplay map ID list. This is separate from the source map. |
+| `Type` | `SpawnOn`, `SpawnIn`, `FillOn`, `FillIn`, `UnspawnOn`, or `UnspawnIn`. |
+| `UpdateMode` | `WaitTime` or `Movement`. |
+| `Wait` | Frame interval for WaitTime mode; not a Movement cooldown. |
+| `Enabled` | Initial activation on configured maps. |
+| `UnspawnSettings` | For an unspawn handler, enable **Unspawn** and set **Boundaries** to the exact owning spawn-boundary names it may remove events from. |
 
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/BoundaryEventSetup_Plugin_Command.png)
+The editor serializes `UnspawnSettings` as a struct with `Unspawn` and `Boundaries` fields; `Boundaries` is a JSON-encoded string array, such as `["NPCs", "Resources"]`. Use the flat list in the editor. See [boundary types](boundarytypes.html) for footprint and saved-entry processing.
 
-**Optional / Legacy method.**
-This plugin command is placed on **page 1** of SpawnMap events and behaves like metadata.
+## Boundary Event Setup
 
-### Parameters
+![Boundary Event Setup](../../Assets/BoundarySpawner/PluginCommands/BoundaryEventSetup_Plugin_Command.png)
 
-* **Boundary List** - Array of boundary names this event may spawn on.
-* **Map List** - Game map IDs this event is allowed to spawn on.
-* **RegionId List** - Region IDs the event may spawn on.
-* **Enabled By Default?** - Whether the event is initially allowed to spawn.
-* **Saved Event?** - Whether this event should be restored if re‑encountered.
+Command ID: `BoundaryEventSetup`. Place it on **page 1 of a template event** for automatic generation of new events. It is scanned as metadata, not executed as a spawn request. It is not required just to create an explicit preload.
 
-### Important Note About Saved Boundary Events
+| Argument key | Purpose |
+| --- | --- |
+| `BoundaryList` | Owning spawn-boundary names permitted to generate this template. |
+| `MapList` | Gameplay map IDs on which generation is allowed. |
+| `RegionsList` | Eligible region IDs. |
+| `Enabled` | Initial fresh-spawn eligibility. |
+| `Save` | Whether newly generated instances are saved boundary entities. |
 
-Boundary‑spawned saved events **do not retain their eventId** when recycled.
-This prevents mass ID buildup and performance degradation. All other state persists normally.
+### RPG Maker MV metadata
 
----
+Place this MV Plugin Command (event command 356) on page 1 of the template:
 
-# Init Boundary Events
+```text
+Ritter_EventSpawner BoundaryEventSetup {"BoundaryList":["NPCs"],"MapList":[1],"RegionsList":[1,3],"Enabled":true,"Save":true}
+```
 
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/Init_Boundary_Plugin_Command.png)
+These fields also accept the JSON-encoded array strings and `"true"`/`"false"` values produced by MZ. This metadata form does not make MZ's full command interface available in MV.
 
-### Parameters
+Saved boundary entities keep their BEID while runtime event IDs can change. See [supported persistent state](savedboundaryevents.html); arbitrary external plugin caches are not automatically preserved.
 
-* **boundaryName** - Name of the boundary to initialize.
+## Init Boundary Events
 
-Use this when you want to restore all saved boundary events when loading a map.
+![Init Boundary Events](../../Assets/BoundarySpawner/PluginCommands/Init_Boundary_Plugin_Command.png)
 
-Required for:
+Command ID: `InitializeBoundary`; argument: `Name`.
 
-* `SpawnOn`
-* `FillOn`
+For an **active spawn boundary**, processes stored saved/preloaded entries throughout its interior up to capacity. This can populate the interior initially even when later streaming uses SpawnOn/FillOn. It does not generate a fresh event on every empty tile or instantiate every record in the world.
 
-Not required for:
+Use after initial population setup if immediate interior restoration is wanted. Previously live persistent events restore automatically on game load; no movement or repeated Initialize commands are needed for that restoration. Inactive boundaries are not initialized by this command.
 
-* `SpawnIn`
-* `FillIn`
+## Activate Boundary
 
-Use when entering a map or when manually preloading saved boundary events.
+![Activate Boundary](../../Assets/BoundarySpawner/PluginCommands/ActivateBoundary_Plugin_Command.png)
 
----
+Command ID: `ActivateBoundary`; argument: `Name`.
 
-# Activate Boundary
+Enables processing on configured maps. Automatic processing still checks geometry, stored records/template rules, and capacity. Activation alone does not instantiate every dormant entry.
 
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/ActivateBoundary_Plugin_Command.png)
+## Deactivate Boundary
 
-Turns a boundary **on**.
+![Deactivate Boundary](../../Assets/BoundarySpawner/PluginCommands/Deactivate_Boundary_Plugin_Command.png)
 
-### Parameters
+Command ID: `DeactivateBoundary`; arguments: `Name`, `UnspawnAll`.
 
-* **boundaryName** - Boundary to activate.
+Stops updates. With `UnspawnAll: false`, live events stay in place. With `true`, owned live events unspawn: saved state remains available; temporary entities expire.
 
-A boundary will spawn or unspawn events only when active **and** all other conditions are met:
+## Enable Event / Disable Event
 
-* Player is on a valid map
-* A valid region is within/on the boundary
-* Enabled spawn events are available
+![Enable Event](../../Assets/BoundarySpawner/PluginCommands/EnableEvent_Plugin_Command.png)
+![Disable Event](../../Assets/BoundarySpawner/PluginCommands/DisableEvent_Plugin_Command.png)
 
----
+Command IDs: `EnableEvent`, `DisableEvent`; arguments: `SpawnMap`, `EventId`.
 
-# Deactivate Boundary
+Changes a template's eligibility for **new generated** auto-boundary spawns. Existing saved clones and preloads are not deleted or disabled. These are not persistent quest-state setters or controls for one BEID.
 
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/Deactivate_Boundary_Plugin_Command.png)
+## Edit Spawner Boundary
 
-Turns a boundary **off**.
+![Edit Boundary](../../Assets/BoundarySpawner/PluginCommands/EditBoundary_Plugin_Command.png)
 
-### Parameters
+Command ID: `EditBoundary`; arguments: `Name`, optional `Width`, `Height`, `Thickness`, `ExpandBy`, `X`, `Y`, `MaxEvents`, `WaitTime`.
 
-* **boundaryName** - Boundary to deactivate.
-* **unspawnAll** - `true/false`. Whether to unspawn all events belonging to this boundary immediately.
+Leave an optional field empty to retain its current value. Zero is a real edit. `X`/`Y` change a static center. Editing geometry invalidates its tile cache; it does not promise immediate removal of events now outside the new footprint. Check the paired unspawn coverage after editing.
 
-Once deactivated, the boundary stops all spawn/unspawn activity until activated again.
+## Preload Saved Boundary Event
 
----
+![Preload Event](../../Assets/BoundarySpawner/PluginCommands/PreloadEvent_Plugin_Command.png)
 
-# Enable Event
+Command ID: `PreloadEvent`; arguments: `BoundaryName`, `SpawnMap`, `SpawnEventId`, `XPosition`, `YPosition`, `varBEID`, `varType`.
 
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/EnableEvent_Plugin_Command.png)
+Creates one persistent metadata record on the current gameplay map without creating a live event. The boundary/map saved-event tile must be empty. On success its BEID is written synchronously to **BEID -> Game Variable** (`varBEID`); `0` disables output.
 
-### Parameters
+Setter Type (`varType`) is `SetValueAsInteger` or `PushValueAsArray`. Array mode initializes an array if necessary. Failed creation does not supply a new identity; do not treat a previously stored output as a new success.
 
-* **spawnMap** - SpawnMap ID.
-* **eventId** - Event ID to enable.
+For example, configure `BoundaryName = Static Spawn`, `SpawnMap = 2`, `SpawnEventId = 1`, `XPosition = 8`, `YPosition = 10`, `varBEID = 1`, and `varType = SetValueAsInteger`. On success, `$gameVariables.value(1)` is the persistent BEID, not a runtime event ID. Retain the boundary name and owning gameplay map ID too. Template IDs and coordinates must be valid; preload creation is not full template or passability validation.
 
-Allows this event to be spawned by auto boundaries.
+## Preload Saved Boundary Event (Region)
 
----
+![Preload Event Region](../../Assets/BoundarySpawner/PluginCommands/PreloadEventRegion_Plugin_Command.png)
 
-# Disable Event
+Command ID: `PreloadEventRegion`; arguments: `BoundaryName`, `SpawnMap`, `SpawnEventId`, `Regions`, `varBEID`, `varType`.
 
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/DisableEvent_Plugin_Command.png)
+Creates **one** preload at a randomly selected matching region tile across the current map, including outside the boundary's current footprint. `Regions` is the editor's region-ID array. Output handling matches PreloadEvent.
 
-### Parameters
+Use the same boundary/template/output settings as the coordinate example, replacing `XPosition`/`YPosition` with `Regions = [1]`. Paint region 1 on the current gameplay map. If no candidate is available or insertion fails, the command logs a warning and leaves the output variable unchanged. Invalid Regions JSON is logged and becomes an empty list, so it cannot create a preload.
 
-* **spawnMap** - SpawnMap ID.
-* **eventId** - Event ID to disable.
-
-Prevents the event from being spawned by boundaries.
-**Saved versions will still restore** - this only blocks *new* spawns.
-
----
-
-# Edit Spawner Boundary
-
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/EditBoundary_Plugin_Command.png)
-
-Modifies an existing boundary’s properties.
-
-### Parameters
-
-* **boundaryName** - Boundary to modify.
-* **param** - Property to edit.
-* **value** - Value to apply.
-
-Leave unchanged parameters empty.
-
-### Parameter Keys
-
-* `width`
-* `height`
-* `thickness`
-* `expandby`
-* `centerx`
-* `centery`
-* `maxevents`
-* `waittime`
-
-### Warning
-
-Changing boundary size may leave some events outside an unspawn boundary. Shrinking boundaries should be done carefully.
-
----
-
-# v2.1 - NEW FEATURE
-
-**Preload Saved Boundary Events**
-
-Preloading stores a metadata object in the boundary's Saved Event Database.
-When the boundary reaches that tile:
-
-* All saved boundary events on the tile which are tied to the boundary are restored
-* **Any preload object found on the tile is spawned as a new saved boundary event**
-* The preload object is deleted and replaced with the real Game_Event
-
----
-
-# Preload Saved Boundary Event
-
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/PreloadEvent_Plugin_Command.png)
-
-### Parameters
-
-* **boundaryName** - Boundary that will spawn the event.
-* **spawnMap** - SpawnMap ID.
-* **eventId** - Template event ID.
-* **x**, **y** - Coordinates to preload.
-* **BEID -> Game Variable** - Variable to store the BEID.
-* **Setter Type**:
-
-  * `SetValueAsInteger` - Store BEID as number
-  * `PushValueAsArray` - Push BEID into an array
-
-Allows deferred spawning until the player is nearby.
-
----
-
-# Preload Saved Boundary Event (Region)
-
-![Plugin Command UI](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/PluginCommands/PreloadEventRegion_Plugin_Command.png)
-
-### Parameters
-
-* **boundaryName** - Target boundary.
-* **spawnMap** - SpawnMap ID.
-* **eventId** - Template event ID.
-* **regions** - Array of region IDs; one is chosen randomly.
-* **BEID -> Game Variable** - Variable for BEID.
-* **Setter Type** - Same as above.
-
-Preloads an event into a **random region tile** inside the boundary, spawning later when conditions are met.
-
----
+The name-based wrappers, these MZ commands, BEIDs, and self-variable transfer are new in v2.1. Basic preloading already existed in v2.0a. See [preload script examples](scriptcalls.html#9-preloading-and-beid-control) for capturing entries and using BEIDs, and [Preloaded Boundary Events](preloadevents.html) for eligibility and first-spawn behavior.
