@@ -1,6 +1,7 @@
 ---
 title: Compatibility Guide
 nav_order: 6
+nav_exclude: true
 ---
 
 # Developer Integration Guide
