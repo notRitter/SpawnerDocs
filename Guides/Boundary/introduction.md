@@ -6,6 +6,7 @@ nav_order: 1
 
 # Boundary System Introduction
 ![Download the Plugin](https://images.squarespace-cdn.com/content/638d8e0d08f7d34f01db55f5/aa21069d-389b-454f-8884-5398efee3571/Boundary+Visuals+Lossy.gif?content-type=image%2Fgif)
+
 *Boundaries visualized using the Ritter_BoundaryVisualizer.js Developer Extension Plugin*
 
 * **2 Thickness "FillOn" Boundary** shown in **Green**
@@ -23,7 +24,7 @@ The **Ritter Boundary System** allows you to dynamically **spawn** and **unspawn
 * The position of any event
 * Any coordinate you choose on the map
 
-Boundaries are created via simple script calls or plugin commands and are stored under a name you define. You can reference, move, resize, or modify them at any time. Create as many boundaries as needed—each with unique shapes, sizes, and behaviors.
+Boundaries are created via simple script calls or plugin commands and are stored under a name you define. You can reference, move, resize, or modify them at any time. Create as many boundaries as needed, each with unique shapes, sizes, and behaviors.
 
 ---
 
@@ -43,7 +44,7 @@ This gives you precise control over when events should appear or be removed from
 
 ## What Boundaries Are Used For
 
-Because boundaries can spawn **any type of event**, they enable highly dynamic, scalable, and performance-safe systems. Common uses include:
+Because boundaries can spawn **any type of event**, they enable dynamic populations with controlled live-event counts. Common uses include:
 
 * Spawning enemies just outside player view for endless encounters
 * Loading NPCs, creatures, or gathering nodes as the player approaches
@@ -52,11 +53,11 @@ Because boundaries can spawn **any type of event**, they enable highly dynamic, 
 * Building “living” maps full of dynamic activity
 * Preloading events into the Boundary Saved Events Database for fine-grained control
 
-**In short:** If an event doesn’t need to exist 24/7, it can be boundary-managed.
+Consider streaming events that do not need to run continuously. Keep essential controllers or transfers editor-placed when that makes their lifecycle clearer.
 
-Events without external references to their eventId can safely be spawned, recycled, and unspawned.
+Integrations must handle removal, recycling, and restoration. Use full BEID tuples for persistent references and review the [developer guide](../../compatibility.html).
 
-This enables large, event-heavy maps with smooth, consistent performance.
+Performance depends on live pages, movement, graphics, plugin integrations, and hardware as well as event count.
 
 ---
 
@@ -65,7 +66,7 @@ This enables large, event-heavy maps with smooth, consistent performance.
 Below are the primary boundary types used to control event spawning.
 
 ### **Fill On - Spawn Boundary**
-![FillOnBoundary](/Assets/BoundarySpawner/Introduction/FillOnBoundary.png)
+![FillOnBoundary](../../Assets/BoundarySpawner/Introduction/FillOnBoundary.png)
 * **Type:** `FillOn`
 * **Width:** 17
 * **Height:** 7
@@ -81,7 +82,7 @@ Behavior:
 ---
 
 ### **Fill In - Spawn Boundary**
-![FillInBoundary](/Assets/BoundarySpawner/Introduction/FillInBoundary.png)
+![FillInBoundary](../../Assets/BoundarySpawner/Introduction/FillInBoundary.png)
 * **Type:** `FillIn`
 * **Width:** 17
 * **Height:** 7
@@ -97,7 +98,7 @@ Behavior:
 ---
 
 ### **Spawn On - Spawn Boundary**
-![SpawnOnBoundary](/Assets/BoundarySpawner/Introduction/SpawnOnBoundary.png)
+![SpawnOnBoundary](../../Assets/BoundarySpawner/Introduction/SpawnOnBoundary.png)
 * **Type:** `SpawnOn`
 * **Width:** 17
 * **Height:** 7
@@ -106,7 +107,7 @@ Behavior:
 Behavior:
 
 * Attempts to spawn one event on a random tile that is **on the boundary edge**.
-* Restores all saved events owned by this boundary found on those tiles on the boundary edge.
+* Processes stored entries owned by this boundary on its edge while capacity permits; saved restoration can restore more than one event.
 * Spawns events that match your BoundaryEventSetup rules (legacy mode).
 * **Thickness** extends the boundary outward.
 
@@ -122,13 +123,7 @@ For example, a boundary with a limit of **40** will:
 * Unspawn events automatically as they leave the unspawn boundary
 * Recycle newly freed event slots for future spawns
 
-This guarantees:
-
-* Stable, predictable performance
-* No buildup of inactive or unnecessary events
-* Efficient population management
-
-Your maps maintain controlled event populations automatically.
+This controls automatic live capacity when a matching outer unspawn handler is configured. A cap alone does not remove events outside the spawn boundary. Explicit BEID restoration can exceed automatic capacity; profile the intended configuration.
 
 ---
 
@@ -144,9 +139,11 @@ With a simple setup; such as a **spawn boundary** just outside the player’s sc
 * Scalable systems for open worlds
 * Preloaded events via XY or RegionId
 
-Because every permanent event has a performance cost, even erased events, boundaries prevent unnecessary overhead.
+Streaming avoids active simulation for dormant entities. Stored records still consume memory and persistence work.
 
-You may design maps with hundreds or thousands of potential events, while only **40–100** ever exist at one time.
+Choose the active cap for your project. The release demonstration contains **60,801 persistent entities** with approximately **650 live simultaneously** under its tested configuration; these are different counts, not a fixed limit or a universal performance result.
+
+Start with the [boundary setup examples](../../Documentation/Boundary/scriptcalls.html), then [preload persistent entities](../../Documentation/Boundary/preloadevents.html).
 
 ---
 
@@ -154,7 +151,7 @@ You may design maps with hundreds or thousands of potential events, while only *
 
 The Ritter Boundary System delivers:
 
-* Higher performance
+* Reduced active-event work through streaming
 * Larger, more dynamic maps
 * Cleaner event organization
 * Automated event recycling
