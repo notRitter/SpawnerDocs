@@ -4,63 +4,77 @@ parent: Spawner Guides
 nav_order: 1
 ---
 
-![Event_Recycling](../Assets/BaseSpawner/Event_Recycling.png)
+![Event Recycling](../Assets/BaseSpawner/Event_Recycling.png)
 
-## Event Recycling
+# Event Recycling
 
-Event recycling is one of the core features that makes the **Ultimate Event Spawner** fast, scalable, and safe to use even on large, event-dense maps. Instead of continually creating new `Game_Event` objects, which gradually increases memory usage and hurts performance, the spawner reuses events you’ve previously unspawned.
+The Ritter Ultimate Event Spawner includes an automatic event recycling system designed to make repeated spawning and unspawning more efficient.
 
-### How It Works
+Instead of continually creating new event objects and assigning higher event IDs, the Event Spawner can reuse previously unspawned events and their available event IDs.
 
-#### 1. Unspawned events are stored in a pool
+This is especially useful for games with large numbers of enemies, NPCs, objects, or other events that appear and disappear throughout gameplay.
 
-Normally, unspawning an event in RPG Maker means *erasing it permanently*. With recycling enabled, the system behaves more intelligently:
+**Event recycling happens automatically.** You don't need to enable it or manage a recycling pool yourself.
 
-* The event’s `Game_Event` instance is moved off-map to **(-1, -1)**.
-* It is added to the internal **unspawn pool** (`Ritter._unspawnList`).
-* The event is safely erased and made inactive.
-* Saved-event data is kept or discarded based on your settings.
+## How Event Recycling Works
 
-At this point, the event is no longer visible or interactive, but the actual `Game_Event` object still exists and is ready to be reused.
+Imagine your game regularly spawns enemies as the player explores.
 
-#### 2. When spawning, the system checks the pool first
+Without event recycling, repeatedly creating and removing enemies could cause the event list to grow unnecessarily over time.
 
-When a new event is spawned:
+With event recycling:
 
-* The spawner checks the unspawn pool.
-* **If a recycled event is available:**
+1. An enemy is spawned onto the map.
+2. The enemy is defeated or is no longer needed.
+3. The Event Spawner unspawns the enemy.
+4. The event and its available ID can be reused for another spawned enemy.
 
-  * The next available event is pulled from the pool.
-  * It is transformed into the desired spawn event.
-* **If the pool is empty:**
+The Event Spawner also supports reusing character sprites, helping reduce unnecessary object creation during repeated spawning.
 
-  * A brand‑new `Game_Event` is created normally.
+This allows your game to continuously spawn and unspawn events without requiring a new event ID for every spawn.
 
-This ensures your project rarely creates new event objects at runtime, significantly reducing performance overhead.
+## Recycling and Saved Events
 
-#### 3. Consistent long‑term performance
+Event recycling works alongside the Event Spawner's saving systems.
 
-Because the system recycles rather than repeatedly constructing and destroying events:
+**Temporary Events:** When a temporary event is unspawned, its event ID becomes available for reuse.
 
-* No unused event clutter accumulates in memory.
-* Frame rate remains stable even after hours of gameplay.
-* Opens the door to large-scale and continuous spawning.
-* The engine avoids slowdown caused by hundreds of inactive events.
+**Saved Events:** Saved events retain their state and reserve their event IDs until they are permanently removed.
 
-This spawner breezes through extreme stress‑tests with **tens of millions** of spawns and unspawns without any performance loss.
+**Saved Boundary Events:** These events use persistent Boundary Event IDs (BEIDs) to maintain their identities, even if their runtime event IDs change when they are restored.
 
-### Why This Matters
+This means you can recycle events while still maintaining persistent NPCs, objects, and other saved entities.
 
-Event recycling makes the spawner ideal for:
+For more information, see [Saved Events](../Documentation/savedevents.html) and [Saved Boundary Events](../Documentation/Boundary/savedboundaryevents.html).
 
-* Open‑world maps
-* Random encounter systems
-* Dynamic NPC populations
-* Survival and crafting systems
-* Tower defense waves
-* Action Battle System enemies and interactables
-* Farming and life‑sim mechanics
-* Endless runner object generation
-* Any game requiring constant spawning and cleanup
+## Large-Scale Event Management
 
-Instead of unspawned erased events piling up over time, you get a stable system that performs the same at **20 hours** as it did at **2 minutes**.
+Event recycling becomes particularly valuable when combined with the Boundary System.
+
+Boundaries allow events to spawn as the player approaches and unspawn when they are no longer needed.
+
+Together, these systems make it possible to maintain large persistent populations without keeping every event active at the same time.
+
+For example, the v2.1 demonstration includes:
+
+- **60,801 persistent boundary events** stored in the world.
+- Approximately **650 events active simultaneously** in the tested configuration.
+- The remaining events stored until needed.
+
+The recycling stress test also repeatedly spawns and unspawns events across **250 designated map tiles per cycle**.
+
+These demonstrations show how recycling and boundary streaming can support large-scale event systems. Actual performance depends on your project's event logic, graphics, plugins, and target hardware.
+
+## Best Practices
+
+- **Unspawn events when they're no longer needed.** This allows their available runtime resources to be reused.
+- **Use temporary events for disposable content.** Enemies, effects, and other events that don't need to remember their state are good candidates.
+- **Save events that need persistence.** Use saved events or saved boundary events for NPCs, treasure chests, and other objects that should remember their state.
+- **Use boundaries for larger populations.** Spawn and unspawn events based on the player's location instead of keeping everything active.
+- **Test with your actual game.** Event pages, movement, graphics, and other plugins still affect performance.
+
+## Summary
+
+Event recycling helps the Ritter Ultimate Event Spawner efficiently reuse events during repeated spawning and unspawning.
+
+Combined with saved events and boundary streaming, it provides a foundation for creating larger, more dynamic RPG Maker worlds without unnecessarily growing the active event list.
