@@ -6,96 +6,53 @@ nav_order: 1
 # Ritter Ultimate Event Spawner Documentation
 <img src="https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/RitterUltimateEventSpawnerLogo2.png" alt="Ritter Ultimate Event Spawner Logo" style="width: 50%; height: auto;"/><img src="https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/RitterBoundarySystemLogo.png" alt="Ritter Ultimate Event Spawner Logo" style="width: 50%; height: auto;"/>
 
-Welcome!
+Documentation for **Ultimate Event Spawner v2.1** and its accompanying Boundary System for RPG Maker **MV and MZ**. The companion has its own version numbering.
 
-This is the official documentation for the **Ritter Ultimate Event Spawner** (RPG Maker MV & MZ).
+## Store and support
 
----
+* [Ultimate Event Spawner on itch.io](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv)
+* [Boundary System on itch.io](https://notritter.itch.io/ritter-boundary-system-rpg-maker-mz)
+* [Spawner support forum](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv/community)
 
-## Quick Links
+## Start here
 
-* **Store Page:** [Ritter Ultimate Event Spawner on Itch.io](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv)
-* **Store Page:** [Ritter Boundary System on Itch.io](https://notritter.itch.io/ritter-boundary-system-rpg-maker-mz)
+1. [Install and configure](Documentation/installation.html) the base plugin and optional Boundary companion.
+2. Set up [spawn maps and templates](Documentation/spawnmapsandtemplates.html).
+3. Try [script calls](Documentation/scriptcalls.html) in either engine, or [MZ plugin commands](Documentation/plugincommands.html).
+4. For streaming, read the [Boundary introduction](Guides/Boundary/introduction.html) and [setup examples](Documentation/Boundary/scriptcalls.html).
 
----
+Upgrading an existing game? Read [Upgrading to v2.1](Documentation/upgrading.html) and [Save Storage & Restoration](Documentation/persistence.html) before replacing files or transferring saves.
 
-## What this plugin does
+## Base Event Spawner
 
-The **Ritter Ultimate Event Spawner** simplifies and supercharges dynamic content for RPG Maker:
+Spawn template copies at coordinates, in regions, or on terrain tags; transform live events; choose saved or temporary behavior; and recycle event objects and sprites.
 
-* Spawn events by [coordinates](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event), [region](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event-by-region), or [terrain tag](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#spawn-event-by-terrain-tag)
-* [Transform existing events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#transform-event) into live instances of [template events](https://notritter.github.io/SpawnerDocs/Documentation/installation.html#4-create-a-template-map-for-source-events)
-* [Save events](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#examples) for persistence throughout gameplay or use temporary spawns
-* [Recycle event objects](https://notritter.github.io/SpawnerDocs/Guides/eventrecycling.html) to prevent memory bloat and preserve performance
-* Full [script-call (MV&MZ)](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html) and [plugin-command (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html) control
-* [Boundary-based spawning system](https://notritter.github.io/SpawnerDocs/Guides/Boundary/introduction.html) for streaming events on large maps
+* [Installation](Documentation/installation.html)
+* [Script Calls](Documentation/scriptcalls.html)
+* [Plugin Commands (MZ)](Documentation/plugincommands.html)
+* [Spawn Maps & Templates](Documentation/spawnmapsandtemplates.html)
+* [Saved Events](Documentation/savedevents.html)
+* [Spatial Lookup & Placement](Documentation/spatial.html)
+* [Save Storage & Restoration](Documentation/persistence.html)
+* [Event Recycling](Guides/eventrecycling.html)
 
----
+## Boundary streaming and persistent entities
 
-## Documentation Structure
+The Boundary companion provides geometry used by the Spawner's automatic handlers. Persistent entities can remain dormant or preloaded while only a selected population is live. Runtime event IDs are reusable; BEID tuples identify persistent boundary entities.
 
-Below is a concise map of the docs so you can land on the exact topic you need.
+* [Boundary Script Calls and Setup](Documentation/Boundary/scriptcalls.html)
+* [Boundary Plugin Commands (MZ)](Documentation/Boundary/plugincommands.html)
+* [Boundary Types & Behaviors](Documentation/Boundary/boundarytypes.html)
+* [Saved Boundary Events](Documentation/Boundary/savedboundaryevents.html)
+* [Preloaded Boundary Events](Documentation/Boundary/preloadevents.html)
+* [BEID Database](Documentation/Boundary/beiddatabase.html)
+* [Self Variables](Documentation/Boundary/selfvariables.html)
+* [Boundary Best Practices](Guides/Boundary/bestpractices.html)
 
-### Base Spawner
+Preloading and the six boundary types already existed in the published releases. v2.1 expands the public preload workflow with BEIDs and Self Variables, adds terrain-tag spawning and Spatial lookup, and strengthens persistence and restoration. See [upgrade notes](Documentation/upgrading.html) for API/default changes and known limits.
 
-**Documentation**
+## Developer integrations
 
-* [Installation & Setup](https://notritter.github.io/SpawnerDocs/Documentation/installation.html#installation)
-* [Script Calls](https://notritter.github.io/SpawnerDocs/Documentation/scriptcalls.html#script-calls)
-* [Plugin Commands (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#plugin-commands)
-* [Spawn Maps & Templates](https://notritter.github.io/SpawnerDocs/Documentation/spawnmapsandtemplates.html)
-* [Saved Events](https://notritter.github.io/SpawnerDocs/Documentation/savedevents.html)
+The [Developer Integration Guide](compatibility.html) covers dynamic initialization/removal, cached IDs/references, sprite rebinding, collision lookup, offline representations, interpreter waits, and restoration. It is an integration guide, not certification of third-party plugins.
 
-**Guides**
-
-* [Event Recycling (how recycling works)](https://notritter.github.io/SpawnerDocs/Guides/eventrecycling.html)
-* Beginner Quick Start
-* Performance Optimization
-
----
-
-### Boundary Spawner
-Requires Ritter Boundary System
-
-
-**Documentation**
-
-* [Boundary System Introduction](https://notritter.github.io/SpawnerDocs/Guides/Boundary/introduction.html#boundary-system-introduction)
-* [Boundary Script Calls](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/scriptcalls.html#boundary-system--script-call-documentation)
-* [Boundary Plugin Commands (MZ)](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/plugincommands.html#boundary-system-plugin-commands-documentation)
-* Boundary Types & Behaviors
-* Auto Handlers & Update Methods
-* [Saved Boundary Events](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/savedboundaryevents.html)
-* [Preloading Saved Boundary Events](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/preloadevents.html)
-* [BEID Database](https://notritter.github.io/SpawnerDocs/Documentation/Boundary/beiddatabase.html)
-
-**Guides**
-
-* Event Streaming Quick Start Guide!
-* Correctly designing Spawn & Unspawn Zones
-* [Boundary System Best Practices](https://notritter.github.io/SpawnerDocs/Guides/Boundary/bestpractices.html#boundary-system-best-practices-guide)
-* Expanding Worlds with Boundaries
-* Boundary Debugging & Visualizer Usage
-
----
-
-## Recommended starting points
-
-* New users: **Beginner Quick Start**
-* Want best performance: **Event Recycling** + **Performance Optimization**
-* Try event streaming: **Event Streaming Quick Start Guide!**
-
----
-
-## Notes for MV vs MZ users
-
-* **MV:** Script calls are the sole integration point.
-* **MZ:** Full plugin-command support via the editor UI; examples in the Plugin Commands pages show MZ UI screenshots and arguments.
-
----
-
-## Contribute / Report issues
-
-If you find a problem or want to suggest improvements, please make a post on the [forums](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv/community) which can be found on the [store page on Itch.io.](https://notritter.itch.io/ritter-ultimate-event-spawner-rpg-maker-mv)
-
----
+**MV:** use Script commands for public control; automatic template rules can use the [MV metadata form](Documentation/Boundary/plugincommands.html#rpg-maker-mv-metadata). **MZ:** use Script commands or the editor's plugin-command interface.
