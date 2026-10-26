@@ -40,21 +40,21 @@ You may create **as many spawn maps as you like**, allowing you to organize temp
 
 ## Template Events
 
-Each event placed on a spawn map is treated as a **template event**.
+Each event placed on a spawn map can be used as a **template event**.
 
 Template events:
 
-* Are never interacted with directly by the player
-* Are never moved or modified at runtime
-* Serve as the source data for spawned events
+* Are created using RPG Maker's normal event editor
+* Contain the event pages, commands, and settings you want your spawned events to use
+* Can be reused to spawn as many copies as needed
 
 When an event is spawned, the Event Spawner:
 
-* Copies the template event’s pages, commands, and settings
-* Creates a new event instance on the target map
-* Assigns it a runtime `eventId`
+* Uses the template event's pages, commands, and settings
+* Creates a new event on the gameplay map
+* Assigns the new event its own `eventId`
 
-The original template remains unchanged.
+You can edit your template events just like any other RPG Maker event. This makes it easy to update and manage events without placing individual copies throughout your gameplay maps.
 
 ---
 
@@ -90,62 +90,74 @@ All complexity lives in spawn maps, not gameplay maps.
 
 ---
 
-### Flexible Spawning
+## Flexible Spawning
 
-Template events can be spawned as:
+Template events can be spawned as either **temporary** or **saved** events.
 
-* **Temporary events** (exist only while spawned, removed on map change)
-* **Saved events** (persistent across map change and save/load game)
+- **Temporary Events:** Exist on the current map until they are removed or the player leaves the map. Great for enemies, effects, and other events that don't need to be remembered when the player returns.
+- **Saved Events:** Remain saved when the player leaves the map, allowing them to be restored when the player returns. Great for NPCs, treasure chests, and other events that need to remember their state.
 
-This flexibility allows you to mix dynamic and persistent content.
+You can use both types in the same project, giving you control over which events should be remembered and which can be recreated as needed.
 
----
-
-## Multiple Spawn Maps
-
-Projects are not limited to a single spawn map.
-
-Common patterns include:
-
-* One spawn map per system (NPCs, enemies, interactables)
-* One spawn map per region or chapter
-* Separate spawn maps for temporary vs persistent templates
-
-The Event Spawner allows you to reference:
-
-* Any spawn map
-* Any template event on that map
-
-at the time of spawning.
+For more information, see [Saved Events](savedevents.html).
 
 ---
 
 ## Example Workflow
 
-A typical workflow using spawn maps looks like this:
+Here's how to create and use your first spawn map:
 
-1. Create a new map to act as a spawn map
-2. Add the mapId to the plugin parameters Spawn Map Ids
-3. Place one or more template events on the map
-4. Configure event pages, logic, and commands normally
-5. Use the Event Spawner to spawn copies of the template onto gameplay maps
+1. **Create a new map** in RPG Maker to hold your template events. Give it a recognizable name, such as `SpawnMap`.
+2. **Create an event** on that map using RPG Maker's normal event editor. Set up its graphics, pages, commands, and behavior just like any other event.
+3. **Find the map and event IDs** you want to use. You'll need these to tell the Event Spawner which event to spawn.
+4. **Open a gameplay map** where you want the event to appear.
+5. **Create an event with a Script command** and enter the following:
+
+```js
+const spawnMapId = 2;
+const spawnEventId = 1;
+const x = 8;
+const y = 10;
+
+Ritter.spawnEvent(spawnMapId, spawnEventId, x, y);
+```
+
+Change the values to match your project. The Event Spawner will create a copy of your template event at the specified coordinates on the current gameplay map.
+
+You can spawn the same template as many times as you need, at different locations or on different gameplay maps.
+
+For more spawning options, see [Script Calls](scriptcalls.html).
 
 ---
 
 ## Updating Template Events
 
-When changes to the event are required:
+Need to change how a spawned event looks or behaves? Simply open its template event on the spawn map and make your changes in RPG Maker's event editor.
 
-* Modify the template event on the spawn map in the editor
+For example, you could:
+
+- Update an NPC's dialogue.
+- Change an enemy's graphics or behavior.
+- Modify the contents of a treasure chest.
+- Fix or improve event commands.
+
+Newly spawned events will use the updated template when you run your game with those changes.
+
+**Important:** Saved events also use their original templates when being restored, so changing a template can affect events in existing save files. Avoid deleting or changing the IDs of templates used by saved events, as this can prevent them from being restored correctly.
 
 ---
 
 ## Best Practices
 
-* Keep spawn maps organized and clearly named
-* Treat template events as read-only at runtime
-* Avoid placing gameplay logic directly on gameplay maps when templates suffice
-* Always remember to properly manage your event count by recycling
+- **Stay organized:** Give your spawn maps and template events descriptive names so they're easy to find.
+- **Reuse templates:** Instead of creating dozens of identical events, create one template and spawn copies wherever you need them.
+- **Choose when to save:** Use temporary events for things that don't need to be remembered, and saved events for things that should persist between visits.
+- **Manage active events:** Unspawn events when they're no longer needed to take advantage of the Event Spawner's recycling system.
+- **Keep your templates:** Don't delete templates that are still being used by saved events.
+
+For more information about event recycling, see [Event Recycling](../Guides/eventrecycling.html).
+
+When dealing with a lot of event templates use [Spawn Map Designer](https://notritter.itch.io/spawn-map-designer) to keep your Spawn Maps organized!
 
 ---
 
