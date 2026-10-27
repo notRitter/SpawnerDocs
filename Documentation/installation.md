@@ -71,9 +71,7 @@ Quick Start provides an easier way to configure automatic event streaming withou
 
 It's completely optional and is covered in [Section 5](#5-configure-event-streaming-quick-start-optional).
 
-**Note:** Older screenshots may show Developer Mode settings that are no longer active in v2.1.
-
-![Plugin parameters](../Assets/BaseSpawner/Installation/Spawner_Plugin_Parameters.png)
+![Plugin parameters](../Assets/Spawner_Plugin_Params.png)
 
 ---
 
