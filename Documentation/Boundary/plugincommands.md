@@ -21,7 +21,7 @@ This guide explains what each command does, how to configure its arguments, and 
 - [Create Boundary](#create-boundary)
 - [Add Auto Handler](#add-auto-handler)
 - [Boundary Event Setup](#boundary-event-setup)
-- [Init Boundary Events](#init-boundary-events)
+- [Initialize Boundary](#initialize-boundary)
 - [Activate Boundary](#activate-boundary)
 - [Deactivate Boundary](#deactivate-boundary)
 - [Enable Event / Disable Event](#enable-event--disable-event)
@@ -199,13 +199,13 @@ For more information about persistent events, see [Saved Boundary Events](savedb
 
 ---
 
-## Init Boundary Events
+## Initialize Boundary
 
-![Init Boundary Events](../../Assets/BoundarySpawner/PluginCommands/Init_Boundary_Plugin_Command.png)
+![Initialize Boundary](../../Assets/BoundarySpawner/PluginCommands/Init_Boundary_Plugin_Command.png)
 
-Use **Init Boundary Events** to populate an active spawn boundary with saved or preloaded events.
+Use **Initialize Boundary** (`InitializeBoundary`) to populate an active spawn boundary with existing saved or preloaded events.
 
-This is particularly useful when you want events to appear immediately instead of waiting for normal boundary movement to trigger spawning.
+This is useful when you want nearby persistent events to appear immediately, without waiting for the boundary's normal automatic spawning behavior.
 
 ### Command Arguments
 
@@ -217,20 +217,20 @@ This is particularly useful when you want events to appear immediately instead o
 
 Imagine you've preloaded NPCs throughout a village.
 
-When the player first enters the village, you want nearby NPCs to appear immediately.
+When the player enters the village, you want nearby NPCs to appear immediately.
 
-After setting up the preloaded events and activating the appropriate spawn boundary, use **Init Boundary Events** to restore eligible saved events inside that boundary.
+After activating the appropriate spawn boundary, use **Initialize Boundary** to restore eligible saved or preloaded events within its area.
 
-The command processes stored events within the boundary's interior, up to its configured capacity. This works even if the boundary normally uses an edge-based spawning type such as `SpawnOn` or `FillOn`.
+The command restores available events within the boundary's interior, up to its configured event limit.
 
-It does not generate a new event on every empty tile or activate every saved event in the world.
+This also works with edge-based spawning types such as `SpawnOn` and `FillOn`.
 
 ### Important Notes
 
-- The spawn boundary must be active before it can be initialized.
-- Use initialization when you want to populate the starting area with existing saved or preloaded events.
-- Previously active persistent events are restored automatically when loading a saved game.
-- You do not need to repeatedly initialize boundaries just to restore events when continuing a saved game.
+- The spawn boundary must be active before initialization.
+- Initialization is optional. Automatic boundary spawning works without it.
+- Only existing saved or preloaded events are restored. The command does not generate new events.
+- You do not need to initialize boundaries again simply to restore previously active persistent events when loading a saved game.
 
 See [Preloaded Boundary Events](preloadevents.html) for more information.
 
@@ -453,11 +453,11 @@ For more information, see [Preloaded Boundary Events](preloadevents.html).
 
 ![Preload Saved Boundary Event Region](../../Assets/BoundarySpawner/PluginCommands/PreloadEventRegion_Plugin_Command.png)
 
-Use **Preload Saved Boundary Event (Region)** to create a persistent boundary event on a randomly selected tile matching one of your chosen region IDs.
+Use **Preload Saved Boundary Event (Region)** to create a persistent event at a randomly selected tile matching one of your chosen region IDs.
 
-This works similarly to the coordinate-based preload command, except you select region IDs instead of entering exact X and Y coordinates.
+Unlike coordinate-based preloading, you don't need to specify an exact location.
 
-It's especially useful when you want to populate a map with persistent events without choosing every location manually.
+This is useful for preparing persistent NPCs, objects, or other events across a map before they are encountered by the player.
 
 ### Command Arguments
 
@@ -472,9 +472,9 @@ It's especially useful when you want to populate a map with persistent events wi
 
 ### Example Setup
 
-Imagine you want to preload a persistent NPC somewhere within region 1 of your current gameplay map.
+Imagine you want to preload a persistent NPC somewhere within region `1` of your current gameplay map.
 
-First, use RPG Maker's Region tool to paint region ID `1` onto the tiles where the NPC is allowed to appear.
+First, use RPG Maker's Region tool to paint region `1` onto the tiles where the NPC can appear.
 
 Then configure the command:
 
@@ -487,23 +487,22 @@ Then configure the command:
 | varBEID | `1` |
 | varType | `SetValueAsInteger` |
 
-When the command succeeds, it creates **one saved boundary event** at a randomly selected eligible tile matching region 1.
+When the command succeeds, it creates **one preloaded saved event** at a randomly selected eligible tile matching region `1`.
 
-The new event's BEID is stored in game variable 1.
+The event receives a persistent BEID, which is stored in game variable `1`.
 
-You can also specify multiple region IDs to allow placement across different areas.
+You can also specify multiple region IDs to allow placement across different areas of the map.
 
 ### Important Notes
 
 - Each command execution creates one preload, not one event per matching tile.
-- Region selection searches the current gameplay map, including matching tiles outside the boundary's current area.
-- The selected tile must be eligible for the preload.
-- If no suitable tile is found, no event is created.
-- If creation fails, the output variable is left unchanged.
-- Invalid region data prevents the command from creating a preload.
+- Region selection searches the **entire current gameplay map**, not just the boundary's active area.
+- The selected tile must be eligible for preloading.
+- If no eligible tile is found, no event is created.
+- If creation fails, the BEID output variable remains unchanged.
 
-Like the coordinate-based version, this command prepares the saved event for later restoration rather than immediately spawning it.
+The preloaded event is stored for later restoration when its location becomes eligible for boundary streaming. It does not immediately appear on the map.
 
-See [Preloaded Boundary Events](preloadevents.html) for more information about how preloaded events are stored and restored.
+See [Preloaded Boundary Events](preloadevents.html) for more information.
 
 For script examples involving BEIDs and saved event management, see [Preloading and BEID Control](scriptcalls.html#9-preloading-and-beid-control).
