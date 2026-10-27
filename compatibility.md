@@ -1,178 +1,393 @@
 ---
 title: Compatibility Guide
 nav_order: 6
-nav_exclude: true
+published: false
 ---
 
-# Developer Integration Guide
+# Developer Compatibility Guide
 
-This guide explains how to adapt RPG Maker **MV/MZ** code to Ritter Ultimate Event Spawner v2.1 and its Boundary integration. It is **not a list of tested third-party plugins**, and the examples do not certify any named plugin combination.
+Ritter Ultimate Event Spawner v2.1 supports RPG Maker MV and MZ and provides dynamic event spawning, recycling, saved events, and optional boundary streaming.
 
-Load an integration patch after the plugins whose methods it aliases. Test the exact engine/plugin versions used by your game.
+This guide is intended for **RPG Maker plugin developers** who want to make their plugins compatible with dynamically spawned events.
 
-## Identity and representation
+It covers the most important integration considerations, common RPG Maker methods, and practical examples.
 
-| Object/identifier | Lifetime and use |
-| --- | --- |
-| Runtime `eventId` | Current-map slot. Temporary and boundary slots can be recycled for unrelated entities. Base retained saves reserve their slot, subject to map-update collision handling. |
-| `(boundaryName, mapId, BEID)` | Persistent saved/preloaded boundary identity. Keep the whole tuple. Temporary boundary events may have no BEID. |
-| Live `Game_Event` | Installed in `$gameMap._events`; can run pages/movement and own a character sprite. |
-| Dormant saved clone | Stored persistent state; it can have a Game_Event prototype without being a live map event. |
-| Preload object | Plain metadata with `isPreloadObj === true`; no Game_Event methods or sprite. |
+**Note:** This guide is not a list of tested third-party plugins. Compatibility depends on the specific plugins, versions, and features being used.
 
-Reacquire [BEID entries and entities](Documentation/Boundary/beiddatabase.html) after streaming, transfers, and loads. Entries themselves are rebuilt and are not permanent handles. An old map-event object can be recycled in place; keeping the same JavaScript reference is not proof it still represents the same entity.
+When creating compatibility patches, place them **below the plugins whose methods they modify** in Plugin Manager.
 
-## Actual lifecycle paths
+## 1. Event IDs and Recycling
 
-| Transition | Relevant execution |
-| --- | --- |
-| Fresh base/boundary spawn | Construct/stage template data, `newData`/`initialize`, install in map/list, then create/rebind sprite. A fresh spawn can initialize more than once. |
-| Recycled fresh entity | Reuse erased event slot, apply new template with `newData`/`initialize`; unrelated entity-owned state must not leak. |
-| Boundary unspawn | Snapshot saved state/self switches, update BEID/storage, then teardown, move off-map, clear boundary identity on the old runtime object, and `erase()`. |
-| Saved boundary respawn | Clone the saved Game_Event, assign runtime ID, restore switches, refresh page, update BEID/Spatial, create/rebind sprite. It does **not** call full `Game_Event.initialize` for that saved state. |
-| Base saved restore | Reinstall the retained saved event and rebind sprite; do not assume constructor/initialize reruns. |
-| Save/load | Deserialize/hydrate templates and records, rebuild runtime tables/BEIDs, then create the map scene/sprites. Initialization hooks alone cannot rebuild another plugin's registries. |
-| Same-map rebuild | Previously live persistent boundary entities are saved and restored before character-sprite creation; runtime IDs and interpreter targets can change. |
+RPG Maker normally assigns event IDs to events placed in the map editor. The Event Spawner also creates events dynamically, allocating and recycling runtime event IDs as needed.
 
-Erasing an engine event alone is not the same as Spawner unspawn. Integrations that remove a spawned entity should use `Ritter.unspawnEvent`, or BEID control for persistent boundary entities, so ownership/pools are maintained.
+Different types of spawned events handle their IDs differently.
 
-## Event lifecycle hooks and cleanup
+| Event Type | Runtime ID Behavior |
+|---|---|
+| **Temporary Event** | Its runtime ID can be recycled after unspawning. |
+| **Base Saved Event** | Its runtime ID is reserved for later restoration. |
+| **Saved Boundary Event** | Uses a persistent BEID. Its runtime ID can change when restored. |
+| **Preloaded Boundary Event** | Has a persistent BEID but may not have a live runtime ID yet. |
 
-Use **idempotent** initialization/cleanup: repeated initialization, erase, or rebinding must not register twice or dispose another entity's resources.
+### Why This Matters
 
-`Game_Event.initialize` is useful for defaults on newly created/recycled entities, but is not a universal “entity became live” hook. After restoration, reconcile your runtime registry from live map events at a defined lifecycle point. Do a bounded rebuild on map/load transitions rather than a global scan every frame.
+Suppose a plugin stores a reference to event `1000`.
 
-`Game_Event.erase` is useful for releasing your transient resources. It does not cover scene-only sprite destruction, nor does it prove a persistent entity was permanently destroyed. During Spawner teardown, `_BEID` and `_parentBoundary` may already be cleared before `erase()` runs. Do not derive your cleanup key from those fields at that point; retain your own transient registration token or verify the registered object.
+That event is later unspawned, and another event receives the same runtime ID.
 
-The following example maintains **only a transient runtime registry**. It is not a persistence store and does not cover live registration for every spawn path by itself:
+If the plugin continues using the old ID, it may accidentally interact with a completely different event.
+
+**Runtime event IDs should not be treated as permanent identities for temporary or boundary events.**
+
+For saved boundary events, use their persistent identity:
 
 ```js
-(function() {
-    var runtime = Object.create(null);
-    function key(event) { return event._mapId + ":" + event.eventId(); }
-
-    function reconcile() {
-        runtime = Object.create(null);
-        $gameMap.events().forEach(function(event) {
-            if (!event._erased && event.x >= 0 && event.y >= 0) {
-                runtime[key(event)] = event;
-            }
-        });
-    }
-
-    var erase = Game_Event.prototype.erase;
-    Game_Event.prototype.erase = function() {
-        var token = key(this);
-        if (runtime[token] === this) delete runtime[token];
-        // Release only resources owned by your plugin; keep persistent data.
-        erase.apply(this, arguments);
-    };
-
-    var onMapLoaded = Scene_Map.prototype.onMapLoaded;
-    Scene_Map.prototype.onMapLoaded = function() {
-        onMapLoaded.apply(this, arguments);
-        reconcile();
-    };
-
-    // In your own spawn adapter, register each successfully returned live event.
-    // For automatic streaming, integrate the current spawn/restore methods too,
-    // or resolve a BEID on demand instead of maintaining a registry.
-})();
+const boundaryName = "NPCs";
+const mapId = $gameMap.mapId();
+const beid = 5;
 ```
 
-If you wrap `Game_Map.spawnEvent`, `spawnBoundaryEvent`, `restoreUnspawnedEvent`, or `respawnSavedBoundaryEvent`, preserve arguments/return values and inspect the actual result **after** the original call. Transforming an event can change its template while keeping the object/ID, so caches of page, note, image, or collision data need refresh too. These are version-specific integration surfaces, not promises that their internals will never change.
+A saved boundary event is identified by its boundary name, gameplay map ID, and BEID.
 
-## Sprite creation, removal, and rebinding
+The same BEID number can exist under different boundaries or on different maps.
 
-`Spriteset_Map.createCharacters` creates scene-specific character sprites for loaded events. `Spriteset_Map.spawnedEvent` reuses a cached sprite by removing old array/parent references, ending MV-owned effects, calling `setCharacter(event)`, and reinserting it. Dormant/preload records have no active character sprite.
+For more information, see the [BEID Database](Documentation/Boundary/beiddatabase.html).
 
-Use `Sprite_Character.setCharacter` for rebind cleanup and your sprite's normal scene-destruction path for final cleanup. An event-erase hook alone does not cover opening menus, scene reconstruction, or loading. Remove only your own attachments; do not destroy shared character bitmaps/textures or the cached character sprite owned by the engine/Spawner.
+## 2. Event Lifecycle and Plugin Hooks
+
+The Event Spawner can create new events, recycle old runtime slots, and restore previously saved events.
+
+These operations don't always follow the same initialization path.
+
+This is important for plugins that extend RPG Maker's event methods.
+
+### Game_Event.initialize
+
+Many RPG Maker plugins use `Game_Event.initialize()` to configure custom event properties.
 
 ```js
-(function() {
-    var setCharacter = Sprite_Character.prototype.setCharacter;
-    Sprite_Character.prototype.setCharacter = function(character) {
-        var owned = this._myAddonLabel;
-        if (owned && owned.parent) owned.parent.removeChild(owned);
-        if (owned && typeof owned.destroy === "function") {
-            owned.destroy({ children: true, texture: false, baseTexture: false });
+const _Game_Event_initialize = Game_Event.prototype.initialize;
+
+Game_Event.prototype.initialize = function(mapId, eventId) {
+    _Game_Event_initialize.call(this, mapId, eventId);
+
+    // Initialize your plugin's runtime data.
+    this._myPluginActive = false;
+};
+```
+
+This is useful for newly created and recycled events.
+
+However, saved events may be restored without calling `Game_Event.initialize()` again. Fresh spawning can also involve repeated initialization.
+
+**For compatibility:**
+
+- Make initialization safe to repeat.
+- Avoid registering the same event multiple times.
+- Don't reset persistent information when a saved event is restored.
+- Make sure restored events can be recognized without relying exclusively on `initialize()`.
+
+### Game_Event.erase
+
+When events are unspawned, plugins may need to release their own temporary resources.
+
+```js
+const _Game_Event_erase = Game_Event.prototype.erase;
+
+Game_Event.prototype.erase = function() {
+
+    // Clean up your plugin's temporary data.
+    this._myPluginActive = false;
+
+    _Game_Event_erase.call(this);
+};
+```
+
+Only clean up information owned by your plugin.
+
+**Important:** RPG Maker's `erase()` method is not a replacement for the Event Spawner's unspawn system.
+
+If your plugin needs to remove a spawned event, use the Spawner's public API:
+
+```js
+const eventId = 1000;
+const removeSave = false;
+
+Ritter.unspawnEvent(eventId, removeSave);
+```
+
+For persistent boundary events, use BEID-based unspawning.
+
+During boundary cleanup, the Spawner may clear the old runtime object's `_BEID` and `_parentBoundary` fields before `erase()` runs. Don't rely on those fields still being available in your erase hook.
+
+### Restoring Runtime Information
+
+Saved events may return without running the normal event constructor or initializer.
+
+If your plugin maintains a cache or registry of active events, make sure it can recognize restored events.
+
+A common RPG Maker integration point is `Scene_Map.onMapLoaded()`:
+
+```js
+const _Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
+
+Scene_Map.prototype.onMapLoaded = function() {
+    _Scene_Map_onMapLoaded.call(this);
+
+    // Refresh your plugin's runtime event information.
+    $gameMap.events().forEach(function(event) {
+        if (!event._erased) {
+            // Register or refresh this live event.
         }
-        Object.defineProperty(this, "_myAddonLabel", {
-            value: null, writable: true, configurable: true
-        });
-        setCharacter.apply(this, arguments);
-        // Attach the new label idempotently at your normal ready/update point.
-    };
-})();
+    });
+};
 ```
 
-MV animation sprites and MZ animation/effect management have different owners. Preserve the engine's removal methods and completion lists. Test recycling during animations, flashes, balloons, and route/animation waits rather than merely checking that the character image appears.
+This example demonstrates a map-load refresh. It does not replace the need to handle events spawned or unspawned while the map remains active.
 
-## Cached references and invalidation
+Keep runtime registration safe to repeat, and avoid unnecessary full-map scans every frame.
 
-* Key current-map caches by map and runtime ID, and verify their value still represents the expected entity before use.
-* For a persistent boundary entity, store its tuple and resolve it at the time of the operation. Do not keep a raw event/entry/sprite across asynchronous callbacks or save/load.
-* Purge registry entries when an entity leaves runtime simulation; rebuild after load/map setup. Keep persistent logical data in serializable entity state or the Self Variables API instead of a transient registry.
-* Use non-enumerable properties for transient handles that should not be serialized. Such properties will not be restored by JsonEx; recreate them rather than expecting persistence.
-* Avoid storing sprites, DOM nodes, callbacks, circular graphs, or unrelated engine event references in persistent event data.
+## 3. Sprite Compatibility
 
-## Collision and spatial lookup
+The Event Spawner can recycle character sprites when events are unspawned and new events are created.
 
-The Boundary integration's `Ritter.Spatial.eventsAt(x,y)` returns event objects for a current-map cell. It is not a universal collision predicate, and base-only Spawner need not provide it. The engine's `eventsXy`, `eventsXyNt`, and movement/collision rules are not globally replaced.
+This matters for plugins that attach additional visual elements to event sprites, such as:
+
+- Name labels
+- Health bars
+- Status icons
+- Custom effects
+
+If these elements aren't cleaned up correctly, they may remain attached when a sprite is reused for another event.
+
+### Sprite_Character.setCharacter
+
+`Sprite_Character.setCharacter()` is a useful place to handle custom sprite attachments when the underlying character changes.
 
 ```js
-function eventsForTile(x, y) {
-    if (Ritter.Spatial && typeof Ritter.Spatial.eventsAt === "function") {
-        return Ritter.Spatial.eventsAt(x, y);
+const _Sprite_Character_setCharacter =
+    Sprite_Character.prototype.setCharacter;
+
+Sprite_Character.prototype.setCharacter = function(character) {
+
+    // Remove a custom label owned by your plugin.
+    if (this._myPluginLabel) {
+        if (this._myPluginLabel.parent) {
+            this._myPluginLabel.parent.removeChild(this._myPluginLabel);
+        }
+
+        this._myPluginLabel.destroy({
+            children: true,
+            texture: false,
+            baseTexture: false
+        });
+
+        this._myPluginLabel = null;
     }
-    return $gameMap.eventsXy(x, y);
+
+    _Sprite_Character_setCharacter.call(this, character);
+
+    // Create or refresh your plugin's visual elements as needed.
+};
+```
+
+This example assumes `_myPluginLabel` is a sprite created and owned by your plugin.
+
+The old label is removed before the character sprite is assigned to another event.
+
+**Important Notes:**
+
+- Only remove or destroy resources owned by your plugin.
+- Don't destroy the main character sprite or shared character textures.
+- Handle cleanup when the map scene is destroyed, not just when a sprite is rebound.
+- Test sprite recycling during animations, balloons, and movement effects.
+
+RPG Maker MV and MZ manage some animation and effect resources differently, so test both engines if your plugin supports both.
+
+## 4. Spatial Lookup and Collision
+
+When the Boundary System is installed, the Event Spawner provides a spatial lookup system for finding events at specific map coordinates.
+
+```js
+Ritter.Spatial.eventsAt(x, y);
+```
+
+This returns event objects associated with the specified tile on the current gameplay map.
+
+### Example: Finding Events on a Tile
+
+```js
+const x = 8;
+const y = 10;
+
+const events = Ritter.Spatial.eventsAt(x, y);
+
+events.forEach(function(event) {
+    console.log(event.eventId());
+});
+```
+
+### Supporting Projects Without the Boundary System
+
+If your plugin supports both the base Event Spawner and the Boundary System, check whether the spatial API is available.
+
+```js
+const x = 8;
+const y = 10;
+
+let events;
+
+if (Ritter.Spatial && Ritter.Spatial.eventsAt) {
+    events = Ritter.Spatial.eventsAt(x, y);
+} else {
+    events = $gameMap.eventsXy(x, y);
 }
 ```
 
-Filter for your own trigger, through, priority, and ownership requirements. Never pass a returned Game_Event object where a numeric event ID is required.
+This uses Ritter's spatial lookup when available and RPG Maker's normal event lookup otherwise.
 
-The index hooks event `setPosition`, normal steps, jumps, and erasure, and is rebuilt on setup/load. Preserve aliases when overriding these methods. A custom movement system that writes `_x/_y` directly must explicitly update its spatial integration **after** the tile changes. `Ritter.Spatial.track(event)`/`untrack(event)` exist for the current implementation, but are low-level, version-specific interfaces; do not edit `_grid`, `_last`, or cell Sets directly.
+### Important Notes
 
-See [Spatial Lookup & Placement](Documentation/spatial.html) for placement limits and cached candidates.
+Spatial lookup identifies events occupying a tile. It does not automatically determine whether an event can move, collide, or spawn there.
 
-## Live, dormant, and preloaded data
+Your plugin should still apply its own rules for through settings, priority, triggers, and other conditions.
 
-Use [self variables](Documentation/Boundary/selfvariables.html) for persistent logical state, including updates to a resolvable dormant entity or preload. Do not call movement, collision, page, sprite, or interpreter methods on an offline clone merely because its prototype is Game_Event.
+The spatial system tracks normal event positioning, movement, jumping, and erasure.
 
-There is no general public offline position/visual setter. Modifying a saved clone/preload's coordinates directly does not relocate its tile-storage key or BEID bookkeeping. Store your intention as logical data and apply it to a verified live entity through engine methods.
+If your plugin directly modifies internal coordinates such as `_x` or `_y`, it may bypass normal spatial updates.
 
-## Save load and map rebuilding
+**Prefer RPG Maker's normal event positioning and movement methods.**
 
-Template hydration and runtime ID/BEID reconstruction happen before the map scene is fully ready. `$dataMap` can still be `null` during cold Continue even though template maps are loaded. Do not call map dimensions, scrolling, screen-centered boundary geometry, or sprite methods from a pure identity-rebuild hook.
+For custom movement systems, low-level `Ritter.Spatial.track(event)` and `Ritter.Spatial.untrack(event)` methods are available, but these are implementation-level interfaces.
 
-Use `Scene_Map.onMapLoaded` after the original method when your integration needs map geometry/display objects. If aliasing `DataManager.extractSaveContents`, recognize that external restoration can defer extraction: confirm that the intended map was actually installed and plugin restoration completed before rebuilding a registry. Preserve MV's synchronous return contract and MZ's Promise/rejection chain when wrapping save/load. Do not convert MV failures into truthy Promises or swallow MZ errors.
+Avoid directly modifying the spatial grid's internal containers.
 
-Do not reset persistent entity data from `initialize` or a reconciliation pass. Saved respawn deliberately preserves character state instead of rerunning the full initializer. Same-map rebuilding also retains the previously live persistent set, inactive boundaries, and supported custody/interpreter references; it does not instantiate all dormant records.
+See [Spatial Lookup & Placement](Documentation/spatial.html) for more information.
 
-## VisuStella Events & Movement Core
+## 5. Saved Boundary Event Compatibility
 
-When Events & Movement Core is installed, load it above Ritter's plugins and keep BoundarySystem above EventSpawner. Ritter provides guarded compatibility for its own events alongside ordinary event/movement features. This is not support for interchanging Ritter and VisuStella spawn records or certification of every plugin/version combination.
+Saved boundary events can be live, dormant, or preloaded.
 
-The integration invalidates Events & Movement Core's event cache after successful spawn, unspawn, restoration, and reconstruction transitions. Ritter's event enumeration excludes its erased off-map recycling objects. Event lookup also resolves valid current-map `_events` slots, including Ritter IDs at or above `1000`, without assuming a numeric range belongs exclusively to one provider.
+| State | Description |
+|---|---|
+| **Live** | The event is active on the map and can run event pages, movement, and graphics. |
+| **Dormant** | The event has been unspawned, but its persistent information remains stored. |
+| **Preloaded** | The event is prepared for spawning but hasn't appeared yet. |
 
-Allocation avoids foreign event slots. If different live objects nevertheless claim the same runtime ID, lookup reports the conflict instead of silently replacing either owner. Ritter does not write into VisuStella's private spawned-event collection or modify its plugin file. Preserve both plugins' accessors and aliases in additional integration patches, and test your exact movement features, page changes, streaming, and save/load configuration.
+### Working with Offline Events
 
-## Interpreter references and movement-route waits
+Dormant and preloaded events should not be treated as ordinary live map events.
 
-A plugin that retains event references or route-wait targets must reconcile them when an ID changes. Supplied MV code uses an interpreter `_character` reference for route waits; MZ uses `_characterId`. Spawner rebinds supported engine-owned references during its same-map restore, including nested/parallel interpreters, but cannot identify arbitrary third-party caches or literal IDs stored in your own commands/variables.
+A dormant saved event may have a `Game_Event` prototype, but it isn't currently participating in map processing.
 
-Use BEIDs to reacquire the live target. Test a save/load or rebuild with an earlier free ID slot so that restoration actually changes IDs, then verify route waits continue while forcing and end when the restored route completes.
+A preload is a metadata object rather than a live `Game_Event`.
 
-## Common symptoms and practical checks
+Don't call movement, collision, sprite, or interpreter methods on these offline representations.
 
-| Symptom | Likely integration issue | Check |
-| --- | --- | --- |
-| An action affects a different NPC | Runtime ID/object was cached across recycling. | Resolve full BEID tuple again; verify live ownership. |
-| Icons or effects remain behind | Owned sprite/effect was not detached on erase/rebind/scene destruction. | Audit each owner and release only its resources. |
-| New spawns are absent from another plugin's collision cache | Cache built once from editor events. | Register successful dynamic spawns and remove erased ones; rebuild after load. |
-| Offline method call crashes or changes unrelated state | Dormant clone/preload treated as live. | Check entry, representation, current map, and `spawned`. |
-| Cold Continue fails but entering New Game helps | Integration assumed current-map geometry existed during extraction. | Defer geometry/display work to map-ready lifecycle. |
-| Route wait hangs or ends early after restore | Old object or runtime ID retained. | Rebind the target and test both engine implementations. |
-| Duplicate registrations after load | Initialization and reconciliation were not idempotent. | Clear/rebuild transient registry once; preserve persistent state. |
+### Using Self Variables
 
-These are diagnostic starting points, not proof that a named third-party plugin is compatible. Test fresh/recycled spawns, saved respawns, cold/warm loads, map-version rebuilding, base-only operation, and streaming cycles with the complete intended plugin order.
+You can update persistent information without bringing the event live.
+
+```js
+const boundaryName = "NPCs";
+const mapId = $gameMap.mapId();
+const beid = 5;
+const varId = "questStage";
+const value = 3;
+
+Ritter.setSelfVariable(
+    boundaryName, mapId, beid, varId, value
+);
+```
+
+This works with saved boundary entities, including dormant and preloaded events.
+
+For changes to movement or appearance, work with a verified live event instead.
+
+Directly changing an offline object's coordinates does not automatically update its saved tile location or BEID bookkeeping.
+
+### Avoiding Stale References
+
+A boundary event may receive a different runtime ID when it returns.
+
+Don't permanently cache its old runtime event object, sprite, or event ID.
+
+Instead, store its boundary name, gameplay map ID, and BEID, then resolve the current entity when needed.
+
+This also matters for plugins that store event references for movement routes or interpreter commands.
+
+The Event Spawner handles supported engine-owned references during restoration, but it cannot automatically update arbitrary references maintained by another plugin.
+
+See [BEID Database](Documentation/Boundary/beiddatabase.html) and [Self Variables](Documentation/Boundary/selfvariables.html).
+
+## 6. VisuStella Events & Movement Core
+
+Ritter Ultimate Event Spawner includes compatibility handling for **VisuStella Events & Movement Core**.
+
+When using both systems, configure the load order as follows:
+
+```text
+VisuStella Events & Movement Core
+Ritter_BoundarySystem
+Ritter_EventSpawner
+```
+
+The Boundary System must remain above Event Spawner.
+
+### Compatibility Behavior
+
+Ritter includes safeguards for dynamic event lookup and runtime ID allocation when working alongside Events & Movement Core.
+
+These help with:
+
+- Recognizing dynamically spawned events alongside normal map events.
+- Avoiding runtime event IDs already occupied by another system.
+- Refreshing relevant event caches after spawning, unspawning, and restoration.
+- Preventing erased recycling objects from being treated as active events.
+- Detecting conflicting live event IDs rather than silently replacing an event.
+
+Ritter does not modify VisuStella's plugin files or take ownership of its private spawned-event records.
+
+**Important:** The two systems maintain their own event-spawning and persistence data. Events created by one system are not automatically managed by the other's saved-event features.
+
+Test the specific versions and movement features used by your project, especially when combining spawning, event movement, page changes, and saved games.
+
+## 7. Common Compatibility Problems
+
+The following are common issues to check when integrating other plugins with the Event Spawner.
+
+| Problem | Possible Cause | What to Check |
+|---|---|---|
+| An action affects the wrong NPC | A recycled runtime ID was reused. | Resolve the current event or use its BEID. |
+| Name labels or effects remain behind | A sprite was recycled without cleaning up custom attachments. | Check sprite rebinding and cleanup. |
+| Another plugin can't detect spawned events | Its event cache doesn't include dynamically created events. | Refresh its cache when events spawn or unspawn. |
+| A plugin crashes when accessing a saved event | A dormant or preloaded event was treated as live. | Check the event's state before calling engine methods. |
+| Loading a saved game causes errors | A plugin accessed map or sprite data too early. | Review map-loading and initialization hooks. |
+| Movement routes behave incorrectly after restoration | An old event reference or ID was retained. | Reacquire the current event and verify movement-route handling. |
+| Events are registered multiple times | Initialization or restoration repeats registration. | Make registration safe to repeat. |
+
+### Testing Your Integration
+
+When developing compatibility with the Event Spawner, test the features your plugin actually uses.
+
+Useful scenarios include:
+
+- Spawning and unspawning events.
+- Recycling runtime event IDs.
+- Restoring base saved events.
+- Streaming persistent boundary events.
+- Loading saved games with spawned events.
+- Testing with and without the Boundary System, if applicable.
+
+**The most important rule is that runtime event IDs are not always permanent event identities.**
+
+For persistent boundary events, use BEIDs. For runtime-only systems, make sure your plugin handles event creation, recycling, restoration, and cleanup correctly.
+
+## Related Documentation
+
+- [Spawner Script Calls](Documentation/scriptcalls.html)
+- [Spatial Lookup & Placement](Documentation/spatial.html)
+- [Saved Events](Documentation/savedevents.html)
+- [BEID Database](Documentation/Boundary/beiddatabase.html)
+- [Boundary Self Variables](Documentation/Boundary/selfvariables.html)
+- [Saved Boundary Events](Documentation/Boundary/savedboundaryevents.html)
