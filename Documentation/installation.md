@@ -6,104 +6,379 @@ nav_order: 1
 
 # Installation
 
-Ritter Ultimate Event Spawner v2.1 supports RPG Maker MV and MZ. The Boundary System is an optional companion: install it when using boundary streaming, BEIDs, preloads, or boundary self variables.
+**Ritter Ultimate Event Spawner v2.1** supports both RPG Maker MV and MZ.
 
-## 1. Install the files
+The Event Spawner allows you to create, transform, and manage events dynamically. Its optional companion, **Ritter Boundary System**, adds automatic event streaming, persistent BEIDs, preloading, and boundary Self Variables.
 
-Place the purchased plugin files in your project's `js/plugins/` folder. Keep their filenames unchanged. Enable them in Plugin Manager in this order:
+You only need the Boundary System if you plan to use those additional features.
+
+## 1. Install the Plugin Files
+
+Place the purchased plugin files in your project's `js/plugins/` folder. Keep their filenames unchanged.
+
+If you're using both plugins, enable them in Plugin Manager in this order:
 
 ```text
 Ritter_BoundarySystem
 Ritter_EventSpawner
 ```
 
-For base spawning alone, enable only `Ritter_EventSpawner`. The companion source currently identifies itself as Boundary System 1.5; its version number is independent of EventSpawner v2.1.
+**Important:** The Boundary System must be placed above Event Spawner.
+
+If you only need basic event spawning, you can enable `Ritter_EventSpawner` by itself.
+
+When using the Boundary System, install the companion version supplied with your Event Spawner update. The two plugins have separate version numbers.
 
 ![Plugin installation folder](../Assets/BaseSpawner/Installation/Spawner_Install_Folder.png)
 
+---
+
 ## 2. Configure Plugin Parameters
 
-| Parameter | Current behavior |
-| --- | --- |
-| Spawn Events Starting Id | First ID considered for newly allocated spawn slots; default `1000`. Choose an integer above your editor-placed event IDs. Retained base saved events reserve their IDs. |
-| Preload Spawn Maps | Retained parameter accepting space-separated map IDs. The current boot loader reads **all maps listed in MapInfos**, not only this list. Changing the list does not restrict the template cache. |
-| Boundary Save Settings | `externalSave` chooses external chunks for dormant boundary records; `externalSaveCount` is a positive integer record count per chunk, normally `4000`. This is not a live-event cap or a byte limit. |
-| Streaming Quick Start | Creates configured spawn/unspawn boundaries. Each Spawn Boundary has its own **Spawn Map ID** for source templates; the shared **Map IDs** list identifies gameplay destinations. See [Quick Start setup](#quick-start-setup). |
+Open **Ritter_EventSpawner** in RPG Maker's Plugin Manager.
 
-The former Developer Mode / Developer Mode Alert Settings parameters are not read as active release settings by the current implementation. Old screenshots may show them; do not rely on those alerts for validation.
+The following settings are worth reviewing before using the plugin:
 
-![Plugin parameters; labels can differ from older screenshots](../Assets/BaseSpawner/Installation/Spawner_Plugin_Parameters.png)
+| Parameter | Description |
+|---|---|
+| **Spawn Events Starting Id** | The starting runtime event ID used for newly spawned events. Defaults to `1000`. Choose a number higher than the IDs of events placed in your map editor. |
+| **Preload Spawn Maps** | Retained for compatibility with older settings. All project maps are now loaded for use as templates, so you don't need to list individual source maps here. |
+| **Boundary Save Settings** | Controls how persistent boundary event data is saved. By default, `externalSave` is disabled, keeping boundary data in the regular game save. Enabling it uses additional save files. |
+| **Event Streaming Quick Start** | Optional configuration for automatically creating spawn and unspawn boundaries. Requires the Boundary System. |
 
-### Quick Start setup
+### Spawn Events Starting Id
 
-Open **Ritter_EventSpawner → Event Streaming Quick Start** in Plugin Manager. This setup requires the Boundary companion and uses the same parameter parser in MV and MZ.
+The default starting event ID is `1000`.
 
-1. Set **Map IDs** (`QuickStream.Maps`) to the gameplay maps where the boundaries should operate.
-2. Open **Spawn Boundaries**, then each entry. Set **Spawn Map ID** (`SpawnBoundary.SpawnMap`) to the map containing that boundary's template events. The editor supplies a default of `1`; choose your actual source map.
-3. Set its unique Name, Distance, Thickness, Type, Update Mode, Wait Time, Max Events, and Enabled flag.
-4. Configure **Unspawn Boundaries** with the exact owning spawn-boundary names under **Target Spawn Boundaries**. They use an edge unspawn handler and need no template-map setting. Give the outer cleanup boundary sufficient Distance to surround its target spawn zones.
-5. Enable Quick Start and test a New Game.
+For example, if your gameplay map contains editor-created events with IDs `1` through `75`, the default starting ID leaves plenty of room for dynamically spawned events.
 
-For example, with **Map IDs = `[5]`**:
+Base saved events may reserve their runtime IDs for later restoration.
 
-| Spawn Boundary Name | Spawn Map ID | Meaning |
-| --- | --- | --- |
-| Forest | `2` | Generate Forest's events from templates on map 2, for gameplay map 5. |
-| Town | `3` | Generate Town's events from templates on map 3, for gameplay map 5. |
+### Boundary Save Settings
 
-An unspawn boundary targeting `["Forest", "Town"]` removes events owned by those boundaries. It does not choose a template map. These map IDs are examples; use existing maps in your project.
+If you're using the Boundary System, you can choose how its persistent event data is stored.
 
-For generated populations, place [BoundaryEventSetup metadata](Boundary/plugincommands.html#boundary-event-setup) on page 1 of each source template. Match its Boundary List to the owning boundary name, keep its Map List aligned with the Quick Start gameplay Map IDs, and set eligible regions. Source-map selection does not replace these spawning rules. Preloaded populations continue using their stored template references.
+- **External Save Disabled:** Boundary data is included in the regular game save.
+- **External Save Enabled:** Boundary data is stored using additional save files.
 
-Quick Start starts disabled. A new SpawnBoundary struct entry defaults to **Spawn Map ID 1** and **Max Events 400**. The top-level Quick Start preset currently supplies source map `2` for both named spawn entries, with Max Events `500` for Static Spawn and `300` for Mover Spawn. Existing serialized settings are not replaced by header defaults; review every entry for your project.
+When external saving is enabled, `externalSaveCount` controls how many records are stored per file. Its normal default is `4000`.
 
-These are separate from the intentional script-call defaults `expandBy = 0` and `maxEvents = 0`. Set Max Events explicitly: the parser uses `800` if that field is omitted from serialized settings. The nested QuickStream list presets omit MaxEvents, so they can differ from the complete top-level preset.
+If you use external saves, make sure to follow the [External Save Backup Instructions](Boundary/savedboundaryevents.html#external-save-backups-and-transfers) when backing up or transferring saved games.
 
-**Validation:** when Quick Start is enabled, every named Spawn Boundary must specify a positive integer Spawn Map ID identifying a loaded project map. Missing, blank, zero, negative, fractional, nonnumeric, or nonexistent IDs stop setup with an error naming the boundary before any Quick Start boundaries are created. This also applies to entries whose individual Enabled flag is off. Disabling Quick Start globally creates nothing and bypasses this setup validation.
+### Event Streaming Quick Start
 
-**Existing development settings:** Quick Start was unreleased. Open each existing Spawn Boundary entry and set Spawn Map ID manually, or recreate the entry in Plugin Manager. There is no migration, missing-value fallback, or dependency on sample map 30.
+Quick Start provides an easier way to configure automatic event streaming without writing boundary setup scripts.
 
-Quick Start creates boundaries only when their names are absent. Changing parameters does not retarget an existing saved boundary or migrate its persistent population. Use a New Game when verifying revised development settings; game save/load retains established boundaries, identities, and source maps.
+It's completely optional and is covered in [Section 5](#5-configure-event-streaming-quick-start-optional).
 
-## 3. Create a Template Map for Source Events
+**Note:** Older screenshots may show Developer Mode settings that are no longer active in v2.1.
 
-1. Create a normal RPG Maker map containing your source events.
-2. Give templates distinct names if you plan to spawn by name.
-3. Configure their pages, graphics, commands, and conditions normally.
-4. Spawn copies from gameplay maps; do not use the template map as your population manager.
+![Plugin parameters](../Assets/BaseSpawner/Installation/Spawner_Plugin_Parameters.png)
 
-Template maps must remain available in the project. Boot waits for the template-map cache before New Game or Continue. A missing or invalid referenced map file is an error, not a reason to continue with incomplete templates.
+---
+
+## 3. Create a Template Map
+
+Before spawning events, you'll need a map containing the events you want to use as templates.
+
+These are ordinary RPG Maker events that the Event Spawner can copy onto your gameplay maps.
+
+### Creating a Template Map
+
+1. Create a new map in RPG Maker.
+2. Add the events you want to spawn.
+3. Configure their graphics, pages, conditions, and event commands normally.
+4. Give your templates recognizable names if you plan to spawn them by name.
+
+For example, you could create a map called `SpawnMap` containing templates for Slimes, NPCs, treasure chests, and other objects.
 
 ![Example template map](../Assets/BaseSpawner/Installation/Spawner_SpawnMap_Minimal.png)
 
-## 4. Test a basic spawn
+### Important Notes
 
-On a gameplay map, use an event's Script command in either engine. Replace map/event IDs and coordinates with valid values:
+Template maps are used as sources for spawned events.
+
+You don't need to place every template event on your gameplay maps manually. Instead, the Event Spawner creates copies of them when requested.
+
+Keep your template maps in the project, even if players never visit them directly.
+
+**Important:** The Event Spawner loads project map data for template access before starting or continuing a game. Missing map files can prevent the game from loading correctly.
+
+For more information, see [Spawn Maps & Templates](spawnmapsandtemplates.html).
+
+---
+
+## 4. Test Your First Spawn
+
+Now that you've installed the plugin and created a template map, you can test spawning an event.
+
+On a gameplay map, create an event and add a **Script** command.
+
+Paste the following example into the Script command:
 
 ```js
-const spawned = Ritter.spawnEvent(2, 1, 8, 10, false, false);
-if (spawned) {
-    $gameVariables.setValue(21, spawned.eventId());
-}
+// Spawn Settings
+const spawnMapId = 2;
+const spawnEventId = 1;
+const x = 8;
+const y = 10;
+const save = false;
+const spawnOnEvents = false;
+
+// Spawn Event
+Ritter.spawnEvent(
+    spawnMapId, spawnEventId, x, y,
+    save, spawnOnEvents
+);
 ```
 
-The call requires a map scene. It returns a live event on success or no event if placement cannot proceed. It does not move the player or promise tile passability. See [placement rules](spatial.html).
+### Configuring the Example
 
-## 5. Choose the engine interface
+| Setting | Description |
+|---|---|
+| `spawnMapId` | ID of the map containing your event template. |
+| `spawnEventId` | ID of the event you want to spawn from that map. |
+| `x` | Destination X coordinate on the current gameplay map. |
+| `y` | Destination Y coordinate on the current gameplay map. |
+| `save` | Set to `true` to retain the event for later map visits, or `false` for a temporary event. |
+| `spawnOnEvents` | Set to `true` to allow spawning on tiles occupied by other events. |
 
-* **MV:** use Script commands for the public JavaScript APIs. The template-only `BoundaryEventSetup` metadata form is documented [here](Boundary/plugincommands.html#rpg-maker-mv-metadata).
-* **MZ:** use the Script commands or the editor's plugin-command UI. Command outputs are available to the following event command.
+In this example, the Event Spawner attempts to create a copy of event `1` from template map `2` at coordinates `(8, 10)`.
 
-For persistent boundary populations, create/configure a spawn boundary, configure its auto handler, then [preload events](Boundary/preloadevents.html). If you want eligible dormant entries instantiated immediately, explicitly initialize the active boundary once. Loading already-live saved events does not require a manual refresh or player movement.
+Because `save` is set to `false`, the spawned event is temporary.
 
-## Upgrading and save handling
+### Testing the Result
 
-Back up your complete project and saves before changing plugins. Use the matching Spawner/Boundary files together. Review [upgrading to v2.1](upgrading.html) and [save storage](persistence.html), especially when moving external chunk files or supporting existing player saves.
+Start a New Game or playtest your project, then activate the event containing the Script command.
+
+If everything is configured correctly and the destination is available, the event should appear at the specified coordinates.
+
+**Tip:** For your first test, choose an empty tile away from the player.
+
+If the event doesn't appear, double-check your template map ID, template event ID, and destination coordinates.
+
+For more spawning options, including region-based spawning, terrain tags, and saved events, see [Script Calls](scriptcalls.html#spawn-event).
+
+For more information about placement behavior, see [Spatial Lookup & Placement](spatial.html).
+
+---
+
+## 5. Configure Event Streaming Quick Start (Optional)
+
+**Event Streaming Quick Start** allows you to configure automatic event spawning and unspawning through Plugin Manager.
+
+This feature requires the Boundary System companion plugin.
+
+You do not need Quick Start for ordinary Event Spawner script calls or plugin commands.
+
+If you want to create boundaries manually through script calls or plugin commands instead, you can leave Quick Start disabled.
+
+### Opening Quick Start
+
+Open:
+
+**Plugin Manager → Ritter_EventSpawner → Event Streaming Quick Start**
+
+Quick Start is disabled by default.
+
+When enabled, it creates the configured spawn and unspawn boundaries during game setup.
+
+### Step 1: Choose Your Gameplay Maps
+
+Set **Map IDs** (`QuickStream.Maps`) to the gameplay maps where the boundaries should operate.
+
+For example:
+
+```js
+[5]
+```
+
+This configures the boundaries for gameplay map `5`.
+
+You can include multiple maps if needed.
+
+### Step 2: Configure Spawn Boundaries
+
+Open **Spawn Boundaries** and edit each boundary entry.
+
+The important settings include:
+
+| Setting | Description |
+|---|---|
+| **Name** | Unique name for the spawn boundary. |
+| **Spawn Map ID** | Map containing the event templates for this boundary. |
+| **Distance** | Size or extent of the boundary's configured area. |
+| **Thickness** | Thickness of the boundary's edge. |
+| **Type** | How the boundary spawns events, such as `SpawnIn` or `FillIn`. |
+| **Update Mode** | Whether processing occurs through movement or timed updates. |
+| **Wait Time** | Frame interval for timed processing. |
+| **Max Events** | Maximum automatic event population. |
+| **Enabled** | Whether the boundary starts enabled. |
+
+Each spawn boundary has its **own Spawn Map ID**.
+
+This allows different boundaries on the same gameplay map to generate events from different template maps.
+
+### Example: Forest and Town Populations
+
+Suppose your gameplay map is map `5`, and you want two separate event populations.
+
+| Spawn Boundary | Spawn Map ID | Purpose |
+|---|---|---|
+| `Forest` | `2` | Uses templates from map 2 for forest creatures and objects. |
+| `Town` | `3` | Uses templates from map 3 for townspeople and town objects. |
+
+Both boundaries operate on gameplay map `5`, but each uses its own template map.
+
+This distinction is important:
+
+- **Map IDs** determines where the boundaries operate.
+- **Spawn Map ID** determines where each spawn boundary gets its event templates.
+
+### Step 3: Configure Unspawn Boundaries
+
+Open **Unspawn Boundaries** and configure the boundaries responsible for removing events that leave the active area.
+
+Under **Target Spawn Boundaries**, enter the exact names of the spawn boundaries you want to manage.
+
+For example:
+
+```js
+["Forest", "Town"]
+```
+
+This tells the unspawn boundary to target events owned by `"Forest"` and `"Town"`.
+
+Unspawn boundaries use edge-based unspawning and don't need a template map.
+
+**Tip:** Give your outer unspawn boundary enough distance to surround the areas managed by its spawn boundaries. This helps prevent events from being unspawned too close to the player.
+
+### Step 4: Configure Automatic Event Templates
+
+If you want your boundaries to automatically generate new events, you'll need to configure the source templates.
+
+On **page 1** of each eligible template event, add the appropriate `BoundaryEventSetup` metadata.
+
+Make sure the template's:
+
+- **Boundary List** includes the name of its owning spawn boundary.
+- **Map List** includes the gameplay maps where it can spawn.
+- **Regions List** contains the eligible region IDs.
+- **Enabled** setting allows automatic generation when desired.
+
+For example, a template assigned to the `"Forest"` boundary should include `"Forest"` in its Boundary List.
+
+Its gameplay Map List should also match the maps where that boundary operates.
+
+See [Boundary Event Setup](Boundary/plugincommands.html#boundary-event-setup) for the complete instructions.
+
+**Important:** Selecting a Spawn Map ID doesn't automatically make every event on that map eligible for generation. The template's boundary settings determine which events can be generated.
+
+If you're using previously preloaded events instead of generating new ones, their stored template references are used for restoration.
+
+### Step 5: Enable Quick Start and Test
+
+Once you've configured your boundaries and templates:
+
+1. Enable Event Streaming Quick Start.
+2. Review the configured spawn and unspawn boundaries.
+3. Start a **New Game**.
+4. Move through your gameplay map and test spawning and unspawning behavior.
+
+### Important Quick Start Notes
+
+**Review the Included Example Settings**
+
+Quick Start is disabled by default.
+
+The supplied boundary entries are examples. Review their Spawn Map IDs, event limits, and other settings before enabling them.
+
+New Spawn Boundary entries default to Spawn Map ID `1` and Max Events `400`. The supplied starter configurations may contain different values.
+
+Choose settings appropriate for your project rather than relying on the examples.
+
+**Every Spawn Boundary Needs a Valid Spawn Map ID**
+
+Each named Spawn Boundary entry must have a valid, positive whole-number Spawn Map ID, even if that individual entry is disabled.
+
+An invalid or missing Spawn Map ID can prevent Quick Start setup and produce an error identifying the affected boundary.
+
+Disabling Quick Start globally skips its setup.
+
+**Quick Start and Existing Saved Games**
+
+Quick Start creates boundaries only when their names don't already exist.
+
+If you change Quick Start settings during development, those changes won't automatically replace existing boundaries or migrate their persistent populations in an older saved game.
+
+Use a **New Game** when testing updated Quick Start configurations.
+
+Saved games retain their previously established boundaries, identities, and source-map settings.
+
+**Script Defaults Are Different**
+
+Quick Start's editor defaults are separate from the defaults used by `Ritter.Boundary.createSpawnerBoundary()`.
+
+When creating boundaries through scripts, `expandBy` defaults to `0`, and `maxEvents` defaults to `0`.
+
+For automatic spawning, configure a positive `maxEvents` value.
+
+For more information, see [Boundary System Script Calls](Boundary/scriptcalls.html).
+
+---
+
+## 6. Choose Your RPG Maker Interface
+
+The Event Spawner supports both RPG Maker MV and MZ, but the available editor interfaces differ slightly.
+
+### RPG Maker MV
+
+Use the **Script** event command to execute the public JavaScript APIs.
+
+Some Boundary System template settings can also be configured using plugin-command metadata.
+
+See [RPG Maker MV Boundary Metadata](Boundary/plugincommands.html#rpg-maker-mv-metadata) for more information.
+
+### RPG Maker MZ
+
+You can use the **Script** event command or the plugin-command interface provided by the editor.
+
+Plugin commands provide fields for configuring supported operations without manually writing every JavaScript call.
+
+Where a plugin command stores an output in a game variable, that result is available to subsequent event commands.
+
+### Using Persistent Boundary Events
+
+For persistent NPCs, resources, or other saved boundary populations, you'll generally:
+
+1. Create a spawn boundary.
+2. Configure its automatic handler.
+3. Preload saved events or configure templates for automatic generation.
+4. Let the Boundary System manage their active population.
+
+See [Preloaded Boundary Events](Boundary/preloadevents.html) for examples of preparing persistent events and initializing an eligible population.
+
+Previously live saved boundary events are restored automatically when loading a saved game.
+
+---
+
+## Upgrading and Save Handling
+
+Before updating plugins in an existing project, back up your project files and saved games.
+
+If you're using both Event Spawner and Boundary System, update them using the matching files supplied together.
+
+For upgrade-specific information, see [Upgrading to v2.1](upgrading.html).
+
+If your game uses external boundary saves, review the [External Save Backup Instructions](Boundary/savedboundaryevents.html#external-save-backups-and-transfers) before updating or transferring saved data.
+
+---
 
 ## Next Steps
 
-* [Script Calls](scriptcalls.html)
-* [Plugin Commands](plugincommands.html)
-* [Spawn Maps & Templates](spawnmapsandtemplates.html)
-* [Boundary Introduction](../Guides/Boundary/introduction.html)
-* [Developer Integration Guide](../compatibility.html)
+Now that the Event Spawner is installed, you can explore its additional features:
+
+- [Script Calls](scriptcalls.html) for spawning, transforming, and unspawning events through JavaScript.
+- [Plugin Commands](plugincommands.html) for supported editor commands.
+- [Spawn Maps & Templates](spawnmapsandtemplates.html) for organizing reusable event templates.
+- [Boundary System Introduction](../Guides/Boundary/introduction.html) for persistent event streaming and large event populations.
