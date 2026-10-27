@@ -6,129 +6,181 @@ nav_order: 5
 
 # Saved Events
 
-## Overview
+Saved Events allow dynamically spawned NPCs, objects, and other events to remain persistent when the player leaves a map and returns later.
 
-**Saved Events** provide a simple, manual persistence system for events spawned using the **Ritter Ultimate Event Spawner**.
+To create a saved event, simply set the `save` argument to `true` when spawning it.
 
-These saved events:
+Unlike temporary spawned events, saved events retain their state between map visits and can be restored after being unspawned.
 
-* Retain their original **eventId**
-* Are managed directly on the map
-* Can be unspawned and restored explicitly through script calls
+**Note:** This page covers saved events created by the base Event Spawner. The Boundary System uses a separate persistence system with BEIDs for automatic event streaming. See [Saved Boundary Events](Boundary/savedboundaryevents.html) for more information.
 
----
+## Creating a Saved Event
 
-## Core Characteristics
-
-Saved events have the following properties:
-
-* Retain the same `eventId` for their entire lifetime
-* Can be unspawned and restored manually
-* Persist unless explicitly destroyed
-
----
-
-## Saving Events
-
-When an event is spawned as a **saved event**:
-
-* The event’s full state is preserved
-* The event remains associated with its `eventId`
-* The event can be safely unspawned and restored later
-
-Saved events remain accessible as long as their saved data is retained.
-
----
-
-## Unspawning Saved Events
-
-Saved events may be unspawned using:
+Use `Ritter.spawnEvent()` with `save` set to `true`.
 
 ```js
-Ritter.unspawnEvent(eventId);
+Ritter.spawnEvent(mapId, eventId, x, y, save, spawnOnEvents);
 ```
 
-By default, this:
-
-* Unspawns the event
-* Preserves its saved data
-* Leaves the erased event instance on the map
-
-This allows the event to be restored later without data loss.
-
----
-
-## Destroying Saved Event Data
-
-If you want to permanently remove a saved event and recycle it, use:
+### Example: Spawning a Saved NPC
 
 ```js
-Ritter.unspawnEvent(eventId, true);
+// Spawn Settings
+const spawnMapId = 2;
+const spawnEventId = 1;
+const x = 8;
+const y = 10;
+const save = true;
+const spawnOnEvents = false;
+
+// Game Variable for the Spawned Event ID
+const eventIdVariable = 21;
+
+// Spawn Event
+const event = Ritter.spawnEvent(
+    spawnMapId, spawnEventId, x, y,
+    save, spawnOnEvents
+);
+
+// Store Runtime Event ID
+if (event) {
+    $gameVariables.setValue(eventIdVariable, event.eventId());
+}
 ```
 
-When `removeSave` is set to `true`:
+This example spawns event `1` from template map `2` at coordinates `(8, 10)` on the current gameplay map.
 
-* The saved event data is destroyed
-* The unspawned event is added to the **event recycling pool**
-* The eventId becomes available for reuse
+Because `save` is `true`, the event is retained when the player leaves the map and can return on later visits.
 
-This ensures that event slots are not wasted.
+If spawning succeeds, the event's runtime ID is stored in game variable `21`.
 
----
+You can change `eventIdVariable` to any game variable you want to use.
 
-## Recycling Behavior
+### Important Notes
 
-The Event Spawner includes an internal **unspawned event pool**:
+Saved events retain their runtime event IDs so they can be restored later.
 
-* Destroyed saved events are returned to the pool
-* Future spawns may reuse recycled eventIds
-* This reduces map event bloat and improves performance
+Keep the event's source template available in your project, since saved events continue using their template data.
 
-If `removeSave` is `false`, the erased event:
+Changes to template pages may affect the event's appearance or behavior when it is restored.
 
-* Remains on the map
-* Is **not** recycled
-* Preserves its saved state
+## Unspawning a Saved Event
 
----
+You can temporarily remove a saved event without deleting its persistent data.
 
-## Restoring Saved Events
-
-Unspawned Saved events can be restored at any time using:
+Use `Ritter.unspawnEvent()` with `removeSave` set to `false`.
 
 ```js
+// Unspawn Settings
+const eventIdVariable = 21;
+const eventId = $gameVariables.value(eventIdVariable);
+const removeSave = false;
+
+// Unspawn Event
+Ritter.unspawnEvent(eventId, removeSave);
+```
+
+This removes the event from the active map while keeping its saved information.
+
+The event's runtime ID remains reserved, preventing other spawned events from taking its slot.
+
+You can restore it later using the same event ID.
+
+## Restoring an Unspawned Saved Event
+
+Use `Ritter.restoreUnspawnedEvent()` to bring a previously unspawned saved event back onto the current gameplay map.
+
+```js
+// Restore Settings
+const eventIdVariable = 21;
+const eventId = $gameVariables.value(eventIdVariable);
+
+// Restore Event
 Ritter.restoreUnspawnedEvent(eventId);
 ```
 
-When called:
+This restores the saved event using its reserved runtime event ID.
 
-* The previously unspawned saved event is restored to the map
-* The original `eventId` is preserved
-* All saved state (self switches, variables, runtime data) is reapplied
+If the event is already live, calling the function again does not create a duplicate.
 
-This function only applies to **Saved Events** that were unspawned **without** destroying their saved data.
+**Important:** Run restoration on the gameplay map where the event was originally saved.
 
+## Permanently Removing a Saved Event
 
----
+If you no longer need a saved event, you can permanently remove it and its saved information.
 
-## State Retention
+Use `Ritter.unspawnEvent()` with `removeSave` set to `true`.
 
-Saved events retain:
+```js
+// Unspawn Settings
+const eventIdVariable = 21;
+const eventId = $gameVariables.value(eventIdVariable);
+const removeSave = true;
 
-* Event pages and commands
-* Self switches
-* Self variables
-* Runtime state
+// Permanently Remove Event
+Ritter.unspawnEvent(eventId, removeSave);
 
-As long as saved data is not destroyed, the event resumes exactly where it left off.
+// Clear Stored Event ID
+$gameVariables.setValue(eventIdVariable, 0);
+```
 
----
+This removes the event and its persistent saved data.
 
-## Summary
+Its runtime event ID becomes available for recycling and may be assigned to another spawned event later.
 
-* Saved events retain their eventIds
-* Events can be unspawned and restored manually
-* `removeSave = true` destroys saved data and recycles the event
-* `removeSave = false` preserves state and identity
+Clearing the game variable prevents you from accidentally using the old event ID to reference a different event.
 
-Saved Events provide a simple, efficient persistence system for spawned events.
+### Unspawn vs. Permanent Removal
+
+| Action | Saved Data | Runtime Event ID |
+|---|---|---|
+| `Ritter.unspawnEvent(eventId, false)` | Retained | Reserved for restoration |
+| `Ritter.restoreUnspawnedEvent(eventId)` | Retained | Restored using its reserved ID |
+| `Ritter.unspawnEvent(eventId, true)` | Removed | Available for recycling |
+
+## Saved Event State
+
+Saved events retain supported information such as:
+
+- **Position:** The event's saved map coordinates.
+- **Self Switches:** Individual event self-switch states.
+- **Character State:** Supported event movement, appearance, and other state.
+
+Saved events continue to use their source event templates for event pages and commands.
+
+This means changes to the source template can affect the event when it is restored.
+
+Other plugins may manage additional event state independently, so test compatibility when using custom event systems.
+
+### Runtime Event IDs and Plugin Compatibility
+
+Base saved events normally retain their runtime event IDs, including when they are unspawned and later restored.
+
+The Event Spawner checks for occupied event IDs when allocating new events, preventing it from overwriting existing events.
+
+However, other event-spawning plugins may use different ID allocation methods. If another plugin assigns an ID already reserved by a saved event, an ID conflict can occur.
+
+**For best compatibility:**
+
+- Avoid using multiple event-spawning plugins unless you've tested them together.
+- Make sure other plugins respect existing and reserved event IDs.
+- Test saved-event restoration when combining the Event Spawner with other systems that create events dynamically.
+
+If you need persistent identities for automatically streamed events, see the Boundary System's [BEID Database](Boundary/beiddatabase.html).
+
+## Saved Events and Game Saves
+
+Saved event data is included in the game's normal save system.
+
+Temporary spawned events can also be included in a game save while they are live, but events created with `save = false` are not retained for future map visits.
+
+For information about updating an existing project, see [Upgrading to v2.1](upgrading.html).
+
+If you're also using the Boundary System with external saves, see the [External Save Backup Instructions](Boundary/savedboundaryevents.html#external-save-backups-and-transfers).
+
+## Related Documentation
+
+- [Spawner Script Calls](scriptcalls.html) for all spawning, unspawning, and transformation APIs.
+- [Spawn Maps & Templates](spawnmapsandtemplates.html) for creating reusable source events.
+- [Saved Boundary Events](Boundary/savedboundaryevents.html) for persistent streamed populations.
+- [BEID Database](Boundary/beiddatabase.html) for identifying and managing individual boundary events.
