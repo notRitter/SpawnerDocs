@@ -6,178 +6,283 @@ nav_order: 3
 
 # Saved Boundary Events
 
-## Overview
+Saved Boundary Events allow NPCs, resources, enemies, and other events to remember their state even when they are no longer active on the map.
 
-**Saved Boundary Events** are the foundation of event persistence in the Ritter Ultimate Event Spawner’s **Boundary System**.
+For example, imagine a player meets an NPC, completes a quest, and then travels to another area. When the player returns, that NPC can reappear at its saved position with its self switches, quest progress, and other supported state intact.
 
-A saved boundary event represents an event that is:
+The Boundary System handles this without needing to keep every saved event running at the same time.
 
-* Permanently tracked by the Boundary System
-* Associated with a unique **Boundary Event ID (BEID)**
-* Accessible at any time through the **BEID Database**
-* Fully persistent whether the event is currently spawned or unspawned
+Unlike regular saved events created by the base Event Spawner, saved boundary events use a persistent **Boundary Event ID (BEID)**. This allows the system to recognize the same event even when its runtime event ID changes.
 
-Unlike traditional RPG Maker events, saved boundary events are **not tied to a single eventId**. Instead, they are tracked intelligently across spawn and unspawn cycles using BEIDs.
+## How Saved Boundary Events Work
 
----
+A saved boundary event can exist in three states:
 
-## Why Saved Boundary Events Need BEID
+| State | Description |
+|---|---|
+| **Live** | The event is currently spawned on the map. Its event pages, movement, and graphics operate normally. |
+| **Dormant** | The event has spawned before but is currently stored. It retains its saved state without running event commands or displaying a sprite. |
+| **Preloaded** | The event has been prepared with a template and position but hasn't appeared on the map yet. |
 
-When using the Boundary System, an event’s `eventId` is **not stable**:
+### Example: An NPC Leaving and Returning
 
-* It can change when events are dynamically spawned
-* It may be reassigned after unspawning and respawning
-* This is necessary for event streaming
+Imagine a town containing 200 persistent NPCs.
 
-Because of this, the Boundary System introduces the **Boundary Event ID (BEID)**:
+When the player enters the town, the Boundary System can spawn the NPCs needed in the surrounding area.
 
-* A persistent, unique identifier
-* Independent of map eventIds
-* Stable across the entire lifetime of a boundary event
+As the player explores:
 
-Saved boundary events use BEIDs to ensure that:
+1. Nearby NPCs become live events.
+2. NPCs that leave the active area are unspawned and stored.
+3. Their saved state remains available while they are dormant.
+4. When the player returns, those NPCs can be restored with their previous state.
 
-* Event state is never lost
-* Events can be found even when unspawned
-* Persistence logic remains reliable and deterministic
+The player can explore a world containing many persistent events without requiring all of them to run simultaneously.
 
-(See **BEID Database Documentation** for details.)
+## Persistent Event Identity (BEIDs)
 
----
+Every saved boundary event has a persistent **BEID**.
 
-## Core Characteristics
+Its regular RPG Maker runtime event ID can change when the event unspawns and respawns, but its BEID remains associated with that saved event.
 
-Saved boundary events have the following defining traits:
+A complete reference consists of three values:
 
-* **Persist forever** unless explicitly removed
-* Retain **all event data and state**
-* Continue to exist even when not spawned
-* Are tracked by BEID, not eventId
-* Can be accessed through the BEID Database at any time
+```js
+const npcRef = {
+    boundaryName: "NPCs",
+    mapId: 1,
+    BEID: 5
+};
+```
 
-Spawning and unspawning only affects the **physical presence** of the event on the map and never its identity or stored data.
+| Value | Description |
+|---|---|
+| `boundaryName` | Name of the spawn boundary that owns the event. |
+| `mapId` | Gameplay map where the event belongs. |
+| `BEID` | Persistent ID assigned to that event. |
 
----
+The same BEID number can exist on different maps or under different boundaries, so keep all three values when identifying a saved event.
 
-## Coordinate-Based Saving
+**Important:** Keep boundary names consistent once they own persistent events. If an event is permanently deleted, stop using its old BEID reference. That number may eventually be reused.
 
-Saved boundary events are stored using **map tile coordinates**:
+For more information, see the [BEID Database](beiddatabase.html).
 
-* Each saved event is bound to an `(x, y)` tile location
-* Multiple saved events may exist on the **same tile**
-* There is no limit to how many events can be saved per tile
+## What Information Is Saved?
 
-When a spawn boundary passes over a tile:
+Saved boundary events retain supported event information when they are unspawned and restored.
 
-* All saved boundary events associated with that tile are processed
-* Every saved event on that tile is spawned in a **single boundary pass**
+This includes:
 
-This allows dense or layered event setups without requiring multiple boundaries or complex logic.
+- **Position:** The event can return to its last saved location.
+- **Self Switches:** Individual event self-switch states are retained.
+- **Self Variables:** Custom values such as quest progress, dialogue choices, and resource quantities.
+- **Character State:** Supported movement, appearance, and other event state.
 
----
+### Using Self Variables
 
-## Boundary-Level Event Databases
+Self Variables are particularly useful for persistent NPCs and interactive objects.
 
-Each spawn boundary maintains its **own saved events database**:
+For example, you could store:
 
-* Saved events belong to a specific boundary
-* BEIDs are unique within the boundary system
-* Boundaries do not share saved event databases
+```js
+const boundaryName = "NPCs";
+const mapId = 1;
+const beid = 5;
+const varId = "questStage";
+const value = 3;
 
-This design ensures:
+Ritter.setSelfVariable(
+    boundaryName, mapId, beid, varId, value
+);
+```
 
-* Clean separation between boundary-managed areas
-* Predictable event ownership
+This stores the NPC's quest stage without requiring the event to remain active.
 
----
+You can update Self Variables even while a saved event is dormant or preloaded.
 
-## Spawning and Unspawning Behavior
+See [Boundary Event Self Variables](selfvariables.html) for more examples.
 
-Saved boundary events transition cleanly between states:
+### Important Notes
 
-### When Spawned
+Saved events still use their source event templates for event pages and commands.
 
-* A real map event is created
-* A temporary `eventId` is assigned
-* The event is assigned it's permanent BEID
+If you change a template, those changes can affect its saved events when they are restored. Event page settings may also change an event's graphics or movement behavior.
 
-### When Unspawned
+Keep the required template maps and events in your project.
 
-* The map event is removed
-* All event data and state remain saved
-* The BEID entry remains active and accessible
+Other plugins may manage their own event data differently, so test compatibility when using custom event systems.
 
-At no point is the saved boundary event lost or invalidated.
+## Bringing Saved Events Back
 
----
+The Boundary System automatically prioritizes eligible saved events when processing a spawn boundary.
 
-## Event State Retention
+Instead of always generating a new event, it first checks for saved events that can be restored.
 
-Saved boundary events retain:
+This allows persistent NPCs and objects to return as the player moves through the map.
 
-* Self switches
-* Self variables
-* Custom runtime data
-* Script-attached metadata
+Restoration follows the boundary's configured area and event capacity, so only the needed population becomes live.
 
-The only value that changes across spawn cycles is the **map eventId**, which is why BEIDs are required for intelligent tracking.
+### Initializing a Saved Population
 
----
+If you've preloaded events and want eligible ones inside an active boundary to appear immediately, use:
 
-## Accessing Saved Boundary Events
+```js
+const boundaryName = "NPCs";
 
-Saved boundary events can be accessed:
+Ritter.Boundary.activate(boundaryName);
+Ritter.Boundary.initBoundaryEvents(boundaryName);
+```
 
-* While spawned
-* While unspawned
-* Before initial spawn
-* After multiple spawn/unspawn cycles
+This restores eligible saved events within the boundary's interior, up to its configured event limit.
 
-Access is always performed via the **BEID Database**, not by eventId.
+It does **not** spawn every saved event across the entire map.
 
-This allows systems such as:
+For more information, see [Preloaded Boundary Events](preloadevents.html#when-it-appears).
 
-* Persistent NPC logic
-* Quest state tracking
-* Dynamic world changes
-* Cross-map references
+## Saving, Loading, and Streaming
 
-(See **BEID Database Documentation** for usage details.)
+Saved boundary events retain their persistent information when they are unspawned, restored, or saved with the game.
 
----
+Their runtime event IDs may change during streaming, but their BEIDs remain consistent. Use BEIDs to identify saved events rather than relying on their previous runtime IDs.
 
-## Relationship to Preloaded Events
+For information about updating existing projects and maintaining save compatibility, see [Upgrading to v2.1](../upgrading.html).
 
-Preloaded events are a **special case** of saved boundary events:
+## Controlling Individual Saved Events
 
-* They begin life as metadata-only entries
-* They are stored in the same saved event database
-* They tell the boundary to spawn the event when needed
-* Once spawned, they behave exactly like other saved boundary events
+You can interact with a particular saved boundary event using its BEID.
 
-From that point onward, preload-origin events follow the same persistence and BEID rules.
+This is useful when you want to restore a specific NPC, temporarily remove an event, or permanently delete a saved entity.
 
----
+### Restore an Event by BEID
 
-## Best Practices
+```js
+const boundaryName = "NPCs";
+const beid = 5;
 
-* Treat saved boundary events as **permanent world entities**
-* Always interact with them using BEIDs
-* Avoid relying on eventIds for long-term logic
-* Use BEID to get events current eventId
-* Use preloading for large or performance-sensitive maps
+Ritter.restoreByBEID(boundaryName, beid);
+```
 
-Saved boundary events are designed to scale safely and predictably across large projects.
+This attempts to restore the saved event on the current gameplay map.
 
----
+Explicit restoration can bring an event into play independently of normal automatic boundary geometry and event-capacity selection.
 
-## Summary
+Use it when you intentionally need a particular event, such as for a cutscene or scripted encounter.
 
-* Saved boundary events are permanently persistent
-* Each has a unique BEID
-* Events are stored by tile coordinates
-* Multiple events can exist on a single tile
-* Spawning/unspawning does not affect identity or data
-* BEIDs enable intelligent tracking beyond eventIds
+### Unspawn an Event but Keep Its Data
 
-Saved boundary events form the backbone of the Boundary System’s persistence model.
+```js
+const boundaryName = "NPCs";
+const beid = 5;
+const removeSave = false;
+
+Ritter.unspawnByBEID(
+    boundaryName, beid, removeSave
+);
+```
+
+If the event is live, it is unspawned while retaining its saved state.
+
+It can be restored again later.
+
+### Permanently Delete a Saved Event
+
+```js
+const boundaryName = "NPCs";
+const beid = 5;
+const removeSave = true;
+
+Ritter.unspawnByBEID(
+    boundaryName, beid, removeSave
+);
+```
+
+Setting `removeSave` to `true` permanently removes the saved event's identity and associated persistent information.
+
+This also works for dormant and preloaded events.
+
+**Important:** Both BEID control calls operate on the current gameplay map. They do not take a gameplay map ID argument.
+
+### Updating Dormant Events
+
+You can update an event's Self Variables without spawning it.
+
+However, movement and visual changes should be applied when the event is live on the current gameplay map.
+
+A dormant event doesn't run its normal event pages or movement, and a preloaded event hasn't been given a live sprite yet.
+
+For more information, see [BEID Database](beiddatabase.html) and [Self Variables](selfvariables.html).
+
+## External Save Settings
+
+By default, saved boundary event data is included in RPG Maker's regular game save.
+
+For games with large persistent event populations, the Boundary System also supports external saving.
+
+You can configure this under:
+
+**Plugin Manager → Ritter_EventSpawner → Boundary Save Settings**
+
+### Available Settings
+
+| Setting | Description |
+|---|---|
+| `externalSave` | Enables or disables additional boundary save files. |
+| `externalSaveCount` | Number of boundary event records stored per additional file. Normally defaults to `4000`. |
+
+When `externalSave` is disabled, boundary data is stored in the main game save.
+
+When enabled, dormant and preloaded boundary data can be stored in additional files.
+
+**Note:** `externalSaveCount` controls how saved records are divided between files. It does not limit the total number of persistent events your game can contain.
+
+## Backing Up and Transferring External Saves
+
+If you're using external saves, backing up only the main save slot is not enough.
+
+The additional boundary save files are part of the saved game's persistent world.
+
+### Creating a Backup
+
+1. Close the game before copying saved data.
+2. Locate the game's save folder, normally `save/` for a local desktop deployment.
+3. Copy the **entire save folder**, including the main save files, additional boundary files, and any engine-created backups.
+
+### Restoring or Transferring a Backup
+
+When restoring or transferring saved data, keep all files from the same backup together.
+
+Before replacing a destination's save folder, back up its existing saved data.
+
+**Do not mix a main save file from one backup with external boundary files from another backup.**
+
+These files belong together and may reference the same persistent event population.
+
+### Important Warnings
+
+- Do not rename or manually remove individual external boundary save files.
+- Older saves may still depend on external boundary data even if you later disable the external-save setting.
+- Missing or damaged required boundary data can cause a save to fail loading rather than silently discarding the saved population.
+- Always keep a complete backup before upgrading plugins or changing how saved data is stored.
+
+### Browser Deployments
+
+Browser-based RPG Maker games use browser storage rather than a normal desktop `save/` folder.
+
+If your game uses external boundary saving, any backup or export system must preserve both the main save data and its associated external boundary data.
+
+Clearing browser site data may remove saved games and boundary data.
+
+Make sure your game's backup or transfer method supports both before relying on it.
+
+## Final Notes
+
+Saved Boundary Events are designed to let your game maintain a persistent world without keeping every event active.
+
+The Boundary System manages when saved events appear and disappear, while their BEIDs allow you to keep track of individual NPCs, resources, and other objects over time.
+
+For more information, see:
+
+- [Preloaded Boundary Events](preloadevents.html) for preparing saved events before they appear.
+- [BEID Database](beiddatabase.html) for identifying and accessing individual saved events.
+- [Boundary Event Self Variables](selfvariables.html) for storing custom persistent data.
+- [Boundary Script Calls](scriptcalls.html) for restoration, unspawning, and saved-event management.
