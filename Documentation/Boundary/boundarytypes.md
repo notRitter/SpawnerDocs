@@ -36,8 +36,8 @@ All boundary types share a common set of configuration properties:
 ## Fill On - Spawn Boundary
 ![FillOnBoundaryType](../../Assets/BoundarySpawner/Introduction/fill-on.png)
 * **Type:** `FillOn`
-* **Width:** 17
-* **Height:** 7
+* **Width:** 19
+* **Height:** 9
 * **Thickness:** 1
 
 ### Behavior
@@ -66,8 +66,8 @@ When processed, it:
 ## Fill In - Spawn Boundary
 ![FillInBoundary](../../Assets/BoundarySpawner/Introduction/fill-in.png)
 * **Type:** `FillIn`
-* **Width:** 17
-* **Height:** 7
+* **Width:** 19
+* **Height:** 9
 * **Thickness:** 1
 
 ### Behavior
@@ -94,9 +94,9 @@ When processed, it:
 ## Spawn On - Spawn Boundary
 ![SpawnOnBoundary](../../Assets/BoundarySpawner/Introduction/spawn-on.png)
 * **Type:** `SpawnOn`
-* **Width:** 17
-* **Height:** 7
-* **Thickness:** 2
+* **Width:** 19
+* **Height:** 9
+* **Thickness:** 1
 
 ### Behavior
 
@@ -124,7 +124,10 @@ When processed, it:
 ## Spawn In - Spawn Boundary
 
 ![SpawnInBoundary](../../Assets/BoundarySpawner/Introduction/spawn-in.png)
-**Type:** `SpawnIn`
+* **Type:** `SpawnIn`
+* **Width:** 19
+* **Height:** 9
+* **Thickness:** 1
 
 ### Behavior
 
@@ -153,8 +156,10 @@ When processed, it:
 ## Unspawn On - Unspawn Boundary
 
 ![UnspawnOnBoundary](../../Assets/BoundarySpawner/Introduction/unspawn-on.png)
-**Type:** `UnspawnOn`
-
+* **Type:** `UnspawnOn`
+* **Width:** 19
+* **Height:** 9
+* **Thickness:** 2
 
 ### Behavior
 
@@ -180,7 +185,10 @@ When processed, it:
 ## Unspawn In - Unspawn Boundary
 
 ![UnspawnInBoundary](../../Assets/BoundarySpawner/Introduction/unspawn-in.png)
-**Type:** `UnspawnIn`
+* **Type:** `UnspawnIn`
+* **Width:** 19
+* **Height:** 9
+* **Thickness:** 2
 
 ### Behavior
 
