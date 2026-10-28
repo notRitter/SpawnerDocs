@@ -12,6 +12,8 @@ Whether you're building a world filled with NPCs, roaming enemies, gathering res
 
 This guide covers seven recommendations for keeping your boundary systems organized, efficient, and reliable.
 
+---
+
 ## 1. Keep Your Active Event Population Manageable
 
 One of the biggest advantages of the Boundary System is that you don't need to keep every event in your world active at the same time.
@@ -28,6 +30,8 @@ Saved boundary events can retain their data while they're inactive, allowing the
 - Keep important map controllers, cutscenes, and transfer events placed normally in the RPG Maker editor when that's more practical.
 
 The ideal number of active events depends on your game's complexity and the hardware you're targeting. A map filled with simple objects may handle many more events than one filled with constantly moving enemies.
+
+---
 
 ## 2. Choose Between Temporary and Saved Events
 
@@ -62,6 +66,10 @@ You can also [preload saved boundary events](../../Documentation/Boundary/preloa
 
 **Tip:** Use temporary events for content that can be recreated freely, and saved events for content that needs to remember what happened to it.
 
+**Tip 2:** If you're using external boundary saves, remember to include the additional boundary save files when backing up or transferring your game's saves. See [External Save Backups and Transfers](../../Documentation/Boundary/savedboundaryevents.html#external-save-backups-and-transfers) for details.
+
+---
+
 ## 3. Use BEIDs to Track Persistent Events
 
 When a saved boundary event is unspawned and later restored, its regular RPG Maker event ID may change.
@@ -87,6 +95,8 @@ For example, if an NPC leaves the player's active area and is unspawned, you can
 You can also use [Self Variables](../../Documentation/Boundary/selfvariables.html) to store information such as quest progress, resource depletion, or other persistent event data.
 
 For detailed examples, see the [BEID Database Guide](../../Documentation/Boundary/beiddatabase.html).
+
+---
 
 ## 4. Pair Spawn Boundaries with Unspawn Boundaries
 
@@ -132,6 +142,8 @@ Keep these points in mind:
 
 Start with a manageable population and increase it as you test your game's performance.
 
+---
+
 ## 5. Initialize Your Starting Population
 
 When using preloaded boundary events, you may want nearby events to appear immediately when the player enters the map.
@@ -156,6 +168,8 @@ You generally only need to perform this initial setup once for the intended star
 
 For more information, see [Preloading Boundary Events](../../Documentation/Boundary/preloadevents.html).
 
+---
+
 ## 6. Keep Your Spawn Maps and Saved Data Organized
 
 Saved boundary events rely on their original event templates.
@@ -169,15 +183,19 @@ To avoid problems:
 - Test changes to event pages, graphics, and behavior with older save files.
 - Make backup copies of player saves before testing major updates.
 
-### External Save Backups
+### Organize Your Spawn Maps with Spawn Map Designer
 
-If you're using the Boundary System's external saving features, make sure to back up the **entire save folder**, not just the main RPG Maker save file.
+As your project grows, keeping track of dozens or hundreds of event templates can become challenging.
 
-Additional files may contain persistent boundary event data needed to restore the world correctly.
+**[Spawn Map Designer](https://notritter.itch.io/spawn-map-designer)** is a visual organization tool that helps you arrange and label your spawn maps using color-coded groups and event tags.
 
-See [Saved Boundary Events: External Save Backups and Transfers](../../Documentation/Boundary/savedboundaryevents.html#external-save-backups-and-transfers) for details.
+Instead of hunting through a scattered collection of templates, you can organize events by category, purpose, or gameplay area—making your spawn maps easier to navigate and maintain.
 
-**Tip:** Before releasing an update to an existing game, test it using copies of saves created with the previous version.
+<img src="../../Assets/designer-before.png" width="450">  <img src="../../Assets/designer-after.png" width="450">
+
+**[Check out Spawn Map Designer on itch.io](https://notritter.itch.io/spawn-map-designer)**
+
+---
 
 ## 7. Test Your Boundaries in Different Situations
 
