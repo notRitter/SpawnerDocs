@@ -145,57 +145,13 @@ For an unspawn-only handler, `SpawnMap` can be set to `0` because it does not ne
 
 Use **Boundary Event Setup** to configure a template event for automatic boundary spawning.
 
-This command belongs on **page 1 of the template event** on your spawn map.
+Place this command on **page 1 of the template event** on your spawn map.
 
-It tells the Boundary System which boundaries are allowed to generate the event, which gameplay maps it can appear on, and whether spawned copies should be saved.
+The command determines which spawn boundaries can generate the event, which gameplay maps and regions it can appear in, whether it is enabled, and whether generated events should be saved.
 
-**This command does not spawn an event by itself.** It configures the template for use by automatic boundary spawning.
+**This command does not spawn an event by itself.** It configures the template for automatic spawning.
 
-### Command Arguments
-
-| Argument | Description |
-|---|---|
-| `BoundaryList` | Names of the spawn boundaries allowed to generate this event. |
-| `MapList` | Gameplay map IDs where the event may be generated. |
-| `RegionsList` | Region IDs where the event is allowed to spawn. |
-| `Enabled` | Whether the template is initially available for automatic spawning. |
-| `Save` | Whether newly generated events should be saved as persistent boundary events. |
-
-### Example
-
-Imagine you have an NPC template on a spawn map.
-
-You could configure it with:
-
-- **BoundaryList:** `NPCs`
-- **MapList:** `1`
-- **RegionsList:** `1, 3`
-- **Enabled:** `true`
-- **Save:** `true`
-
-This allows the `NPCs` boundary to generate the template on gameplay map 1, using region IDs 1 and 3.
-
-Because `Save` is enabled, generated NPCs can retain their persistent boundary event data.
-
-**Note:** Boundary Event Setup is intended for automatic generation of new events. You do not need to add it simply to create an event through the explicit preload commands.
-
-### RPG Maker MV Setup
-
-RPG Maker MV does not have MZ's structured Plugin Command interface, but you can configure template events using a traditional MV Plugin Command.
-
-Place the following command on **page 1 of the template event**:
-
-```text
-Ritter_EventSpawner BoundaryEventSetup {"BoundaryList":["NPCs"],"MapList":[1],"RegionsList":[1,3],"Enabled":true,"Save":true}
-```
-
-This configures the same template settings described above.
-
-The metadata also accepts the JSON-encoded array strings and `"true"` / `"false"` values used by MZ.
-
-For other Boundary System operations in MV, use the available [Script Calls](scriptcalls.html).
-
-For more information about persistent events, see [Saved Boundary Events](savedboundaryevents.html).
+For a complete explanation of the command arguments, configuration examples, and RPG Maker MV instructions, see the [Boundary Event Setup documentation](eventsetup.html).
 
 ---
 
