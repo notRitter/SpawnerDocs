@@ -49,7 +49,3 @@ Use the Boundary companion to bring NPCs, enemies, and objects into play as the 
 * [Boundary Best Practices](Guides/Boundary/bestpractices.html)
 
 Use [Self Variables](Documentation/Boundary/selfvariables.html) to keep each NPC's quest progress or each resource's state, even while the event is not active. See [what's new in v2.1](Documentation/upgrading.html#whats-new) when upgrading an existing project.
-
-## MV and MZ
-
-**MV:** use Script commands for public control; automatic template rules can use the [MV metadata form](Documentation/Boundary/plugincommands.html#rpg-maker-mv-metadata). **MZ:** use Script commands or the editor's plugin-command interface.
