@@ -197,21 +197,20 @@ Instead of hunting through a scattered collection of templates, you can organize
 
 ---
 
-## 7. Test Your Boundaries in Different Situations
+## 7. Test Your Boundary Setup
 
-Boundaries are flexible, and the best configuration depends on how your game uses them.
+Once you've configured your boundaries, take a moment to test them during normal gameplay.
 
-Before finalizing your setup, test how your boundaries behave during normal gameplay.
+Walk around your map and check that:
 
-### Things Worth Testing
+- Events spawn and unspawn in the areas you expect.
+- Boundaries respect your configured event limits.
+- Saved boundary events return when you revisit an area.
+- Events appear only on the maps and regions you've configured.
 
-- **Map edges:** Make sure boundaries behave correctly when they extend beyond the map.
-- **Different event populations:** Test both lightly populated and heavily populated areas.
-- **Player movement:** Walk through areas repeatedly to confirm events spawn and unspawn as expected.
-- **Event limits:** Check that your configured population limits behave as intended.
-- **Saved events:** Leave an area, return, and confirm persistent events restore correctly.
-- **Save and load:** Save the game, close it, and load directly from Continue to verify restoration.
-- **Other plugins:** Test compatibility with custom movement, visual effects, and other systems that interact with events.
+If you're using persistent boundary events, it's also a good idea to save and reload your game to confirm everything behaves as expected.
+
+A quick playtest can help catch configuration mistakes before they become part of your finished game.
 
 ### Visualizing Your Boundaries
 
