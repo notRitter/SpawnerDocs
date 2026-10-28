@@ -5,14 +5,15 @@ nav_order: 1
 ---
 
 # Boundary System Introduction
-![Download the Plugin](https://images.squarespace-cdn.com/content/638d8e0d08f7d34f01db55f5/aa21069d-389b-454f-8884-5398efee3571/Boundary+Visuals+Lossy.gif?content-type=image%2Fgif)
+
+![Boundary System Visualization](https://images.squarespace-cdn.com/content/638d8e0d08f7d34f01db55f5/aa21069d-389b-454f-8884-5398efee3571/Boundary+Visuals+Lossy.gif?content-type=image%2Fgif)
 
 *Boundaries visualized using the Ritter_BoundaryVisualizer.js Developer Extension Plugin.*
 
 - **Green:** A `FillOn` boundary with a thickness of 2.
 - **Red:** An `UnspawnOn` boundary with a thickness of 2.
 
-These examples show boundaries on-screen, but boundaries can also extend beyond the visible screen and can be created in a variety of sizes.
+Boundaries can move with the player, follow other events, or remain at fixed locations. They can also extend beyond the visible screen.
 
 ---
 
@@ -28,11 +29,11 @@ Boundaries can follow:
 
 Each boundary has a name you assign, allowing you to reference, move, resize, or modify it through script calls and plugin commands.
 
-You can create multiple boundaries with different sizes, shapes, and behaviors to control when and where events appear.
+You can create multiple boundaries with different sizes and behaviors to control when and where events appear.
 
 For example, you could create a boundary around the player that spawns nearby NPCs and creatures, paired with a larger boundary that removes those events as the player moves away.
 
-The result is a world that can feel populated and active without requiring every event to remain loaded at once.
+The result is a world that feels populated and active without requiring every event to remain loaded at once.
 
 ---
 
@@ -46,195 +47,88 @@ They can also move automatically when attached to the player or another event.
 
 For example, imagine a boundary surrounding the player:
 
-- As the player moves, the boundary moves with them.
-- New areas enter the boundary, allowing events to spawn.
-- Areas left behind can be handled by an unspawn boundary.
-- Saved events can be restored when the player returns.
+1. As the player moves, the boundary moves with them.
+2. New areas enter the boundary, allowing events to spawn.
+3. Areas left behind can be handled by an unspawn boundary.
+4. Saved events can be restored when the player returns.
 
 This allows you to build dynamic event populations that respond to exploration.
 
 ### Boundary Size and Thickness
 
-Boundaries have configurable dimensions, including width, height, and thickness.
+Boundaries have configurable dimensions:
 
-- **Width** determines how wide the boundary is.
-- **Height** determines how tall the boundary is.
-- **Thickness** extends the boundary outward, allowing its edge to cover additional tiles.
+- **Width:** Determines how wide the boundary is.
+- **Height:** Determines how tall the boundary is.
+- **Thickness:** Extends the boundary outward, allowing its edge or evaluated area to cover additional tiles.
 
-For example, a boundary with a width of 17, height of 7, and thickness of 2 covers a wider edge than the same boundary with a thickness of 1.
+Thickness expands outward from the boundary's base dimensions rather than reducing its interior.
 
-The illustrations below demonstrate how different boundary types use these settings.
+Different boundary types use these dimensions in different ways.
 
 ---
 
-## The Six Boundary Types
+## Understanding the Six Boundary Types
 
-The Boundary System provides six primary behaviors.
+The Boundary System provides six boundary types. Each determines **where events are evaluated** and **whether events are spawned or unspawned**.
 
-| Boundary Type | What It Does |
+| Boundary Type | Behavior |
 |---|---|
-| `SpawnOn` | Spawns one event at a location along the boundary's edge. |
-| `SpawnIn` | Spawns one event at a location inside the boundary. |
-| `FillOn` | Attempts to spawn events on every eligible tile along the boundary's edge. |
-| `FillIn` | Attempts to spawn events on every eligible tile inside the boundary. |
-| `UnspawnOn` | Unspawns boundary events located along the boundary's edge. |
-| `UnspawnIn` | Unspawns boundary events located inside the boundary. |
+| `SpawnOn` | Attempts to spawn one event at a random eligible edge tile. |
+| `SpawnIn` | Attempts to spawn one event at a random eligible interior tile. |
+| `FillOn` | Attempts to spawn events across eligible edge tiles. |
+| `FillIn` | Attempts to spawn events across eligible interior tiles. |
+| `UnspawnOn` | Unspawns boundary events along the edge. |
+| `UnspawnIn` | Unspawns boundary events within the interior. |
 
-**On** means the boundary's edge.
+The names make more sense when broken down:
 
-**In** means the area inside the boundary.
+- **On:** Operates along the boundary's edge.
+- **In:** Operates within the boundary's interior.
+- **Spawn:** Attempts to create an event at one selected location.
+- **Fill:** Attempts to populate every eligible tile in the evaluated area.
+- **Unspawn:** Removes active boundary events from the evaluated area.
 
-**Spawn** places an event at a selected location, while **Fill** attempts to populate every eligible tile in the selected area.
+### Choosing a Boundary Type
 
-**Unspawn** removes matching boundary events from the active map.
+Imagine you're building a forest with creatures that appear as the player explores.
 
-### SpawnOn - Spawn Along the Edge
+You could use `SpawnOn` to introduce creatures around the edge of the player's surroundings, or `SpawnIn` to place them randomly throughout the nearby area.
 
-`SpawnOn` attempts to spawn one event at a random eligible location along the boundary's edge.
+If you wanted to populate many tiles at once, `FillOn` or `FillIn` would be more appropriate.
 
-This is useful for spawning enemies, creatures, or other events around the player without filling every tile.
+To remove creatures that have moved too far away, you could use a larger `UnspawnOn` boundary surrounding the player.
 
-**Example Script Call:**
+![FillOn Boundary](../../Assets/BoundarySpawner/Introduction/fill-on.png)
 
-```js
-const spawnMapId = 2;
-const spawnEventId = 1;
-const regions = [1, 2, 3];
-const boundaryName = "spawn";
+*FillOn evaluates tiles along the boundary's edge.*
 
-Ritter.spawnEventOnBoundary(
-    spawnMapId,
-    spawnEventId,
-    regions,
-    boundaryName
-);
-```
+![UnspawnOn Boundary](../../Assets/BoundarySpawner/Introduction/unspawn-on.png)
 
-This attempts to spawn event 1 from spawn map 2 along the edge of the boundary named `"spawn"`, using the specified region IDs.
+*UnspawnOn removes active boundary events found along its edge.*
 
-### SpawnIn - Spawn Inside the Boundary
+You can also use `UnspawnIn` when you want to clear events throughout an entire boundary area.
 
-`SpawnIn` attempts to spawn one event at a random eligible location inside the boundary.
+These types can be combined to create different spawning and cleanup behaviors.
 
-This is useful when you want to place an event somewhere within an area rather than specifically along its edge.
+**For detailed explanations and visual examples of all six types, see [Boundary Types](../../Documentation/Boundary/boundarytypes.html).**
 
-**Example Script Call:**
+---
 
-```js
-const spawnMapId = 2;
-const spawnEventId = 1;
-const regions = [1, 2, 3];
-const boundaryName = "spawn";
+### How Unspawn Boundaries Target Events
 
-Ritter.spawnEventInBoundary(
-    spawnMapId,
-    spawnEventId,
-    regions,
-    boundaryName
-);
-```
+Each unspawn boundary can be assigned to one or more spawn boundaries.
 
-This attempts to spawn the selected event inside the boundary named `"spawn"`.
+When an unspawn boundary evaluates an event, it checks whether that event belongs to one of its assigned spawn boundaries.
 
-### FillOn - Fill the Boundary Edge
+- **Matching ownership:** The event is eligible to be unspawned.
+- **No matching ownership:** The event is left alone.
 
-![FillOn Boundary](../../Assets/BoundarySpawner/Introduction/FillOnBoundary.png)
+For example, an unspawn boundary assigned to `"Forest Spawn"` will remove eligible events created by `"Forest Spawn"`, but it won't affect events belonging to `"Village Spawn"`.
 
-**Example Dimensions:**
+You can also assign both spawn boundaries to the same unspawn boundary, allowing it to manage events from multiple populations.
 
-- Width: 17
-- Height: 7
-- Thickness: 1
-
-`FillOn` attempts to spawn an event on every eligible tile along the boundary's edge.
-
-This is useful for creating groups of objects or events around an area.
-
-For example, you could use it to populate the edge of a boundary with obstacles, environmental objects, or other event-based content.
-
-**Example Script Call:**
-
-```js
-const spawnMapId = 2;
-const spawnEventId = 1;
-const regions = [1, 2, 3];
-const boundaryName = "spawn";
-
-Ritter.spawnFillOnBoundary(
-    spawnMapId,
-    spawnEventId,
-    regions,
-    boundaryName
-);
-```
-
-### FillIn - Fill the Boundary Interior
-
-![FillIn Boundary](../../Assets/BoundarySpawner/Introduction/FillInBoundary.png)
-
-**Example Dimensions:**
-
-- Width: 17
-- Height: 7
-- Thickness: 1
-
-`FillIn` attempts to spawn events on every eligible tile inside the boundary.
-
-This is useful when you want to populate an entire area rather than selecting a single spawn location.
-
-For example, you could fill an area with environmental objects or other event-based content.
-
-**Example Script Call:**
-
-```js
-const spawnMapId = 2;
-const spawnEventId = 1;
-const regions = [1, 2, 3];
-const boundaryName = "spawn";
-
-Ritter.spawnFillInBoundary(
-    spawnMapId,
-    spawnEventId,
-    regions,
-    boundaryName
-);
-```
-
-### UnspawnOn - Unspawn Along the Edge
-
-`UnspawnOn` removes boundary events located along the edge of the specified boundary.
-
-This is particularly useful for automatically removing events as the player moves away from them.
-
-For example, you could place an unspawn boundary farther away from the player than the spawn boundary. As events reach its edge, they can be unspawned.
-
-**Example Script Call:**
-
-```js
-const boundaryName = "unspawn";
-
-Ritter.unspawnEventOnBoundary(boundaryName);
-```
-
-This unspawns matching boundary events along the edge of the boundary named `"unspawn"`.
-
-### UnspawnIn - Unspawn Inside the Boundary
-
-`UnspawnIn` removes boundary events located inside the specified boundary.
-
-Unlike `UnspawnOn`, which checks the edge, this operates across the boundary's interior.
-
-This is useful when you want to clear boundary events from an entire area.
-
-**Example Script Call:**
-
-```js
-const boundaryName = "unspawn";
-
-Ritter.unspawnEventInBoundary(boundaryName);
-```
-
-This unspawns matching boundary events inside the boundary named `"unspawn"`.
+This lets you control which events are removed without affecting unrelated spawned events in the same area.
 
 ---
 
@@ -314,9 +208,12 @@ Actual performance depends on your project's event logic, graphics, other plugin
 
 Ready to create your first boundary?
 
-Start with the [Boundary Script Calls](../../Documentation/Boundary/scriptcalls.html) guide to learn how to create, position, and configure boundaries.
+Start with the [Boundary Plugin Commands](../../Documentation/Boundary/plugincommands.html) or [Boundary Script Calls](../../Documentation/Boundary/scriptcalls.html) to learn how to create, position, and configure boundaries.
 
-Once you're comfortable with the basics, explore [Preloading Boundary Events](../../Documentation/Boundary/preloadevents.html) to learn how to populate your world with persistent events.
+You can also explore:
+
+- [Boundary Types](../../Documentation/Boundary/boundarytypes.html) for detailed behavior descriptions and visual examples.
+- [Preloaded Boundary Events](../../Documentation/Boundary/preloadevents.html) to learn how to populate your world with persistent events.
 
 ---
 
