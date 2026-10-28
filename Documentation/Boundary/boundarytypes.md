@@ -34,7 +34,7 @@ All boundary types share a common set of configuration properties:
 ---
 
 ## Fill On - Spawn Boundary
-![FillOnBoundaryType](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/Introduction/FillOnBoundary.png)
+![FillOnBoundaryType](../../Assets/BoundarySpawner/Introduction/fill-on.png)
 * **Type:** `FillOn`
 * **Width:** 17
 * **Height:** 7
@@ -64,7 +64,7 @@ When processed, it:
 ---
 
 ## Fill In - Spawn Boundary
-![FillInBoundary](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/Introduction/FillInBoundary.png)
+![FillInBoundary](../../Assets/BoundarySpawner/Introduction/fill-in.png)
 * **Type:** `FillIn`
 * **Width:** 17
 * **Height:** 7
@@ -92,7 +92,7 @@ When processed, it:
 ---
 
 ## Spawn On - Spawn Boundary
-![SpawnOnBoundary](https://raw.githubusercontent.com/notRitter/SpawnerDocs/refs/heads/main/Assets/BoundarySpawner/Introduction/SpawnOnBoundary.png)
+![SpawnOnBoundary](../../Assets/BoundarySpawner/Introduction/spawn-on.png)
 * **Type:** `SpawnOn`
 * **Width:** 17
 * **Height:** 7
@@ -123,9 +123,8 @@ When processed, it:
 
 ## Spawn In - Spawn Boundary
 
+![SpawnInBoundary](../../Assets/BoundarySpawner/Introduction/spawn-in.png)
 **Type:** `SpawnIn`
-
-*(Image: Spawn In boundary visualization)*
 
 ### Behavior
 
@@ -153,9 +152,9 @@ When processed, it:
 
 ## Unspawn On - Unspawn Boundary
 
+![UnspawnOnBoundary](../../Assets/BoundarySpawner/Introduction/unspawn-on.png)
 **Type:** `UnspawnOn`
 
-*(Image: Unspawn On boundary visualization)*
 
 ### Behavior
 
@@ -180,9 +179,8 @@ When processed, it:
 
 ## Unspawn In - Unspawn Boundary
 
+![UnspawnInBoundary](../../Assets/BoundarySpawner/Introduction/unspawn-in.png)
 **Type:** `UnspawnIn`
-
-*(Image: Unspawn In boundary visualization)*
 
 ### Behavior
 
