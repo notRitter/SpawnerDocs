@@ -6,6 +6,7 @@ nav_order: 4
 
 # Spawn Maps & Templates
 ![Example template map](../Assets/BaseSpawner/Installation/Spawner_SpawnMap_Minimal.png)
+(Spawn Map Event Groups Created With [Spawn Map Designer](https://notritter.itch.io/spawn-map-designer))
 
 ## Overview
 
