@@ -21,7 +21,7 @@ Documentation for **Ultimate Event Spawner v2.1** and its accompanying Boundary 
 3. Try [script calls](Documentation/scriptcalls.html) in either engine, or [MZ plugin commands](Documentation/plugincommands.html).
 4. For streaming, read the [Boundary introduction](Guides/Boundary/introduction.html) and [setup examples](Documentation/Boundary/scriptcalls.html).
 
-Upgrading an existing game? Start with [Upgrading to v2.1](Documentation/upgrading.html). If you use external boundary saves, also review the [backup and transfer instructions](Documentation/Boundary/savedboundaryevents.html#external-save-backups-and-transfers).
+Upgrading an existing game? Start with [Upgrading to v2.1](Documentation/upgrading.html). If you use external boundary saves, also review the [backup and transfer instructions](Documentation/Boundary/savedboundaryevents.html#backing-up-and-transferring-external-saves).
 
 ## Base Event Spawner
 
@@ -48,4 +48,4 @@ Use the Boundary companion to bring NPCs, enemies, and objects into play as the 
 * [Self Variables](Documentation/Boundary/selfvariables.html)
 * [Boundary Best Practices](Guides/Boundary/bestpractices.html)
 
-Use [Self Variables](Documentation/Boundary/selfvariables.html) to keep each NPC's quest progress or each resource's state, even while the event is not active. See [what's new in v2.1](Documentation/upgrading.html#whats-new) when upgrading an existing project.
+Use [Self Variables](Documentation/Boundary/selfvariables.html) to keep each NPC's quest progress or each resource's state, even while the event is not active. See [what's new in v2.1](Documentation/upgrading.html#whats-new-in-v21) when upgrading an existing project.
