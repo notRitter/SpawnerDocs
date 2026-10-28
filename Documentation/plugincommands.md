@@ -12,6 +12,7 @@ MZ Only
  * [Spawn Event](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#spawn-event)
  * [Spawn Event Region](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#spawn-event-region)
  * [Spawn Event Terrain Tags](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#spawn-event-terrain-tag)
+ * [Spawn Child](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#spawn-child)
  * [Transform Event](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#transform-event)
  * [Unspawn Event](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#unspawn-event)
  * [Unspawn Event Xy](https://notritter.github.io/SpawnerDocs/Documentation/plugincommands.html#unspawn-event-xy)
@@ -89,6 +90,55 @@ Spawns or recycles an event on the game map on to a random tile marked with the 
 
   * **Set Value As Integer**
   * **Push Value As Array**
+
+</details>
+
+---
+
+## Spawn Child
+
+<text color="secondary" weight="medium" size="xs">New in Event Spawner v2.1</text>
+
+<details open markdown="block">
+ 
+<summary>Show/Hide Section</summary>
+
+Use **Spawn Child** to spawn an event that belongs to another spawned event.
+
+When the parent is unspawned through the Event Spawner, its owned children are also cleaned up automatically.
+
+![Spawn Child Plugin Command](../Assets/BaseSpawner/PluginCommands/Spawn-Child-Plugin-Command.png)
+
+### Command Arguments
+
+| Argument | Description |
+|---|---|
+| `ParentEventId` | Runtime event ID of the parent on the current map. Use `0` for the event executing the command. |
+| `SpawnMap` | Map ID or name containing the child's template event. |
+| `SpawnEventId` | ID or name of the template event to spawn. |
+| `X` | Child's destination X coordinate. |
+| `Y` | Child's destination Y coordinate. |
+| `Save` | Whether the child should be saved. Defaults to `false`. |
+| `SpawnOnEvents` | Whether the child may spawn on other events. Defaults to `false`. |
+
+### Example
+
+Imagine an enemy that summons minions during battle.
+
+Inside the enemy's event, use **Spawn Child** with `ParentEventId` set to `0` to spawn a minion associated with that enemy.
+
+The minion behaves like a normal spawned event, but it also belongs to its parent. When the enemy is unspawned, its owned minions are automatically cleaned up.
+
+This is also useful for NPC companions, objects that generate smaller objects, and other events that manage temporary spawned events.
+
+### Important Notes
+
+- The parent must be an available event on the current gameplay map.
+- If the parent is unavailable or the child's placement fails, no child is spawned.
+- Unspawning a child individually removes its ownership link to the parent.
+- Parent-child ownership uses runtime event relationships and is not automatically preserved across arbitrary boundary streaming cycles.
+
+For script call examples, see [Spawn Child](scriptcalls.html#spawn-child).
 
 </details>
 
