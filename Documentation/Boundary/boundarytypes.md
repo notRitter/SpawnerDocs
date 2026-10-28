@@ -1,227 +1,287 @@
 ---
-title: Auto Boundary Types
+title: Boundary Types
 parent: Boundary Documentation
 nav_order: 7
 ---
 
-# Auto Boundary Types & Behaviors
+# Boundary Types
 
 ## Overview
 
-The Boundary System supports multiple **boundary types**, each defining *how* and *where* events are spawned or unspawned when a boundary is evaluated.
+The Ritter Boundary System supports **six boundary types**, each controlling how and where events are spawned or unspawned.
 
 Boundary types determine:
 
-* Which tiles are checked
-* Whether events are spawned or unspawned
-* How saved boundary events are restored
-* How boundary thickness affects behavior
+- Which tiles are evaluated
+- Whether events are spawned or unspawned
+- Where saved boundary events can be restored
+- How boundary thickness affects the evaluated area
 
-Each boundary type has a distinct visual footprint and behavior pattern. The sections below describe each type in detail. Diagrams are provided for visual reference.
+Each type has a different behavior and visual footprint.
+
+This page explains all six types, with screenshots showing their evaluated areas.
+
+## Boundary Type Comparison
+
+| Boundary Type | Action | Evaluated Area |
+|---|---|---|
+| `SpawnOn` | Spawn one event | Random eligible edge tile |
+| `SpawnIn` | Spawn one event | Random eligible interior tile |
+| `FillOn` | Spawn multiple events | Eligible edge tiles |
+| `FillIn` | Spawn multiple events | Eligible interior tiles |
+| `UnspawnOn` | Unspawn events | Boundary edge |
+| `UnspawnIn` | Unspawn events | Boundary interior |
+
+The distinction between **On** and **In** is important:
+
+- **On** evaluates the boundary's edge.
+- **In** evaluates the area inside the boundary.
+
+**Spawn** attempts to create one new event per evaluation, while **Fill** attempts to populate the eligible tiles in its evaluated area.
+
+**Unspawn** removes active boundary events from the evaluated area.
 
 ---
 
 ## Common Boundary Properties
 
-All boundary types share a common set of configuration properties:
+All six boundary types share these properties:
 
-* **Type** - Determines the boundary’s behavior
-* **Width / Height** - Size of the boundary region
-* **Thickness** - Number of tiles the boundary extends outward from its core shape
+- **Type:** Determines how the boundary behaves.
+- **Width / Height:** Define the boundary's base dimensions.
+- **Thickness:** Expands the boundary's evaluated area outward.
 
-> **Note:** Thickness always expands *outward* from the base boundary shape and does not reduce the interior area.
+Thickness does not reduce the boundary's interior. Increasing it extends the evaluated area beyond the original boundary dimensions.
+
+The screenshots below illustrate how these settings affect different boundary types.
 
 ---
 
-## Fill On - Spawn Boundary
-![FillOnBoundaryType](../../Assets/BoundarySpawner/Introduction/fill-on.png)
-* **Type:** `FillOn`
-* **Width:** 19
-* **Height:** 9
-* **Thickness:** 1
+## SpawnOn - Spawn Along the Edge
+
+![SpawnOn Boundary](../../Assets/BoundarySpawner/Introduction/spawn-on.png)
+
+**Example Configuration:**
+
+- Type: `SpawnOn`
+- Width: 19
+- Height: 9
+- Thickness: 1
 
 ### Behavior
 
-The **Fill On** boundary evaluates only the **outer edge** of the boundary shape.
+`SpawnOn` attempts to spawn **one event at a random eligible tile** along the boundary's edge.
 
-When processed, it:
+When evaluated, it:
 
-* Attempts to spawn events on **every tile along the boundary edge**
-* Restores any saved boundary events found on those edge tiles
-* Spawns new events that match the configured Boundary Event rules
+- Restores eligible saved boundary events found along the edge.
+- Selects a random valid edge tile for a new event.
+- Attempts to spawn one event that meets the configured spawning conditions.
 
 ### Thickness
 
-* Thickness extends the evaluated edge **outward**
-* Additional rings of edge tiles are included as thickness increases
+Increasing thickness extends the evaluated edge outward, providing additional tiles where spawning can occur.
 
 ### Use Cases
 
-* Perimeter-based spawning
-* Border guards or environmental edges
-* Triggers that activate only when crossing a boundary line
+- Randomized encounters around the player
+- Controlled spawning with limited density
+- Introducing creatures as the player explores
 
 ---
 
-## Fill In - Spawn Boundary
-![FillInBoundary](../../Assets/BoundarySpawner/Introduction/fill-in.png)
-* **Type:** `FillIn`
-* **Width:** 19
-* **Height:** 9
-* **Thickness:** 1
+## SpawnIn - Spawn Inside the Boundary
+
+![SpawnIn Boundary](../../Assets/BoundarySpawner/Introduction/spawn-in.png)
+
+**Example Configuration:**
+
+- Type: `SpawnIn`
+- Width: 19
+- Height: 9
+- Thickness: 1
 
 ### Behavior
 
-The **Fill In** boundary evaluates **every tile inside** the boundary region.
+`SpawnIn` attempts to spawn **one event at a random eligible tile** inside the boundary.
 
-When processed, it:
+When evaluated, it:
 
-* Attempts to spawn events on **all interior tiles**
-* Restores saved boundary events found within the region
-* Spawns new events that meet the boundary’s spawn conditions
+- Restores eligible saved boundary events found within the area.
+- Selects a random valid interior tile.
+- Attempts to spawn one event that meets the configured spawning conditions.
+
+Unlike `SpawnOn`, the new event can appear anywhere within the evaluated interior.
 
 ### Thickness
 
-* Thickness expands the boundary **outward**, increasing the total evaluated area
+Increasing thickness expands the evaluated area outward, providing additional interior tiles for spawning.
 
 ### Use Cases
 
-* Area-based population spawning
-* Zones filled with NPCs or interactables
+- Random encounters within an area
+- Low-density NPC populations
+- Dynamic interior event placement
 
 ---
 
-## Spawn On - Spawn Boundary
-![SpawnOnBoundary](../../Assets/BoundarySpawner/Introduction/spawn-on.png)
-* **Type:** `SpawnOn`
-* **Width:** 19
-* **Height:** 9
-* **Thickness:** 1
+## FillOn - Fill the Boundary Edge
+
+![FillOn Boundary](../../Assets/BoundarySpawner/Introduction/fill-on.png)
+
+**Example Configuration:**
+
+- Type: `FillOn`
+- Width: 19
+- Height: 9
+- Thickness: 1
 
 ### Behavior
 
-The **Spawn On** boundary attempts to spawn **a single event** per evaluation.
+`FillOn` attempts to spawn events across **every eligible tile along the boundary's edge**.
 
-When processed, it:
+When evaluated, it:
 
-* Restores any saved boundary events found on the **edge tiles**
-* Selects a random valid tile on the **boundary edge**
-* Attempts to spawn one event that meets the boundary’s spawn conditions on that tile
+- Checks the boundary's edge tiles.
+- Restores eligible saved boundary events found on those tiles.
+- Attempts to spawn new events according to the configured Boundary Event rules.
 
+Unlike `SpawnOn`, which attempts one new event, `FillOn` can populate multiple eligible tiles during an evaluation.
 
 ### Thickness
 
-* Thickness expands the boundary edge outward
-* The random selection pool increases accordingly
+Increasing thickness adds additional outward rings of edge tiles to the evaluated area.
 
 ### Use Cases
 
-* Randomized encounters
-* Controlled spawning with limited density
+- Perimeter-based spawning
+- Border guards and environmental objects
+- Populating the edges of an area
 
 ---
 
-## Spawn In - Spawn Boundary
+## FillIn - Fill the Boundary Interior
 
-![SpawnInBoundary](../../Assets/BoundarySpawner/Introduction/spawn-in.png)
-* **Type:** `SpawnIn`
-* **Width:** 19
-* **Height:** 9
-* **Thickness:** 1
+![FillIn Boundary](../../Assets/BoundarySpawner/Introduction/fill-in.png)
+
+**Example Configuration:**
+
+- Type: `FillIn`
+- Width: 19
+- Height: 9
+- Thickness: 1
 
 ### Behavior
 
-The **Spawn In** boundary attempts to spawn **a single event** per evaluation within the boundary interior.
+`FillIn` attempts to spawn events across **every eligible tile inside the boundary**.
 
-When processed, it:
+When evaluated, it:
 
-* Selects a random valid tile **inside** the boundary region
-* Attempts to spawn one event on that tile
-* Restores any saved boundary events found within the boundary
-* Spawns new events that meet the boundary’s spawn conditions
+- Checks tiles throughout the boundary's interior.
+- Restores eligible saved boundary events within the area.
+- Attempts to spawn new events according to the configured Boundary Event rules.
+
+Unlike `SpawnIn`, which attempts one new event, `FillIn` can populate multiple eligible tiles during an evaluation.
 
 ### Thickness
 
-* Thickness expands the interior region outward
-* The random selection pool increases accordingly
+Increasing thickness expands the evaluated interior outward, increasing the area available for spawning.
 
 ### Use Cases
 
-* Random encounters within an area
-* Low-density population spawning
-* Dynamic interior event placement
+- Populating areas with NPCs or interactable objects
+- Filling zones with environmental details
+- Preparing populated areas for gameplay
 
 ---
 
-## Unspawn On - Unspawn Boundary
+## UnspawnOn - Unspawn Along the Edge
 
-![UnspawnOnBoundary](../../Assets/BoundarySpawner/Introduction/unspawn-on.png)
-* **Type:** `UnspawnOn`
-* **Width:** 19
-* **Height:** 9
-* **Thickness:** 2
+![UnspawnOn Boundary](../../Assets/BoundarySpawner/Introduction/unspawn-on.png)
+
+**Example Configuration:**
+
+- Type: `UnspawnOn`
+- Width: 19
+- Height: 9
+- Thickness: 2
 
 ### Behavior
 
-The **Unspawn On** boundary evaluates only the **boundary edge** and removes events found there.
+`UnspawnOn` evaluates the **boundary's edge** and unspawns applicable boundary events found there.
 
-When processed, it:
+When evaluated, it:
 
-* Unspawns events located on the boundary edge
-* Preserves saved boundary event data unless explicitly destroyed
+- Checks the boundary's edge tiles.
+- Unspawns applicable events located on those tiles.
+- Preserves saved boundary event data for future restoration.
+
+This type is especially useful when paired with a smaller spawn boundary.
+
+As events move away from the player and reach the outer unspawn boundary, they can be removed from the active map.
 
 ### Thickness
 
-* Thickness expands the evaluated edge outward
+Increasing thickness extends the evaluated edge outward, allowing the boundary to cover additional tiles.
 
 ### Use Cases
 
-* Cleaning up events when exiting an area
-* Despawning perimeter-based encounters
-* Managing world density dynamically
+- Cleaning up events as the player explores
+- Removing distant creatures and NPCs
+- Maintaining an active event population around the player
 
 ---
 
-## Unspawn In - Unspawn Boundary
+## UnspawnIn - Unspawn Inside the Boundary
 
-![UnspawnInBoundary](../../Assets/BoundarySpawner/Introduction/unspawn-in.png)
-* **Type:** `UnspawnIn`
-* **Width:** 19
-* **Height:** 9
-* **Thickness:** 2
+![UnspawnIn Boundary](../../Assets/BoundarySpawner/Introduction/unspawn-in.png)
+
+**Example Configuration:**
+
+- Type: `UnspawnIn`
+- Width: 19
+- Height: 9
+- Thickness: 2
 
 ### Behavior
 
-The **Unspawn In** boundary evaluates **all tiles inside** the boundary region.
+`UnspawnIn` evaluates **the entire boundary interior** and unspawns applicable boundary events found within it.
 
-When processed, it:
+When evaluated, it:
 
-* Unspawns all events found within the boundary
-* Leaves saved boundary event data intact for future restoration
+- Checks tiles throughout the boundary's interior.
+- Unspawns applicable events located within the area.
+- Preserves saved boundary event data for future restoration.
+
+Unlike `UnspawnOn`, which evaluates the edge, `UnspawnIn` operates throughout the evaluated area.
 
 ### Thickness
 
-* Thickness expands the region outward
+Increasing thickness expands the evaluated area outward.
 
 ### Use Cases
 
-* Clearing entire zones
-* Resetting populated areas
-* Managing large-scale event lifecycle transitions
+- Clearing populated areas
+- Removing events throughout a zone
+- Managing event populations across large areas
 
 ---
 
-## Summary
+## Choosing the Right Boundary Type
 
-| Boundary Type | Action  | Evaluated Area           |
-| ------------- | ------- | ------------------------ |
-| FillOn        | Spawn   | Boundary edge            |
-| FillIn        | Spawn   | Interior tiles           |
-| SpawnOn       | Spawn   | One random edge tile     |
-| SpawnIn       | Spawn   | One random interior tile |
-| UnspawnOn     | Unspawn | Boundary edge            |
-| UnspawnIn     | Unspawn | Interior tiles           |
+The best boundary type depends on how you want events to appear or disappear.
 
-Each boundary type serves a distinct role in controlling event lifecycle behavior. Choosing the correct boundary type is essential for predictable spawning, clean unspawning, and efficient boundary evaluation.
+For example:
 
-This page serves as a reference for understanding how each boundary type behaves and how visual boundary shapes translate into in-game logic.
+- Use `SpawnOn` to introduce creatures along the edge of the player's surroundings.
+- Use `SpawnIn` to place occasional events randomly within an area.
+- Use `FillOn` to populate the perimeter of a region.
+- Use `FillIn` to populate an entire area.
+- Use `UnspawnOn` to remove events as they reach the edge of a larger cleanup boundary.
+- Use `UnspawnIn` to clear events throughout a selected area.
+
+You can combine multiple boundaries to create more advanced spawning and event streaming behavior.
+
+For a practical introduction to using boundaries together, see the [Boundary System Introduction](../../Guides/Boundary/introduction.html).
+
+For implementation details, see [Boundary Plugin Commands](plugincommands.html) and [Boundary Script Calls](scriptcalls.html).
