@@ -34,7 +34,7 @@ In RPG Maker MZ, configure your template using the **BoundaryEventSetup** plugin
 4. Choose **BoundaryEventSetup**.
 5. Configure the boundary names, gameplay maps, regions, and other settings.
 
-![Boundary Event Setup Plugin Command](../Assets/BoundarySpawner/PluginCommands/BoundaryEventSetup_Plugin_Command.png)
+![Boundary Event Setup Plugin Command](https://raw.githubusercontent.com/notRitter/SpawnerDocs/main/Assets/BoundarySpawner/PluginCommands/BoundaryEventSetup_Plugin_Command.png)
 
 ### Command Arguments
 
