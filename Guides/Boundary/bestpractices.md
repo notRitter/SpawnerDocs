@@ -189,7 +189,7 @@ As your project grows, keeping track of dozens or hundreds of event templates ca
 
 **[Spawn Map Designer](https://notritter.itch.io/spawn-map-designer)** is a visual organization tool that helps you arrange and label your spawn maps using color-coded groups and event tags.
 
-Instead of hunting through a scattered collection of templates, you can organize events by category, purpose, or gameplay area—making your spawn maps easier to navigate and maintain.
+Instead of hunting through a scattered collection of templates, you can organize events by category, purpose, or gameplay area, making your spawn maps easier to navigate and maintain.
 
 <img src="../../Assets/designer-before.png" width="450">  <img src="../../Assets/designer-after.png" width="450">
 
