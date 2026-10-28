@@ -5,6 +5,7 @@ nav_order: 4
 ---
 
 # Spawn Maps & Templates
+![Example template map](../Assets/BaseSpawner/Installation/Spawner_SpawnMap_Minimal.png)
 
 ## Overview
 
