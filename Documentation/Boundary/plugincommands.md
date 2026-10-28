@@ -14,7 +14,7 @@ These commands appear under **Ritter_EventSpawner** in the Plugin Command menu. 
 
 This guide explains what each command does, how to configure its arguments, and when you might want to use it. The accompanying screenshots show the available settings in RPG Maker MZ.
 
-**Using RPG Maker MV?** Boundary features are available through [Script Calls](scriptcalls.html). The Boundary Event Setup section below also explains how to configure event templates in MV.
+**Using RPG Maker MV?** Boundary features are available through [Script Calls](scriptcalls.html).
 
 ## Table of Contents
 
@@ -247,9 +247,7 @@ If you also enable `UnspawnAll`, the boundary's remaining active enemies will be
 
 ## Enable Event / Disable Event
 
-![Enable Event](../../Assets/BoundarySpawner/PluginCommands/EnableEvent_Plugin_Command.png)
-
-![Disable Event](../../Assets/BoundarySpawner/PluginCommands/DisableEvent_Plugin_Command.png)
+![Enable Event](../../Assets/BoundarySpawner/PluginCommands/EnableEvent_Plugin_Command.png) ![Disable Event](../../Assets/BoundarySpawner/PluginCommands/DisableEvent_Plugin_Command.png)
 
 Use **Enable Event** and **Disable Event** to control whether a particular template event can be selected for new automatic boundary spawns.
 
