@@ -12,7 +12,15 @@ Instead of searching through every event on the map to find which events occupy 
 
 This is especially useful when working with large numbers of events.
 
-**Spatial works automatically when using the Boundary System.** There is no additional plugin to install or configuration required.
+Both the base Event Spawner and the optional Boundary System use Spatial to efficiently find events at specific map coordinates.
+
+You can also access the Spatial lookup directly:
+
+```js
+const events = Ritter.Spatial.eventsAt(x, y);
+```
+
+This returns an array of events located on that tile.
 
 ## Event Placement
 
@@ -43,40 +51,35 @@ This allows the event to spawn on a tile occupied by another event. It does not 
 
 **Note:** Event placement does not automatically check every movement or terrain restriction. A valid spawn location is not necessarily a tile an event can walk onto.
 
-## Finding Events at a Location
+### Finding Events at a Location
 
-RPG Maker provides a built-in way to find events at specific coordinates:
+Spatial provides two functions for finding events at specific map coordinates.
 
-```js
-const x = 8;
-const y = 10;
-
-const events = $gameMap.eventsXy(x, y);
-```
-
-When the Boundary System is installed, you can also use the Spatial lookup:
+**Get event objects:**
 
 ```js
 const x = 8;
-const y = 10;
+const y = 4;
 
 const events = Ritter.Spatial.eventsAt(x, y);
 ```
 
-Both examples return an array of events at the specified coordinates.
+Returns an array of `Game_Event` objects at the specified coordinates.
 
-For example, to retrieve their event IDs:
+**Get event IDs:**
 
 ```js
 const x = 8;
-const y = 10;
+const y = 4;
 
-const events = Ritter.Spatial.eventsAt(x, y);
-
-const eventIds = events.map(function(event) {
-    return event.eventId();
-});
+const eventIds = Ritter.Spatial.eventIdsAt(x, y);
 ```
+
+Returns an array of event IDs at the specified coordinates.
+
+Both functions return an empty array (`[]`) when no events are found.
+
+Use whichever function best suits your needs.
 
 Manual Spatial lookup is optional. Most developers can continue using RPG Maker's normal event commands and script calls without interacting with it directly.
 
@@ -92,10 +95,32 @@ If you're using other plugins that modify event movement, test them together to 
 
 ## Performance Benefits
 
-Spatial lookup helps reduce unnecessary event searches, particularly on maps containing large numbers of events.
+Spatial lookup provides a significant performance improvement for the Boundary System, especially on maps containing hundreds of active events or multiple large boundaries.
 
-This can improve performance for systems that frequently need to find events at particular coordinates, including spawning and boundary management.
+### Why It Matters for the Boundary System
 
-The improvement depends on the number of events, how frequently lookups occur, and the other systems running in your project.
+When a boundary performs a spawning or unspawning pass, it checks tiles within its configured area to determine which locations contain events.
 
-Spatial lookup does not eliminate the processing cost of event pages, movement, graphics, or other RPG Maker systems.
+Without Spatial, checking a single tile may require searching through the entire map's event list. A boundary checking hundreds of tiles can repeat that search hundreds of times during a single pass.
+
+**Spatial eliminates the need for those repeated full-map searches.**
+
+Instead, the Boundary System can look directly at the events registered at each tile, regardless of how many other events exist elsewhere on the map.
+
+### What This Means for Your Game
+
+- **Faster boundary passes:** Large boundaries can check their tiles without repeatedly scanning every event on the map.
+- **Better performance with hundreds of events:** Tile lookups remain efficient as the number of active events increases.
+- **More room for larger boundaries:** Larger boundary areas become more practical because occupancy checks are significantly cheaper.
+- **More flexibility with multiple boundaries:** Projects using several spawning and unspawning boundaries benefit from reduced lookup overhead.
+- **Less repeated processing:** Frequent boundary updates spend less time searching for events at individual coordinates.
+
+If you're upgrading an existing project that uses the Boundary System with several hundred active events, you may notice a substantial performance improvement without changing your boundary configurations.
+
+### Beyond the Boundary System
+
+Spatial is built into the base Event Spawner and does not require the Boundary System.
+
+The base Event Spawner also benefits from faster occupancy checks when spawning events, particularly when placing large numbers of events.
+
+**Note:** Spatial optimizes event location lookups. It does not eliminate the processing costs of event pages, movement logic, graphics, or other RPG Maker systems. Actual performance improvements depend on your project's event counts, boundary configurations, and other active systems.
