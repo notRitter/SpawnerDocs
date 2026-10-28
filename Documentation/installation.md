@@ -63,7 +63,7 @@ If you're using the Boundary System, you can choose how its persistent event dat
 
 When external saving is enabled, `externalSaveCount` controls how many records are stored per file. Its normal default is `4000`.
 
-If you use external saves, make sure to follow the [External Save Backup Instructions](Boundary/savedboundaryevents.html#external-save-backups-and-transfers) when backing up or transferring saved games.
+If you use external saves, make sure to follow the [External Save Backup Instructions](Boundary/savedboundaryevents.html#backing-up-and-transferring-external-saves) when backing up or transferring saved games.
 
 ### Event Streaming Quick Start
 
