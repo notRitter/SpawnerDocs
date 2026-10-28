@@ -107,7 +107,7 @@ Use **Spawn Child** to spawn an event that belongs to another spawned event.
 
 When the parent is unspawned through the Event Spawner, its owned children are also cleaned up automatically.
 
-![Spawn Child Plugin Command](../Assets/BaseSpawner/PluginCommands/Spawn-Child-Plugin-Command.png)
+![Spawn Child Plugin Command](../Assets/BaseSpawner/PluginCommands/spawn-child-plugin-command-1.png)
 
 ### Command Arguments
 
