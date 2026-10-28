@@ -149,4 +149,4 @@ Disabling a template prevents it from being selected for new automatic spawns. I
 - [Boundary Plugin Commands](plugincommands.html) — Configure boundaries and automatic handlers in RPG Maker MZ.
 - [Boundary Script Calls](scriptcalls.html) — Create and manage boundaries through JavaScript.
 - [Preloaded Boundary Events](preloadevents.html) — Create persistent events without automatic template generation.
-- [Saved Boundary Events](savedevents.html) — Learn how persistent boundary events are stored and restored.
+- [Saved Boundary Events](savedboundaryevents.html) — Learn how persistent boundary events are stored and restored.
