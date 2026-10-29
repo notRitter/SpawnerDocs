@@ -21,3 +21,5 @@ search_enabled: true
 # Optional logo
 logo: "/Assets/SpawnerDocumentationLogo.png"
 favicon_ico: "/assets/favicon.ico"
+
+color_scheme: dark
