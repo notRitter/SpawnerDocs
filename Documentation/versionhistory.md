@@ -1,6 +1,7 @@
 ---
 title: Version History
-nav_order: 2
+parent: Spawner Documentation
+nav_order: 10
 ---
 
 # Version History
