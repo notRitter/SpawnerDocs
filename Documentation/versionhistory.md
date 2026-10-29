@@ -12,7 +12,7 @@ For installation instructions, migration information, and important changes when
 
 ---
 
-## v2.1 — Major Feature and Stability Update
+## v2.1: Major Feature and Stability Update
 
 Version 2.1 introduces new spawning capabilities, faster event lookups, improved recycling and restoration, and expanded tools for managing persistent event populations.
 
@@ -213,7 +213,7 @@ Before updating a game with existing saved progress, preserve the relevant save 
 
 ---
 
-## v2.0a — Hotfix and Compatibility Update
+## v2.0a: Hotfix and Compatibility Update
 
 - Added compatibility with **VisuStella Events & Movement Core**.
 - Fixed an edge case in spawned event sprite handling that could cause instability during page refresh.
@@ -221,7 +221,7 @@ Before updating a game with existing saved progress, preserve the relevant save 
 
 ---
 
-## v2.0 — Major Update
+## v2.0: Major Update
 
 - Added cross-engine support for **RPG Maker MV and MZ**.
 - Significantly optimized the Event Spawner core.
@@ -232,42 +232,42 @@ Before updating a game with existing saved progress, preserve the relevant save 
 
 ---
 
-## v1.9d — Hotfix
+## v1.9d: Hotfix
 
 - Fixed an edge case involving missing `$dataMap.events` data when restoring saved events.
 
-## v1.9c — Feature Update
+## v1.9c: Feature Update
 
 - Added the option to spawn events on occupied tiles using coordinate-based and region-based spawning.
 
-## v1.9b — Hotfix
+## v1.9b: Hotfix
 
 - Fixed a situational crash during playtest launch caused by template-map loading timing.
 - Resolved the error `Cannot set property 'events' of undefined`.
 
-## v1.9 — Stability Update
+## v1.9: Stability Update
 
 - Fixed a crash involving saved events under specific circumstances.
 
 ---
 
-## v1.8 — Performance Update
+## v1.8: Performance Update
 
 - Optimized automatic Boundary System processing.
 - Improved performance under heavy event-streaming workloads.
 
-## v1.7 — Compatibility Update
+## v1.7: Compatibility Update
 
 - Added compatibility with **RPG Maker MZ Core Scripts 1.7.0**.
 
-## v1.6 — Maintenance Update
+## v1.6: Maintenance Update
 
 - Improved spawn-map loading efficiency and organization.
 - Consolidated spawn-map data into `$MapData[mapId]`.
 
 ---
 
-## v1.5 — Boundary System Integration
+## v1.5: Boundary System Integration
 
 - Added plugin commands for Event Spawner.
 - Added plugin commands for Boundary System.
@@ -280,7 +280,7 @@ Before updating a game with existing saved progress, preserve the relevant save 
 
 ---
 
-## v1.2 — Feature Update
+## v1.2: Feature Update
 
 - Added spawning events by **Spawn Map Name** and **Event Name**.
 - Added coordinate-based event unspawning.
@@ -288,11 +288,11 @@ Before updating a game with existing saved progress, preserve the relevant save 
 - Added boundary-filling script calls.
 - Added `unspawnEventInBoundary`.
 
-## v1.1 — Hotfix
+## v1.1: Hotfix
 
 - Fixed a rare crash caused by attempting to unspawn an already unspawned event and subsequently changing scenes.
 
-## v1.0 — Initial Release
+## v1.0: Initial Release
 
 - Initial release of **Ritter Ultimate Event Spawner**.
 
