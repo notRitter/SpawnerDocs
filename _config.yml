@@ -19,7 +19,7 @@ baseurl: "/SpawnerDocs"
 search_enabled: true
 
 # Optional logo
-logo: "/Assets/SpawnerDocumentationLogo.png"
+logo: "/Assets/SpawnerDocumentationLogo1.png"
 favicon_ico: "/assets/favicon.ico"
 
 color_scheme: dark
