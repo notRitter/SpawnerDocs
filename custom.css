@@ -17,3 +17,7 @@
     left: 0 !important;
   }
 }
+/* Make the documentation site title visible in dark mode */
+.site-title {
+  color: #f0f6fc !important;
+}
