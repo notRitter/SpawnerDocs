@@ -110,15 +110,15 @@ If your existing setup relies on additional expansion in the player's movement d
 
 ### Maximum Events
 
-The `maxEvents` script argument defaults to `0`, which does **not** mean unlimited spawning.
+The `maxEvents` script argument defaults to `100`.
 
 When creating boundaries through script calls, provide a positive maximum if you want automatic spawning to populate the area.
 
 RPG Maker MZ plugin commands and Quick Start settings have their own defaults.
 
-### Automatic Handler Update Modes
+### Automatic Boundary Update Modes
 
-`Ritter.Boundary.addAutoHandler()` now accepts an update mode as its eighth argument.
+Automatic boundaries now support two update modes: **WaitTime** and **Movement**.
 
 | Mode | Behavior |
 |---|---|
@@ -127,7 +127,11 @@ RPG Maker MZ plugin commands and Quick Start settings have their own defaults.
 
 New script calls default to `"WaitTime"` when the argument is omitted.
 
-Recognized older saves without a stored update mode retain their movement-based behavior.
+**Movement mode is recommended for static event spawning**, where events only need to be spawned or removed as the player travels through the map.
+
+For systems that continuously generate new events around the player, such as ongoing enemy spawning, **WaitTime** remains the appropriate choice.
+
+Use Movement when updates depend on the player moving. Use WaitTime when updates must happen regardless of player movement.
 
 ### Quick Start
 
