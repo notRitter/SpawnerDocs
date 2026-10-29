@@ -368,8 +368,6 @@ If you're using both Event Spawner and Boundary System, update them using the ma
 
 For upgrade-specific information, see [Upgrading to v2.1](upgrading.html).
 
-If your game uses external boundary saves, review the [External Save Backup Instructions](Boundary/savedboundaryevents.html#external-save-settings) before updating or transferring saved data.
-
 ---
 
 ## Next Steps
