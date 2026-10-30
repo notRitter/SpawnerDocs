@@ -43,7 +43,7 @@ See [Boundary Script Calls](Boundary/scriptcalls.html) and [BEID Database](Bound
 Updating to v2.1 is straightforward:
 
 1. **Update Event Spawner:** Replace `Ritter_EventSpawner.js` with the new version.
-2. **Update Boundary System (if installed):** Replace `Ritter_BoundarySystem.js` with the companion version included in the release.
+2. **Update Boundary System (if installed):** Replace `Ritter_BoundarySystem.js` with the new companion version 1.6.
 3. **Check plugin order:** If using both plugins, keep BoundarySystem above EventSpawner in Plugin Manager.
 
 Keep the plugin filenames unchanged.
