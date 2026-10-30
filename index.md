@@ -48,4 +48,4 @@ Use the Boundary companion to bring NPCs, enemies, and objects into play as the 
 * [Self Variables](Documentation/Boundary/selfvariables.html)
 * [Boundary Best Practices](Guides/Boundary/bestpractices.html)
 
-Use [Self Variables](Documentation/Boundary/selfvariables.html) to keep each NPC's quest progress or each resource's state, even while the event is not active. See [what's new in v2.1](Documentation/upgrading.html#whats-new-in-v21) when upgrading an existing project.
+Use [Self Variables](Documentation/Boundary/selfvariables.html) to keep each NPC's quest progress or each resource's state, even while the event is not active. See [what's new in v2.1](Documentation/releasenotes.html) when upgrading an existing project.
